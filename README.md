@@ -1,3 +1,5 @@
+# Build Process
+## Windows
 1. [Install Haxe](http://haxe.org/download)
  * Haxe will add environment variables `HAXEPATH` and `NEKO_INSTPATH` and add them to the `PATH`
 1. `haxelib install lime`
