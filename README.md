@@ -13,3 +13,5 @@
  * `Ctrl-Shift-B` to set build target
  * `Ctrl-Enter` to build and run
  * Check snippets inside command palette
+
+# [Tiled](http://www.mapeditor.org/) (Map Editor)
