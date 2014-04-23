@@ -2,7 +2,7 @@
 <project>
 	<!------------------------------APPLICATION SETTINGS---------------------------->
 	
-	<app title="TOJam 9 Game" file="TOJam 9 Game" main="Main" version="0.0.1" company="Circuiton" />
+	<app title="tojam2014" file="tojam2014" main="Main" version="0.0.1" company="Stormtromper" />
 	
 	<!--The flixel preloader is not accurate in Chrome. You can use it regularly if you embed the swf into a html file, or you can set the actual size of your file manually at "Flxpreloader-onUpdate-bytesTotal"!-->
 	<app preloader="flixel.system.FlxPreloader" />
