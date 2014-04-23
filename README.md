@@ -15,3 +15,4 @@
  * Check snippets inside command palette
 
 # [Tiled](http://www.mapeditor.org/) (Map Editor)
+1. See [HaxeFlixel Demos](http://haxeflixel.com/demos/) for example usage
