@@ -9,3 +9,7 @@
 1. `haxelib install flixel-addons`
 1. `haxelib install flixel-ui`
 1. `lime test windows`
+1. [Install haxe-sublime-bundle](https://github.com/clemos/haxe-sublime-bundle)
+ * `Ctrl-Shift-B` to set build target
+ * `Ctrl-Enter` to build and run
+ * Check snippets inside command palette
