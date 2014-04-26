@@ -37,7 +37,7 @@
 	<assets path="assets/levels" rename="levels" />
 
 	<!--Flash requires .ogg - if="flash"-->
-	<assets path="assets/sounds" >
+	<assets path="assets/sounds" unless="flash">
 	<!-- -->
 		<music path="howl.ogg" id="Howl" />
 		<music path="howlbase.ogg" id="HowlBase" />
