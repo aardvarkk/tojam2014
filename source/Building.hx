@@ -15,6 +15,9 @@ class Building extends FlxSprite
 		sprite.animation.frameIndex = 8 * 15 + 9;
 		sprite.drawFrame();
 
+		moves = false;
+		immovable = true;
+
 		makeGraphic(Width * Reg.blockSize, Height * Reg.blockSize, FlxColor.CHARTREUSE);
 
 		for (r in 0...Height) {
