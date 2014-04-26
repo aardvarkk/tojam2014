@@ -15,8 +15,8 @@
  * Check snippets inside command palette
  
 ## OSX
-1. `haxelib upgrade`
 1. `sudo haxelib selfupdate`
+1. `haxelib upgrade`
 
 # [Tiled](http://www.mapeditor.org/) (Map Editor)
 1. See [HaxeFlixel Demos](http://haxeflixel.com/demos/) for example usage
