@@ -259,7 +259,7 @@ class PlayState extends FlxState
 		if (FlxG.keys.justPressed.SPACE)
 		{
 			_selectedPlayer += 1;
-			if (_selectedPlayer > 3) _selectedPlayer = 0;
+			if (_selectedPlayer > _numPlayers - 1) _selectedPlayer = 0;
 
 			for (p in _players)
 			{
