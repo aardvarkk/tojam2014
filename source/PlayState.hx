@@ -52,13 +52,15 @@ class PlayState extends FlxState
 	private var _racer:Racer;
 	private var _camera:FlxCamera;
 	private var _numPlayers:Int;
+	private var _round:Int;
 
-	public function new(NumPlayers:Int)
+	public function new(NumPlayers:Int = 2, ?Round:Int = 0)
 	{
 		super();
 		_numPlayers = NumPlayers;
+		_round = Round;
 
-		FlxG.log.add('Starting game with $_numPlayers players');
+		FlxG.log.add('Starting game round $_round with $_numPlayers players');
 	}
 
 	/**
@@ -201,4 +203,18 @@ class PlayState extends FlxState
 	{
 		FlxG.camera.flash(0xffff0000, 2);
 	}	
+
+	public function endRound()
+	{
+		// Still more rounds to go, so reset everything and switch the racer...
+		if (_round < _numPlayers - 1) 
+		{
+
+		}
+		// Done the game, show which player won!
+		else
+		{
+			FlxG.switchState(new ShowWinnerState(0));
+		}
+	}
 }

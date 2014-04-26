@@ -47,12 +47,9 @@ class MenuState extends FlxState
 	{
 		super.update();
 
-		if (FlxG.keys.anyJustPressed(["ONE", "TWO", "THREE", "FOUR"]))
+		if (FlxG.keys.anyJustPressed(["TWO", "THREE", "FOUR"]))
 		{
-			if (FlxG.keys.anyJustPressed(["ONE"])) {
-				FlxG.switchState(new PlayState(1));	
-			}
-			else if (FlxG.keys.anyJustPressed(["TWO"])) {
+			if (FlxG.keys.anyJustPressed(["TWO"])) {
 				FlxG.switchState(new PlayState(2));	
 			}
 			else if (FlxG.keys.anyJustPressed(["THREE"])) {

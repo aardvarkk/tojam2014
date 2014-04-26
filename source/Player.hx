@@ -252,7 +252,7 @@ class Player extends FlxExtendedSprite
 	public function playLandingSound():Void
 	{
 		// Override within the characters themselves
-		FlxG.log.add("playLandingSound()");
+		// FlxG.log.add("playLandingSound()");
 		FlxG.sound.play("Landing", 1.0);
 	}
 
