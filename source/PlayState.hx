@@ -152,7 +152,7 @@ class PlayState extends FlxState
 		{
 			if (p.y > FlxG.height + 20 || p.x + p.width < _camera.scroll.x - 20)
 			{
-				p.reset(100,0);
+				p.reset(_camera.scroll.x + 100,0);
 			}
 		}
 
