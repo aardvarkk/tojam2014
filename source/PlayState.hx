@@ -147,6 +147,9 @@ class PlayState extends FlxState
 
 		// Overlap
 
+		// off-screen kill
+		for 
+
 
 		// Game controls
 		if (FlxG.keys.justPressed.ESCAPE)
