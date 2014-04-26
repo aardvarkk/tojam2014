@@ -403,7 +403,6 @@ class Player extends FlxExtendedSprite
 		acceleration.y = gravity;
 		diving = false;
 		drag.x = gravity; // Ground friction
-		gravity = 450;
 		health = 1;
 		jumped = false;
 		jumpStrength = 136;
