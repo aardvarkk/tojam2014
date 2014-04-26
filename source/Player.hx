@@ -18,24 +18,24 @@ class Player extends FlxExtendedSprite
 	public var number:Int;
 	public var selected:Bool = false;
 
-	private var _jumpTimer:Float;
-	private var _jumpStrength:Float = 100;
-	private var _jumped:Bool = false;
-	private var _landed:Bool = false;
+	private var jumpTimer:Float;
+	private var jumpStrength:Float = 100;
+	private var jumped:Bool = false;
+	private var landed:Bool = false;
 
 	public var attacking:Bool = false;
 	public var attackTimer:Float = -1;
 
 	public var invulnerable:Bool = false;
-	private var _invTimer:Float = 0.8;
-	private var _invDuration:Float = 0.8;
+	private var invTimer:Float = 0.8;
+	private var invDuration:Float = 0.8;
 
 	private var respawning:Bool = false;
 	private var respawnTimer:Float = 0;
 	private var justDied:Bool = false;
 
 	private var moveSpeed:Float = 0;
-	public static var gravity:Float = 400;
+	public var gravity:Float = 400;
 	private var normalMaxVelocity:FlxPoint;
 
 	public function new(X:Int, Y:Int)
@@ -52,6 +52,14 @@ class Player extends FlxExtendedSprite
 		solid = true;
 		health = 1;
 		number = 0; // set for 1p mode for testing by default
+
+		animation.add("idle", [0, 0, 0, 0, 0, 0, 2, 1, 2, 1, 2, 1], 3, true);
+		animation.add("walk", [4, 5, 6, 7], 12, true);	
+		animation.add("jump", [5], 8, true);
+		animation.add("fall", [6], 8, true);
+		animation.add("climb", [8, 9], 8, true);
+		animation.add("climbidle", [8], 4, true);
+		animation.add("attack", [10], 4, false);
 	}
 
 	override public function update():Void
@@ -89,49 +97,49 @@ class Player extends FlxExtendedSprite
 		// Jump Reset
 		if (isTouching(FlxObject.FLOOR))
 		{
-			if (_landed == false)
+			if (landed == false)
 			{
 				playLandingSound();
-				_landed = true;
+				landed = true;
 			}
 			
-			_jumped = false; // reset jump press
-			_jumpTimer = 0;
+			jumped = false; // reset jump press
+			jumpTimer = 0;
 			
 		}
 		else if (!isTouching(FlxObject.FLOOR))
 		{
-			_landed = false;
+			landed = false;
 		}
 		
 		//prevent bouncy mode
 		if (isPressing(Reg.JUMP) == true)
 		{
-			_jumped = true;
+			jumped = true;
 		}
 		
 		// Variable Jump Control
-		if ((_jumpTimer >= 0) && isPressing(Reg.JUMP) && _jumped)
+		if ((jumpTimer >= 0) && isPressing(Reg.JUMP) && jumped)
 		{
-			_jumpTimer += FlxG.elapsed;
+			jumpTimer += FlxG.elapsed;
 			
 			if (isTouching(FlxObject.CEILING))
 			{
-				_jumpTimer += FlxG.elapsed; // double penalty. only half max jump if you hit your head.
+				jumpTimer += FlxG.elapsed; // double penalty. only half max jump if you hit your head.
 				// this was done so you can still recover from a head bonk and push blocks, but your jumping ability is greatly diminished.
 			}
 			
-			if (_jumpTimer > .26)
+			if (jumpTimer > .26)
 			{
-				_jumpTimer = -1; // -1 means jump isn't allowed
+				jumpTimer = -1; // -1 means jump isn't allowed
 			}
 		}
 		else
 		{
-			_jumpTimer = -1;
+			jumpTimer = -1;
 		}
 		
-		if(_jumpTimer > 0)
+		if(jumpTimer > 0)
 		{
 			jump();
 		}
@@ -206,33 +214,34 @@ class Player extends FlxExtendedSprite
 	public function jump():Void
 	{
 		// Jump sound
-		if (_jumpTimer < 0.02)
+		if (jumpTimer < 0.02)
 		{
-			_landed = false;
+			landed = false;
 		}
 		
 		//Jump
-		if (_jumpTimer < 0.075)
+		if (jumpTimer < 0.075)
 		{
-			velocity.y = -_jumpStrength * 0.7;//-.22;//-.3;
+			velocity.y = -jumpStrength * 0.7;//-.22;//-.3;
 		}
-		else if (_jumpTimer < 0.15)
+		else if (jumpTimer < 0.15)
 		{
-			velocity.y = -_jumpStrength * 1;//26;//-.35;
+			velocity.y = -jumpStrength * 1;//26;//-.35;
 		}
-		else if (_jumpTimer < 0.24)
+		else if (jumpTimer < 0.24)
 		{
-			velocity.y = -_jumpStrength * 1.1;//-.3;//-.4;
+			velocity.y = -jumpStrength * 1.1;//-.3;//-.4;
 		}
 		else
 		{
-			velocity.y = -_jumpStrength * 1;//-.5;
+			velocity.y = -jumpStrength * 1;//-.5;
 		}
 	}
 
 	public function playLandingSound():Void
 	{
 		// Override within the characters themselves
+		FlxG.sound.play("GrimmerLand", 0.4);
 	}
 
 }

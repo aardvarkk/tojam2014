@@ -52,9 +52,9 @@ class PlayState extends FlxState
 	 */
 	override public function create():Void
 	{
-		//#if debug
+		#if debug
 		FlxG.game.debugger.stats.visible = true;
-		//#end
+		#end
 
 		//FlxG.mouse.visible = false;
 
@@ -71,7 +71,9 @@ class PlayState extends FlxState
 		// since we don't want the split screen cameras to fuck it up
 
 		// Initialize things
-		_backdropFar = new FlxBackdrop(Reg.SNOWCLOUDS,1.5,0,true,false);
+		_backdropFar = new FlxBackdrop(Reg.SNOWCLOUDS,0.5,0,true,false);
+		
+		/*
 		_weatherEmitter = new FlxEmitter(-240,-5);
 		_weatherEmitter.setSize(720,0);
 		_weatherEmitter.makeParticles(Reg.PARTICLE,400,0,true,0);
@@ -80,14 +82,15 @@ class PlayState extends FlxState
 		_weatherEmitter.setAlpha(1,1,0,0.5);
 		_weatherEmitter.setRotation(0,0);
 		_weatherEmitter.start(false,10,0.007125);
+		*/
+
+		_players = new FlxGroup();
+		_p1 = new Player1(120,120);
 
 		// Add objects to game from back to front
 		add(_backdropFar);
-		add(_weatherEmitter);
 
-		// The last stuff
-		//FlxG.sound.play("");
-		FlxG.camera.flash(0xffffffff,0.25);
+		//add(_weatherEmitter);
 
 		// Create the random buildings
 		_buildings = new RandomBuildings(
@@ -101,6 +104,15 @@ class PlayState extends FlxState
 			3
 			);
 		add(_buildings);
+
+		// Add players
+		_players.add(_p1);
+		add(_players);
+
+
+		// The last stuff
+		//FlxG.sound.play("");
+		FlxG.camera.flash(0xffffffff,0.25);
 
 		// Super
 		super.create();
@@ -121,7 +133,20 @@ class PlayState extends FlxState
 	override public function update():Void
 	{
 
-		//FlxG.camera.scroll.x +=1;
+		// Resize the world - collisions are only detected within the world bounds
+		FlxG.worldBounds.set(FlxG.camera.scroll.x - 20, FlxG.camera.scroll.y - 20, FlxG.width + 20, FlxG.height + 20);
+		
+		// Collisions
+		FlxG.collide(_players, _buildings);
+
+		// Overlap
+
+
+		// Game controls
+		if (FlxG.keys.justPressed.ESCAPE)
+		{
+			FlxG.resetState();
+		}
 
 		// Super
 		super.update();

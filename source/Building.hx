@@ -19,9 +19,9 @@ class Building extends FlxSprite
 		sprite.animation.frameIndex = TileIndex;
 		sprite.drawFrame();
 
+		// Choose random full-alpha color
 		var color = FlxRandom.int();
 		color = color | 0xff000000;
-
 		makeGraphic(Width * Reg.blockSize, Height * Reg.blockSize, color);
 
 		for (r in 0...Height) {

@@ -36,22 +36,20 @@ class Player1 extends Player
 		jumpStrength = 136;
 
 		loadGraphic(Reg.CORGI1, true, 48, 32);
-		width = 12;
-		height = 15;
-		offset.x = 17;
+		width = 15;
+		height = 16;
+		offset.x = 16;
 		offset.y = 16;
 
-		isSelected = true;
+		selected = true;
 
-		animation.add("idle", [0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 2], 3, true);
-		animation.add("walk", [3, 4, 5, 3, 6, 7], 10, true);	
-		animation.add("jump", [8, 9], 7, true);
-		animation.add("fall", [10, 11], 6, true);
-		animation.add("climb", [12, 13, 14, 15], 8, true);
-		animation.add("climbidle", [12, 16, 18, 17], 4, true);
-		animation.add("attack1", [24, 25, 25, 26, 26, 27], 24, false);
-		animation.add("attack2", [28, 29, 30, 31, 32], 10, false);
-		animation.add("attack3", [38, 39, 40, 41, 34, 35, 36, 37], 30, true);
+		animation.add("idle", [0, 0, 0, 0, 0, 0, 2, 1, 2, 1, 2, 1], 3, true);
+		animation.add("walk", [4, 5, 6, 7], 12, true);	
+		animation.add("jump", [5], 8, true);
+		animation.add("fall", [6], 8, true);
+		animation.add("climb", [8, 9], 8, true);
+		animation.add("climbidle", [8], 4, true);
+		animation.add("attack", [10], 4, false);
 	}
 
 	override public function update():Void
@@ -62,7 +60,7 @@ class Player1 extends Player
 
 	override public function playLandingSound():Void
 	{
-		FlxG.sound.play("GrimmerLand", 0.4);
+		super.playLandingSound();
 	}
 
 	override public function controls():Void
@@ -76,6 +74,7 @@ class Player1 extends Player
 		if (velocity.y > 0)
 		{
 			animation.play("fall");
+			
 		}
 		else if (velocity.y < 0)
 		{
