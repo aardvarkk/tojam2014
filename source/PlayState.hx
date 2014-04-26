@@ -55,30 +55,28 @@ class PlayState extends FlxState
 	private var _round:Int;
 	private var _selectedPlayer:Int = 0;
 	private var _rider:Player;
+	private var _roundOver:Bool = false;
 
 	public function new(NumPlayers:Int = 2, ?Round:Int = 0)
 	{
 		super();
 		_numPlayers = NumPlayers;
-		_round = Round;
 
-		for (i in 0..._numPlayers)
-		{
-			Reg.scores[i] = 0;
-		}
-
-		FlxG.log.add('Starting game round $_round with $_numPlayers players');
+		startRound(Round);
 	}
 
-	private function getScoreString()
+	public function startRound(Round:Int)
 	{
-		var scoreString = "";
-		for (i in 0..._numPlayers)
+		FlxG.log.add('Starting game round $_round with $_numPlayers players');
+		_round = Round;
+
+		if (_round == 0) 
 		{
-			var score = Reg.scores[i];
-			scoreString += 'P${i+1}:$score\n';
+			for (i in 0..._numPlayers)
+			{
+				Reg.scores[i] = 0;
+			}
 		}
-		return scoreString;
 	}
 
 	/**
@@ -188,6 +186,7 @@ class PlayState extends FlxState
 		add(_infoText);
 		_infoText.scrollFactor.x = 0;
 		_infoText.scrollFactor.y = 0;
+		_infoText.color = 0;
 
 		// The last stuff
 		//FlxG.sound.play("");
@@ -221,35 +220,51 @@ class PlayState extends FlxState
 	 */
 	override public function update():Void
 	{
-		// Slide camera to follow racer
-		_camera.scroll.x += Reg.RACERSPEED * FlxG.elapsed;
-
-		// Update player score strings visually
-		_infoText.text = getScoreString();
-
-		// Resize the world - collisions are only detected within the world bounds
-		FlxG.worldBounds.set(FlxG.camera.scroll.x - 20, FlxG.camera.scroll.y - 20, FlxG.width + 20, FlxG.height + 20);
-		
-		// Collisions
-		//FlxG.collide(_players, _buildings);
-		FlxG.overlap(_players, _racer, swap);
-
-		// Overlap
-
-		// off-screen kill
-		for (p in _players)
+		// Game actively playing
+		if (!_roundOver) 
 		{
-			if (p.y > FlxG.height + 20 || p.x + p.width < _camera.scroll.x - 20)
+			// Slide camera to follow racer
+			_camera.scroll.x += Reg.RACERSPEED * FlxG.elapsed;
+
+			// Update player score strings visually
+			_infoText.text = Reg.getScoreString();
+
+			// Resize the world - collisions are only detected within the world bounds
+			FlxG.worldBounds.set(FlxG.camera.scroll.x - 20, FlxG.camera.scroll.y - 20, FlxG.width + 20, FlxG.height + 20);
+			
+			// Collisions
+			//FlxG.collide(_players, _buildings);
+			FlxG.overlap(_players, _racer, swap);
+
+			// Overlap
+
+			// off-screen kill
+			for (p in _players)
 			{
-				p.respawn(_camera.scroll.x + 48, 48);
-				Reg.scores[p.number] -= 100;
+				if (p.y > FlxG.height + 20 || p.x + p.width < _camera.scroll.x - 20)
+				{
+					p.respawn(_camera.scroll.x + 48, 48);
+					Reg.scores[p.number] -= 100;
+				}
+				if (p.diving == false)
+				{
+					FlxG.collide(p, _buildings);
+				}
 			}
-			if (p.diving == false)
+
+			// Check for round over
+			if (_racer.x + _racer.width >= Reg.LEVELLENGTH)
 			{
-				FlxG.collide(p, _buildings);
+				endRound();
 			}
 		}
-
+		// Round is over!
+		else 
+		{
+			_infoText.text = Reg.getScoreString();
+			_infoText.text += "\nROUND OVER!";
+			new FlxTimer(2, endRoundTimer);
+		}
 
 		// Game controls
 		if (FlxG.keys.justPressed.ESCAPE)
@@ -291,8 +306,15 @@ class PlayState extends FlxState
 		Reg.scores[P.number] += 500;
 	}	
 
+	public function endRoundTimer(Timer:FlxTimer)
+	{
+		FlxG.switchState(new PlayState(_numPlayers, _round + 1));
+	}
+
 	public function endRound()
 	{
+		_roundOver = true;
+
 		// Still more rounds to go, so reset everything and switch the racer...
 		if (_round < _numPlayers - 1) 
 		{
@@ -301,7 +323,7 @@ class PlayState extends FlxState
 		// Done the game, show which player won!
 		else
 		{
-			FlxG.switchState(new ShowWinnerState(0));
+			FlxG.switchState(new ShowWinnerState());
 		}
 	}
 }

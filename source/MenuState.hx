@@ -26,7 +26,7 @@ class MenuState extends FlxState
         title.alignment = "center";
         add(title);
 
-        var choosePlayers = new FlxText(0, FlxG.height/2 + 50, FlxG.width, "Choose Number of Players (1-4)");
+        var choosePlayers = new FlxText(0, FlxG.height/2 + 50, FlxG.width, "Choose Number of Players (2-4)");
         choosePlayers.alignment = "center";
         add(choosePlayers);
 	}

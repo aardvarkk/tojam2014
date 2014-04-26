@@ -28,6 +28,32 @@ class Reg
 	 * Example usage: Storing the scores for level.
 	 */
 	static public var scores:Array<Dynamic> = [];
+	
+	static public function getScoreString(?Sorted:Bool = true)
+	{
+		var scoreString = "";
+		for (i in 0...scores.length)
+		{
+			var score = Reg.scores[i];
+			scoreString += 'P${i+1}:$score\n';
+		}
+		return scoreString;
+	}
+
+	static public function getWinner():Int
+	{
+		var maxScoreIdx = 0;
+		var maxScore = scores[0];
+		for (i in 1...scores.length) 
+		{
+			if (scores[i] > maxScore) {
+				maxScore = scores[i];
+				maxScoreIdx = i;
+			}
+		}
+		return maxScoreIdx;
+	}
+
 	/**
 	 * Generic score variable that can be used for cross-state stuff.
 	 * Example usage: Storing the current score.
@@ -85,5 +111,7 @@ class Reg
 	 public static inline var RACERHEIGHT:Int = 25;
 	 public static inline var RACERSPEED:Int = 75;
 
-	 public static inline var LEVELLENGTH:Int = 2048;
+	 public static inline var LEVELLENGTH:Int = 1024;
+
+	 public static inline var LINESPACE:Int = 25;
 }

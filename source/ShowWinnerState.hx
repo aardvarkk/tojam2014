@@ -3,19 +3,37 @@ package;
 import flixel.FlxG;
 import flixel.FlxState;
 import flixel.text.FlxText;
+import flixel.util.FlxTimer;
 
 class ShowWinnerState extends FlxState
 {
-	private var _winner:Int;
-
-	public function new(Winner:Int = 1)
+	public function new()
 	{
 		super();
-		_winner = Winner;
 	}
 
 	override public function create()
 	{
-		add(new FlxText(0, FlxG.height/2, 100, 'Player $_winner Wins!'));
+		var winner = Reg.getWinner();
+
+		var text = 'Player ${winner + 1} Wins!\n';
+		text += Reg.getScoreString();
+
+		add(new FlxText(0, 0, FlxG.width, text));
+	}
+
+	override public function update()
+	{
+		new FlxTimer(3, waitOver);
+
+		// if (FlxG.keys.justPressed.ANY) 
+		// {
+		// 	FlxG.switchState(new MenuState());
+		// }
+	}
+
+	public function waitOver(Timer:FlxTimer)
+	{
+		FlxG.switchState(new MenuState());
 	}
 }
