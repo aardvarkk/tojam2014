@@ -160,9 +160,9 @@ class Player extends FlxExtendedSprite
 		if (FlxG.keys.anyJustPressed([Reg.keyset[number][4]]))
 		{
 			// Starting dive bomb
-			// If BOTH trying to start a jump and holding down, start the divebomb
+			// If not already diving and BOTH trying to start a jump and holding down, start the divebomb
 			// Immediately set vertical velocity
-			if (FlxG.keys.anyPressed([Reg.keyset[number][1]]))
+			if (!diving && FlxG.keys.anyPressed([Reg.keyset[number][1]]))
 			{
 				diving = true;
 				velocity.x += diveBombBoostX;
