@@ -76,7 +76,7 @@ class TitleState extends FlxState
 		//_moon.velocity.x = 15;
 		// Title-specific Sprites - Really no need to have their own class UNLESS they get used again
 		_rider = new FlxSprite(FlxG.width, FlxG.height - 78);
-		_rider.loadGraphic(Reg.RIDER,true,true,48);
+		_rider.loadGraphic(Reg.RIDER, true, 48);
 		_rider.animation.add("default",[0,1,2,3],12,true);
 		_rider.animation.play("default");
 		_rider.facing = FlxObject.LEFT;
@@ -85,7 +85,7 @@ class TitleState extends FlxState
 		_moonTarget = new FlxPoint(282,64-16);
 		_start = new FlxSprite(182, 221);
 		_start.visible = false;
-		_start.loadGraphic(Reg.START,true,false,120,12);
+		_start.loadGraphic(Reg.START, true, 120, 12);
 		_start.animation.add("default",[0,1],1,true);
 		_start.animation.add("flicker",[0,1],4,true);
 		_start.animation.play("default");

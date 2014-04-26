@@ -28,7 +28,7 @@ class Grimmer extends Player
 		acceleration.y = gravity;
 		jumpStrength = 136;
 
-		loadGraphic(Reg.GRIMMER, true, true, 48, 32);
+		loadGraphic(Reg.GRIMMER, true, 48, 32);
 		width = 12;
 		height = 15;
 		offset.x = 17;

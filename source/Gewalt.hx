@@ -30,7 +30,7 @@ class Gewalt extends Player
 		acceleration.y = gravity;
 		jumpStrength = 173;
 
-		loadGraphic(Reg.GEWALT, true, true, 48, 32);
+		loadGraphic(Reg.GEWALT, true, 48, 32);
 		width = 13;
 		height = 15;
 		offset.x = 16;

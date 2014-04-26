@@ -115,6 +115,7 @@ class Player extends FlxExtendedSprite
 		{
 			if (!onLadder && !forceWalk) // can't adjust when on ladder or forced to walk ie boulder riding
 			{
+				flipX = true;
 				facing = FlxObject.LEFT;
 				//acceleration.x = -maxVelocity.x * 20; //velocity.x = -maxVelocity.x;
 				if (velocity.x > -normalMaxVelocity.x)
@@ -126,6 +127,7 @@ class Player extends FlxExtendedSprite
 		// Move Right
 		if (isPressing(FlxObject.RIGHT))
 		{
+			flipX = false;
 			if (!onLadder && !forceWalk) // can't adjust when on ladder or forced to walk ie boulder riding
 			{
 				facing = FlxObject.RIGHT;
