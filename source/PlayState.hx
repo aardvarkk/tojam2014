@@ -228,7 +228,8 @@ class PlayState extends FlxState
 			_camera.scroll.x += Reg.RACERSPEED * FlxG.elapsed;
 
 			// Update player score strings visually
-			_infoText.text = Reg.getScoreString();
+			_infoText.text = 'Round ${_round + 1} of ${_numPlayers}\n';
+			_infoText.text += Reg.getScoreString();
 
 			// Resize the world - collisions are only detected within the world bounds
 			FlxG.worldBounds.set(FlxG.camera.scroll.x - 20, FlxG.camera.scroll.y - 20, FlxG.width + 20, FlxG.height + 20);
