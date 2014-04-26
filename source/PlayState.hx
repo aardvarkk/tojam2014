@@ -45,7 +45,8 @@ class PlayState extends FlxState
 	private var _p2:Player;
 	private var _p3:Player;
 	private var _p4:Player;
-	private var _blocks:FlxTileblock;
+	private var _buildings:RandomBuildings;
+
 	/**
 	 * Function that is called up when to state is created to set it up. 
 	 */
@@ -87,6 +88,18 @@ class PlayState extends FlxState
 		// The last stuff
 		//FlxG.sound.play("");
 		FlxG.camera.flash(0xffffffff,0.25);
+
+		// Create the random buildings
+		_buildings = new RandomBuildings(
+			FlxG.height, 
+			FlxG.width * 10, 
+			2,
+			15,
+			1,
+			5,
+			3
+			);
+		add(_buildings);
 
 		// Super
 		super.create();

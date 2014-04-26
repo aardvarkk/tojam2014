@@ -20,6 +20,10 @@ class Reg
 	 */
 	static public var level:Int = 0;
 	/**
+	 * Size of smallest detail block
+	 */
+	static public var blockSize:Int = 16; 
+	/**
 	 * Generic scores Array that can be used for cross-state stuff.
 	 * Example usage: Storing the scores for level.
 	 */
