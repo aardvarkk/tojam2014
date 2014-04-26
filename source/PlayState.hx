@@ -63,7 +63,7 @@ class PlayState extends FlxState
 		//FlxG.mouse.visible = false;
 
 		_camera = FlxG.camera;
-		_camera.deadzone = new FlxRect(0, 0, 0, 0);
+		//_camera.deadzone = new FlxRect(10, 10, FlxG.width - 10, FlxG.height - 10);
 
 		FlxG.cameras.bgColor = 0xff486878;
 
@@ -124,7 +124,8 @@ class PlayState extends FlxState
 
 		FlxG.camera.setBounds(0,0, FlxG.width * 10, FlxG.height);
 
-		_camera.follow(_racer, FlxCamera.STYLE_PLATFORMER);
+		_camera.follow(_racer, FlxCamera.STYLE_LOCKON);
+		_camera.followLead.x = -130;
 
 		// Super
 		super.create();
