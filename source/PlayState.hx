@@ -43,6 +43,7 @@ class PlayState extends FlxState
 	private var _weatherEmitter:FlxEmitter;
 	private var _infoText:FlxText;
 	private var _players:FlxTypedGroup<Player>;
+	private var _bubbles:FlxTypedGroup<Bubble>;
 	private var _p1:Player;
 	private var _p2:Player;
 	private var _p3:Player;
@@ -90,7 +91,8 @@ class PlayState extends FlxState
 		_weatherEmitter.start(false,10,0.007125);
 
 		_players = new FlxTypedGroup();
-		_p1 = new Player1(100,0);
+		_p1 = new Player1(150,100);
+		_bubbles = new FlxTypedGroup();
 
 		// Add objects to game from back to front
 		add(_backdropFar);
@@ -112,7 +114,9 @@ class PlayState extends FlxState
 
 		// Add players
 		_players.add(_p1);
+		_bubbles.add(_p1.bubble);
 		add(_players);
+		add(_bubbles);
 
 		// Add racer
 		_racer = new Racer(FlxG.width - Reg.RACERWIDTH, FlxG.height - Reg.RACERHEIGHT);
@@ -150,7 +154,7 @@ class PlayState extends FlxState
 		FlxG.worldBounds.set(FlxG.camera.scroll.x - 20, FlxG.camera.scroll.y - 20, FlxG.width + 20, FlxG.height + 20);
 		
 		// Collisions
-		FlxG.collide(_players, _buildings);
+		//FlxG.collide(_players, _buildings);
 		FlxG.overlap(_players, _racer, swap);
 
 		// Overlap
@@ -160,7 +164,11 @@ class PlayState extends FlxState
 		{
 			if (p.y > FlxG.height + 20 || p.x + p.width < _camera.scroll.x - 20)
 			{
-				p.reset(_camera.scroll.x + 100,0);
+				p.respawn(_camera.scroll.x + 48, 48);
+			}
+			if (p.diving == false)
+			{
+				FlxG.collide(p, _buildings);
 			}
 		}
 
@@ -169,6 +177,11 @@ class PlayState extends FlxState
 		if (FlxG.keys.justPressed.ESCAPE)
 		{
 			FlxG.resetState();
+		}
+		if (FlxG.keys.justPressed.SPACE)
+		{
+			// test
+			//_p1.selected = !_p1.selected;
 		}
 
 		// Super

@@ -25,19 +25,18 @@ class Player extends FlxExtendedSprite
 
 	public var attacking:Bool = false;
 	public var attackTimer:Float = -1;
-	public var dive:Bool = true;
+	public var diving:Bool = false;
 
 	public var invulnerable:Bool = false;
 	private var invTimer:Float = 0.8;
 	private var invDuration:Float = 0.8;
 
-	private var respawning:Bool = false;
 	private var respawnTimer:Float = 0;
-	private var justDied:Bool = false;
 
 	private var moveSpeed:Float = 0;
 	public var gravity:Float = 400;
 	private var normalMaxVelocity:FlxPoint;
+	public var bubble:Bubble;
 
 	public function new(X:Int, Y:Int)
 	{
@@ -51,11 +50,9 @@ class Player extends FlxExtendedSprite
 		drag.x = normalMaxVelocity.x * 10;
 
 		solid = true;
+		diving = false;
 		health = 1;
 		number = 0; // set for 1p mode for testing by default
-
-
-		// thing
 
 		gravity = 450;
 		moveSpeed = 83;
@@ -67,6 +64,8 @@ class Player extends FlxExtendedSprite
 		else if (number == 3) loadGraphic(Reg.CORGI3, true, 48, 32);
 		else if (number == 4) loadGraphic(Reg.CORGI4, true, 48, 32);
 		else loadGraphic(Reg.CORGI1, true, 48, 32);
+
+		bubble = new Bubble(X, Y);
 
 		width = 15;
 		height = 16;
@@ -89,9 +88,21 @@ class Player extends FlxExtendedSprite
 		// Need to add global pause features later, but skip for now
 		controls();
 
-		if (landed == false && jumped == true && dive == true)
+		if (respawnTimer > 0) // when it was >= 0 there were bugs
 		{
-			solid = false;
+			respawnTimer -= FlxG.elapsed;
+			velocity.y = 0;
+			bubble.x = x - 10;
+			bubble.y = y - 12;
+
+			if (isPressing(Reg.JUMP) || respawnTimer <= 0)
+			{
+				jumped = true;
+				landed = false;
+				jumpTimer = -1;
+				respawnTimer = -1;
+				bubble.die();
+			}
 		}
 
 		super.update();
@@ -106,7 +117,6 @@ class Player extends FlxExtendedSprite
 		{
 			flipX = true;
 			facing = FlxObject.LEFT;
-			//acceleration.x = -maxVelocity.x * 20; //velocity.x = -maxVelocity.x;
 			if (velocity.x > -normalMaxVelocity.x)
 				velocity.x -= normalMaxVelocity.x * .5;
 		}
@@ -116,9 +126,8 @@ class Player extends FlxExtendedSprite
 		{
 			flipX = false;
 			facing = FlxObject.RIGHT;
-			//acceleration.x = maxVelocity.x * 20; //velocity.x = maxVelocity.x;
 			if (velocity.x < normalMaxVelocity.x)
-				velocity.x += normalMaxVelocity.x * .5; // 20%
+				velocity.x += normalMaxVelocity.x * .5;
 		}
 		
 		// Jump Reset
@@ -170,78 +179,51 @@ class Player extends FlxExtendedSprite
 		{
 			jump();
 		}
+
+		// Dive bomb
+		if (landed == false &&
+			jumped == true &&
+			isPressing(FlxObject.DOWN) &&
+			(x >= FlxG.camera.scroll.x + FlxG.width - 100))
+		{
+			diving = true;
+			velocity.y += 25;
+			angularVelocity = 80;
+		}
 		
 	}
 
 	private function isPressing(Direction:Int):Bool
 	{
+		if (number == 0 && selected == false)
+			return false;
+
 		if (Direction == FlxObject.UP)
 		{
-			if (number == 0 && selected)
-				return (FlxG.keys.anyPressed([Reg.keyset[0][0]]));
-			else if (number > 0)
-				return (FlxG.keys.anyPressed([Reg.keyset[number][0]]));
-			else
-				return false;
+			return (FlxG.keys.anyPressed([Reg.keyset[number][0]]));
 		}
 		else if (Direction == FlxObject.DOWN)
 		{
-			if (number == 0 && selected)
-			{
-				return (FlxG.keys.anyPressed([Reg.keyset[0][1]]));
-				dive = true;
-			}
-			else if (number > 0)
-			{
-				return (FlxG.keys.anyPressed([Reg.keyset[number][1]]));
-				dive = true;
-			}
-			else
-			{
-				return false;
-			}
+			return (FlxG.keys.anyPressed([Reg.keyset[number][1]]));
 		}
 		else if (Direction == FlxObject.LEFT)
 		{
-			if (number == 0 && selected)
-				return (FlxG.keys.anyPressed([Reg.keyset[0][2]]));
-			else if (number > 0)
-				return (FlxG.keys.anyPressed([Reg.keyset[number][2]]));
-			else
-				return false;
+			return (FlxG.keys.anyPressed([Reg.keyset[number][2]]));
 		}
 		else if (Direction == FlxObject.RIGHT)
 		{
-			if (number == 0 && selected)
-				return (FlxG.keys.anyPressed([Reg.keyset[0][3]]));
-			else if (number > 0)
-				return (FlxG.keys.anyPressed([Reg.keyset[number][3]]));
-			else
-				return false;
+			return (FlxG.keys.anyPressed([Reg.keyset[number][3]]));
 		}
 		else if (Direction == Reg.JUMP)
 		{
-			if (number == 0 && selected)
-			{
-				return (FlxG.keys.anyPressed([Reg.keyset[0][4]]));
-			}
-			else if (number > 0)
-				return (FlxG.keys.anyPressed([Reg.keyset[number][4]]));
-			else
-				return false;
+			return (FlxG.keys.anyPressed([Reg.keyset[number][4]]));
 		}
 		else if (Direction == Reg.KEY1)
 		{
-			if (number == 0 && selected)
-				return (FlxG.keys.anyPressed([Reg.keyset[0][5]]));
-			else if (number > 0)
-				return (FlxG.keys.anyPressed([Reg.keyset[number][5]]));
-			else
-				return false;
+			return (FlxG.keys.anyPressed([Reg.keyset[number][5]]));
 		}
 		else
 		{
-			// you're out of control in the most literal sense
 			return false;
 		}
 	}
@@ -257,33 +239,42 @@ class Player extends FlxExtendedSprite
 		//Jump
 		if (jumpTimer < 0.075)
 		{
-			velocity.y = -jumpStrength * 0.7;//-.22;//-.3;
+			velocity.y = -jumpStrength * 0.7;
 		}
 		else if (jumpTimer < 0.15)
 		{
-			velocity.y = -jumpStrength * 1;//26;//-.35;
+			velocity.y = -jumpStrength * 1;
 		}
 		else if (jumpTimer < 0.24)
 		{
-			velocity.y = -jumpStrength * 1.1;//-.3;//-.4;
+			velocity.y = -jumpStrength * 1.1;
 		}
 		else
 		{
-			velocity.y = -jumpStrength * 1;//-.5;
+			velocity.y = -jumpStrength * 1;
 		}
 	}
 
 	public function playLandingSound():Void
 	{
 		// Override within the characters themselves
-		FlxG.sound.play("GewaltLand", 0.4);
+		FlxG.sound.play("Landing", 0.4);
 	}
 
 	override public function reset(X:Float, Y:Float):Void
 	{
+		jumped = false;
 		super.reset(X, Y);
-		solid = true;
-		dive = false;
+		diving = false;
+		angularVelocity = 0;
+		angle = 0;
+	}
+
+	public function respawn(X:Float, Y:Float):Void
+	{
+		reset(X, Y);
+		respawnTimer = 2;
+		bubble.reset(x - 10, y - 12);
 	}
 
 }

@@ -39,24 +39,7 @@
 	<!--Flash requires .ogg - if="flash"-->
 	<assets path="assets/sounds" unless="flash">
 	<!-- -->
-		<music path="howl.ogg" id="Howl" />
-		<music path="howlbase.ogg" id="HowlBase" />
-		<music path="growl.ogg" id="Growl" />
-		<music path="oddecho.ogg" id="OddEcho" />
-		<music path="endhowl.ogg" id="EndHowl" />
-		<music path="death.ogg" id="PlayerDeath" />
-		<music path="reform3.ogg" id="PlayerRespawn" />
-		<music path="grimmerland3.ogg" id="GrimmerLand" />
-		<music path="grimmerhit.ogg" id="GrimmerHurt" />
-		<music path="swinghammer.ogg" id="HammerUpper" />
-		<music path="swinghammerdown.ogg" id="HammerSwipe" />
-		<music path="spinhammer.ogg" id="HammerSpin" />
-		<music path="slamhammer.ogg" id="HammerSlam" />
-		<music path="gewaltland2fix.ogg" id="GewaltLand" />
-		<music path="gewalthit.ogg" id="GewaltHurt" />
-		<music path="gewaltexplosion.ogg" id="GewaltCloud" />
-		<music path="gewaltslash.ogg" id="GewaltSlash" />
-		<music path="gewaltslash2.ogg" id="GewaltSlash2" />
+		<music path="grimmerland3.ogg" id="Landing" />
 	<!-- -->
 	</assets>
 	<assets path="assets/music" if="flash">
