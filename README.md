@@ -13,6 +13,8 @@
  * `Ctrl-Shift-B` to set build target
  * `Ctrl-Enter` to build and run
  * Check snippets inside command palette
+## OSX
+1. `sudo haxelib selfupdate`
 
 # [Tiled](http://www.mapeditor.org/) (Map Editor)
 1. See [HaxeFlixel Demos](http://haxeflixel.com/demos/) for example usage
