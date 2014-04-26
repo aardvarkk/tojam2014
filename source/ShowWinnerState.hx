@@ -8,7 +8,7 @@ class ShowWinnerState extends FlxState
 {
 	private var _winner:Int;
 
-	public function new(Winner:Int = 0)
+	public function new(Winner:Int = 1)
 	{
 		super();
 		_winner = Winner;
@@ -16,7 +16,6 @@ class ShowWinnerState extends FlxState
 
 	override public function create()
 	{
-		var winningPlayerNumber = _winner + 1;
-		add(new FlxText(0, FlxG.height/2, 100, 'Player $winningPlayerNumber Wins!'));
+		add(new FlxText(0, FlxG.height/2, 100, 'Player $_winner Wins!'));
 	}
 }
