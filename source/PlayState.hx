@@ -36,6 +36,7 @@ import flixel.input.gamepad.XboxButtonID;
 class PlayState extends FlxState
 {
 	// Variables live here
+	private var _background:FlxBackdrop;
 	private var _cloudsFar:FlxBackdrop;
 	private var _cloudsMid:FlxBackdrop;
 	private var _cloudsNear:FlxBackdrop;
@@ -58,6 +59,7 @@ class PlayState extends FlxState
 	private var _round:Int;
 	private var _selectedPlayer:Int = 0;
 	private var _rider:Player;
+	//private var _bombs:FlxTypedGroup<Bomb>;
 	private var _roundOver:Bool = false;
 
 	public function new(NumPlayers:Int = 2, ?Round:Int = 0)
@@ -109,6 +111,7 @@ class PlayState extends FlxState
 		// since we don't want the split screen cameras to fuck it up
 
 		// Initialize things
+		_background = new FlxBackdrop(Reg.BACKGROUND,0.0675,0,true, false);
 		_cloudsFar = new FlxBackdrop(Reg.CLOUDSFAR,0.125,0,true,false);
 		_cloudsMid = new FlxBackdrop(Reg.CLOUDSMID,0.25,0,true,false);
 		_cloudsNear = new FlxBackdrop(Reg.CLOUDSNEAR,0.5,0,true,false);
@@ -122,9 +125,9 @@ class PlayState extends FlxState
 
 		_weatherEmitter = new FlxEmitter(-240,-5);
 		_weatherEmitter.setSize(720,0);
-		_weatherEmitter.makeParticles(Reg.PARTICLE,400,0,true,0);
-		_weatherEmitter.setXSpeed(-50,-150); // 10-100 looks good - try it in ruins?
-		_weatherEmitter.setYSpeed(50,80);
+		_weatherEmitter.makeParticles(Reg.PARTICLE,200,0,true,0);
+		_weatherEmitter.setXSpeed(-80,-350); // 10-100 looks good - try it in ruins?
+		_weatherEmitter.setYSpeed(100,400);
 		_weatherEmitter.setAlpha(1,1,0,0.5);
 		_weatherEmitter.setRotation(0,0);
 		_weatherEmitter.start(false,10,0.007125);
@@ -145,6 +148,7 @@ class PlayState extends FlxState
 		_racer.drag.y = 300;
 
 		// Add objects to game from back to front
+		add(_background);
 		add(_cloudsFar);
 		add(_mountainsFar);
 		add(_cloudsMid);
@@ -243,6 +247,7 @@ class PlayState extends FlxState
 		{
 			// Slide camera to follow racer
 			_camera.scroll.x += Reg.RACERSPEED * FlxG.elapsed;
+			_weatherEmitter.x = _camera.scroll.x;
 
 			// Update player score strings visually
 			_infoText.text = 'Round: ${_round + 1} of ${_numPlayers}\n';

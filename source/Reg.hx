@@ -95,6 +95,7 @@ class Reg
 	 public static inline var MOUNTAINSFAR:String = "images/mountainsFar.png";
 	 public static inline var BUILDINGSMID:String = "images/buildingsMid.png";
 	 public static inline var BUILDINGSNEAR:String = "images/buildingsNear.png";
+	 public static inline var BACKGROUND:String = "images/background.png";
 	 /**
 	 * Game sprites
 	 */
