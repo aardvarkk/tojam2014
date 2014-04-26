@@ -5,6 +5,7 @@ import flixel.FlxObject;
 import flixel.FlxSprite;
 import flixel.FlxState;
 import flixel.FlxCamera;
+import flixel.util.FlxRect;
 
 import flixel.text.FlxText;
 
@@ -62,6 +63,7 @@ class PlayState extends FlxState
 		//FlxG.mouse.visible = false;
 
 		_camera = FlxG.camera;
+		_camera.deadzone = new FlxRect(0, 0, 0, 0);
 
 		FlxG.cameras.bgColor = 0xff486878;
 
