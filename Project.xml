@@ -36,27 +36,27 @@
 	<assets path="assets/data" rename="data" />
 	<assets path="assets/levels" rename="levels" />
 
-	<!--Flash requires .mp3 - if="flash"-->
-	<assets path="assets/sounds" if="flash">
+	<!--Flash requires .ogg - if="flash"-->
+	<assets path="assets/sounds" >
 	<!-- -->
-		<music path="howl.mp3" id="Howl" />
-		<music path="howlbase.mp3" id="HowlBase" />
-		<music path="growl.mp3" id="Growl" />
-		<music path="oddecho.mp3" id="OddEcho" />
-		<music path="endhowl.mp3" id="EndHowl" />
-		<music path="death.mp3" id="PlayerDeath" />
-		<music path="reform3.mp3" id="PlayerRespawn" />
-		<music path="grimmerland3.mp3" id="GrimmerLand" />
-		<music path="grimmerhit.mp3" id="GrimmerHurt" />
-		<music path="swinghammer.mp3" id="HammerUpper" />
-		<music path="swinghammerdown.mp3" id="HammerSwipe" />
-		<music path="spinhammer.mp3" id="HammerSpin" />
-		<music path="slamhammer.mp3" id="HammerSlam" />
-		<music path="gewaltland2fix.mp3" id="GewaltLand" />
-		<music path="gewalthit.mp3" id="GewaltHurt" />
-		<music path="gewaltexplosion.mp3" id="GewaltCloud" />
-		<music path="gewaltslash.mp3" id="GewaltSlash" />
-		<music path="gewaltslash2.mp3" id="GewaltSlash2" />
+		<music path="howl.ogg" id="Howl" />
+		<music path="howlbase.ogg" id="HowlBase" />
+		<music path="growl.ogg" id="Growl" />
+		<music path="oddecho.ogg" id="OddEcho" />
+		<music path="endhowl.ogg" id="EndHowl" />
+		<music path="death.ogg" id="PlayerDeath" />
+		<music path="reform3.ogg" id="PlayerRespawn" />
+		<music path="grimmerland3.ogg" id="GrimmerLand" />
+		<music path="grimmerhit.ogg" id="GrimmerHurt" />
+		<music path="swinghammer.ogg" id="HammerUpper" />
+		<music path="swinghammerdown.ogg" id="HammerSwipe" />
+		<music path="spinhammer.ogg" id="HammerSpin" />
+		<music path="slamhammer.ogg" id="HammerSlam" />
+		<music path="gewaltland2fix.ogg" id="GewaltLand" />
+		<music path="gewalthit.ogg" id="GewaltHurt" />
+		<music path="gewaltexplosion.ogg" id="GewaltCloud" />
+		<music path="gewaltslash.ogg" id="GewaltSlash" />
+		<music path="gewaltslash2.ogg" id="GewaltSlash2" />
 	<!-- -->
 	</assets>
 	<assets path="assets/music" if="flash">
