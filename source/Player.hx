@@ -358,9 +358,12 @@ class Player extends FlxExtendedSprite
 
 	public function dismount():Void
 	{
-		_vehicle = null;
 		ridingVehicle = false;
+		_vehicle = null;
 		acceleration.y = gravity;
+		x = 0;
+		y = 0;
+		kill();
 	}
 
 }

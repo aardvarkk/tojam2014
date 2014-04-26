@@ -77,7 +77,7 @@ class PlayState extends FlxState
 		//FlxG.mouse.visible = false;
 
 		_camera = FlxG.camera;
-		//_camera.deadzone = new FlxRect(10, 10, FlxG.width - 10, FlxG.height - 10);
+		FlxG.camera.setBounds(0,0, FlxG.width * 10, FlxG.height);
 
 		FlxG.cameras.bgColor = 0xff486878;
 
@@ -115,6 +115,8 @@ class PlayState extends FlxState
 
 		_infoText = new FlxText(10,10, FlxG.width - 20, "HELLO!");
 
+		_racer = new Racer(FlxG.width - Reg.RACERWIDTH, FlxG.height - Reg.RACERHEIGHT);
+
 		// Add objects to game from back to front
 		add(_backdropFar);
 
@@ -151,13 +153,21 @@ class PlayState extends FlxState
 		}
 		_players.add(_p1);
 		_bubbles.add(_p1.bubble);
+
+		// mount the player whose turn it is?
+		for (p in _players)
+		{
+			if (p.number == _round)
+			{
+				p.mount(_racer);
+				_rider = p;
+			}
+		}
+
+		add(_racer);
 		
 		add(_players);
 		add(_bubbles);
-
-		// Add racer
-		_racer = new Racer(FlxG.width - Reg.RACERWIDTH, FlxG.height - Reg.RACERHEIGHT);
-		add(_racer);
 
 		add(_infoText);
 		_infoText.scrollFactor.x = 0;
@@ -167,10 +177,16 @@ class PlayState extends FlxState
 		//FlxG.sound.play("");
 		FlxG.camera.flash(0xffffffff,0.25);
 
-		FlxG.camera.setBounds(0,0, FlxG.width * 10, FlxG.height);
-
 		_camera.follow(_racer, FlxCamera.STYLE_LOCKON);
 		_camera.followLead.x = -130;
+
+		// Watchlist
+		FlxG.watch.add(this, "_numPlayers", "Players");
+		FlxG.watch.add(this, "_round", "Round");
+		FlxG.watch.add(_p1, "ridingVehicle", "P1 Riding");
+		FlxG.watch.add(_p2, "ridingVehicle", "P2 Riding");
+		FlxG.watch.add(_p3, "ridingVehicle", "P3 Riding");
+		FlxG.watch.add(_p4, "ridingVehicle", "P4 Riding");
 
 		// Super
 		super.create();
@@ -245,13 +261,11 @@ class PlayState extends FlxState
 		// kick out old rider if there is one
 		if (_rider != null)
 		{
-			_rider.dismount;
-			FlxG.log.add('kicked out $_rider');
+			_rider.dismount();
 		}
 		// add new rider
 		_rider = P;
 		P.mount(R);
-		FlxG.log.add('$P is now the new rider');
 	}	
 
 	public function endRound()
