@@ -51,6 +51,15 @@ class PlayState extends FlxState
 	private var _buildings:RandomBuildings;
 	private var _racer:Racer;
 	private var _camera:FlxCamera;
+	private var _numPlayers:Int;
+
+	public function new(NumPlayers:Int)
+	{
+		super();
+		_numPlayers = NumPlayers;
+
+		FlxG.log.add('Starting game with $_numPlayers players');
+	}
 
 	/**
 	 * Function that is called up when to state is created to set it up. 

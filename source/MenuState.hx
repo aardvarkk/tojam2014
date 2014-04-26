@@ -17,12 +17,18 @@ class MenuState extends FlxState
 	 */
 	override public function create():Void
 	{
+		super.create();
+
 		// Set a background color
         FlxG.cameras.bgColor = 0xff111112;
 
-        add(new FlxText(FlxG.width/2, FlxG.height/2, 150, "Tower of the Gorillion"));
+        var title = new FlxText(0, FlxG.height/2, FlxG.width, "Our Game Title");
+        title.alignment = "center";
+        add(title);
 
-		super.create();
+        var choosePlayers = new FlxText(0, FlxG.height/2 + 50, FlxG.width, "Choose Number of Players (1-4)");
+        choosePlayers.alignment = "center";
+        add(choosePlayers);
 	}
 	
 	/**
@@ -40,5 +46,21 @@ class MenuState extends FlxState
 	override public function update():Void
 	{
 		super.update();
+
+		if (FlxG.keys.anyJustPressed(["ONE", "TWO", "THREE", "FOUR"]))
+		{
+			if (FlxG.keys.anyJustPressed(["ONE"])) {
+				FlxG.switchState(new PlayState(1));	
+			}
+			else if (FlxG.keys.anyJustPressed(["TWO"])) {
+				FlxG.switchState(new PlayState(2));	
+			}
+			else if (FlxG.keys.anyJustPressed(["THREE"])) {
+				FlxG.switchState(new PlayState(3));	
+			}
+			else if (FlxG.keys.anyJustPressed(["FOUR"])) {
+				FlxG.switchState(new PlayState(4));	
+			}			
+		}
 	}	
 }
