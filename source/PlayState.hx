@@ -81,8 +81,15 @@ class PlayState extends FlxState
 		_weatherEmitter.setRotation(0,0);
 		_weatherEmitter.start(false,10,0.007125);
 
+		_players = new FlxGroup();
+		_p1 = new Player1(120,120);
+
 		// Add objects to game from back to front
 		add(_backdropFar);
+
+		_players.add(_p1);
+		add(_players);
+
 		add(_weatherEmitter);
 
 		// The last stuff
@@ -121,6 +128,12 @@ class PlayState extends FlxState
 	{
 
 		//FlxG.camera.scroll.x +=1;
+		FlxG.collide(_players, _buildings);
+
+		if (FlxG.keys.justPressed.ESCAPE)
+		{
+			FlxG.resetState();
+		}
 
 		// Super
 		super.update();

@@ -52,7 +52,7 @@ class Player1 extends Player
 
 	override public function playLandingSound():Void
 	{
-		FlxG.sound.play("GrimmerLand", 0.4);
+		super.playLandingSound();
 	}
 
 	override public function controls():Void

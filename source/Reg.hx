@@ -66,7 +66,6 @@ class Reg
 	 public static inline var CORGI2:String = "images/corgi2.png";
 	 public static inline var CORGI3:String = "images/corgi3.png";
 	 public static inline var CORGI4:String = "images/corgi4.png";
-
 	 /**
 	 * Particles
 	 */
