@@ -80,7 +80,7 @@ class Player extends FlxExtendedSprite
 		offset.x = 16;
 		offset.y = 16;
 
-		selected = true;
+		selected = false; // handled separately
 
 		animation.add("idle", [0, 0, 0, 0, 0, 0, 2, 1, 2, 1, 2, 1], 3, true);
 		animation.add("walk", [4, 5, 6, 7], 12, true);	

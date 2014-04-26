@@ -53,6 +53,8 @@ class PlayState extends FlxState
 	private var _camera:FlxCamera;
 	private var _numPlayers:Int;
 	private var _round:Int;
+	private var _selectedPlayer:Int = 1;
+	private var _singleControllerMode:Bool = true;
 
 	public function new(NumPlayers:Int = 4, ?Round:Int = 0)
 	{
@@ -161,6 +163,18 @@ class PlayState extends FlxState
 		_infoText.scrollFactor.x = 0;
 		_infoText.scrollFactor.y = 0;
 
+		// Debug controls, essentially - press space to cycle players
+		// players all think their own control is 0
+		// this allows a separate map for debug mode that isn't cramped
+		if (_singleControllerMode)
+		{
+			for (p in _players)
+			{
+				p.number = 0;
+			}
+			_p1.selected = true;
+		}
+
 		// The last stuff
 		//FlxG.sound.play("");
 		FlxG.camera.flash(0xffffffff,0.25);
@@ -219,8 +233,29 @@ class PlayState extends FlxState
 		}
 		if (FlxG.keys.justPressed.SPACE)
 		{
-			// test
-			//_p1.selected = !_p1.selected;
+			_selectedPlayer += 1;
+			if (_selectedPlayer > 4) _selectedPlayer = 1;
+
+			if (_selectedPlayer == 1)
+			{
+				_p1.selected = true;
+				_p2.selected = _p3.selected = _p4.selected = false;
+			}
+			else if (_selectedPlayer == 2)
+			{
+				_p2.selected = true;
+				_p1.selected = _p3.selected = _p4.selected = false;
+			}
+			else if (_selectedPlayer == 3)
+			{
+				_p3.selected = true;
+				_p1.selected = _p2.selected = _p4.selected = false;
+			}
+			else if (_selectedPlayer == 4)
+			{
+				_p4.selected = true;
+				_p1.selected = _p2.selected = _p3.selected = false;
+			}
 		}
 
 		// Super
