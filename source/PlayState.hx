@@ -4,6 +4,7 @@ import flixel.FlxG;
 import flixel.FlxObject;
 import flixel.FlxSprite;
 import flixel.FlxState;
+import flixel.FlxCamera;
 
 import flixel.text.FlxText;
 
@@ -46,6 +47,7 @@ class PlayState extends FlxState
 	private var _p3:Player;
 	private var _p4:Player;
 	private var _buildings:RandomBuildings;
+	private var _camera:FlxCamera;
 
 	/**
 	 * Function that is called up when to state is created to set it up. 
@@ -57,6 +59,8 @@ class PlayState extends FlxState
 		#end
 
 		//FlxG.mouse.visible = false;
+
+		_camera = FlxG.camera;
 
 		FlxG.cameras.bgColor = 0xff486878;
 
@@ -113,6 +117,10 @@ class PlayState extends FlxState
 		// The last stuff
 		//FlxG.sound.play("");
 		FlxG.camera.flash(0xffffffff,0.25);
+
+		FlxG.camera.setBounds(0,0, FlxG.width * 10, FlxG.height);
+
+		_camera.follow(_p1, FlxCamera.STYLE_PLATFORMER);
 
 		// Super
 		super.create();
