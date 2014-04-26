@@ -52,9 +52,9 @@ class PlayState extends FlxState
 	 */
 	override public function create():Void
 	{
-		#if debug
+		//#if debug
 		FlxG.game.debugger.stats.visible = true;
-		#end
+		//#end
 
 		//FlxG.mouse.visible = false;
 

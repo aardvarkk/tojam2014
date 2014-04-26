@@ -39,6 +39,19 @@ class Reg
 	 */
 	static public var saves:Array<FlxSave> = [];
 	/**
+	* Keyboard input sets
+	*/
+	public static var JUMP:Int = 10;
+	public static var KEY1:Int = 20;
+	public static var KEY2:Int = 40;
+	public static var KEY3:Int = 80;
+	public static var keyset:Array<Dynamic> =
+	[
+		["UP", "DOWN", "LEFT", "RIGHT", "Z", "X"],
+		["UP", "DOWN", "LEFT", "RIGHT", "PERIOD", "SLASH"],
+		["T", "G", "F", "H", "Z", "X"]
+	];
+	/**
 	 * Title screen images
 	 */
 	 
@@ -53,6 +66,7 @@ class Reg
 	 public static inline var CORGI2:String = "images/corgi2.png";
 	 public static inline var CORGI3:String = "images/corgi3.png";
 	 public static inline var CORGI4:String = "images/corgi4.png";
+
 	 /**
 	 * Particles
 	 */
