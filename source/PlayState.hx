@@ -41,7 +41,7 @@ class PlayState extends FlxState
 	private var _foreground:FlxBackdrop;
 	private var _weatherEmitter:FlxEmitter;
 	private var _infoText:FlxText;
-	private var _players:FlxGroup;
+	private var _players:FlxTypedGroup<Player>;
 	private var _p1:Player;
 	private var _p2:Player;
 	private var _p3:Player;
@@ -86,8 +86,8 @@ class PlayState extends FlxState
 		_weatherEmitter.setRotation(0,0);
 		_weatherEmitter.start(false,10,0.007125);
 
-		_players = new FlxGroup();
-		_p1 = new Player1(120,120);
+		_players = new FlxTypedGroup();
+		_p1 = new Player1(100,0);
 
 		// Add objects to game from back to front
 		add(_backdropFar);
@@ -148,7 +148,13 @@ class PlayState extends FlxState
 		// Overlap
 
 		// off-screen kill
-		for 
+		for (p in _players)
+		{
+			if (p.y > FlxG.height + 20 || p.x + p.width < _camera.scroll.x - 20)
+			{
+				p.reset(100,0);
+			}
+		}
 
 
 		// Game controls
