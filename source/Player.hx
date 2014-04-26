@@ -336,6 +336,7 @@ class Player extends FlxExtendedSprite
 		if (jumpTimer < 0.02)
 		{
 			landed = false;
+			FlxG.sound.play("Jump1");
 		}
 		
 		//Jump

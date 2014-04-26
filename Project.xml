@@ -40,12 +40,12 @@
 	<assets path="assets/sounds" unless="flash">
 	<!-- -->
 		<music path="monkey_land.ogg" id="Landing" />
-		<music path="monkey_jump1.ogg" id="Jump1" />
+		<music path="monkey_jump.ogg" id="Jump1" />
 		<music path="monkey_jump2.ogg" id="Jump2" />
 		<music path="monkey_jump3.ogg" id="Jump3" />
 		<music path="monkey_jump4.ogg" id="Jump4" />
 		<music path="monkey_bananabomb.ogg" id="Bananabomb" />
-		<music path="monkey_ukiii.ogg" id="Ukiii" />
+		<music path="monkey_ukiiii.ogg" id="Uki" />
 		<music path="monkey_splosion.ogg" id="Boom" />
 	<!-- -->
 	</assets>
