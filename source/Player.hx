@@ -152,11 +152,11 @@ class Player extends FlxExtendedSprite
 
 		if (isPressing(FlxObject.UP) && _vehicle.y >= 40)
 		{
-			_vehicle.acceleration.y -= runAccel * .5;
+			_vehicle.acceleration.y -= runAccel * .25;
 		}
 		else if (isPressing(FlxObject.DOWN) && _vehicle.y <= FlxG.height - 50)
 		{
-			_vehicle.acceleration.y += runAccel * .5;
+			_vehicle.acceleration.y += runAccel * .25;
 		}
 
 		if (_vehicle.y < 50)
@@ -359,25 +359,32 @@ class Player extends FlxExtendedSprite
 
 	public function animate():Void
 	{
-		if (velocity.y > 0)
+		if (!ridingVehicle)
 		{
-			animation.play("fall");
-			
-		}
-		else if (velocity.y < 0)
-		{
-			animation.play("jump");
-		}
-		else
-		{
-			if (velocity.x != 0)
+			if (velocity.y > 0)
 			{
-				animation.play("walk");
+				animation.play("fall");
+				
+			}
+			else if (velocity.y < 0)
+			{
+				animation.play("jump");
 			}
 			else
 			{
-				animation.play("idle");
+				if (velocity.x != 0)
+				{
+					animation.play("walk");
+				}
+				else
+				{
+					animation.play("idle");
+				}
 			}
+		}
+		else // riding
+		{
+			animation.play("idle");
 		}
 	}
 
@@ -418,6 +425,8 @@ class Player extends FlxExtendedSprite
 		acceleration.y = 0;
 		velocity.x = 0;
 		velocity.y = 0;
+		facing = FlxObject.LEFT;
+		flipX = true;
 	}
 
 	public function dismount():Void
