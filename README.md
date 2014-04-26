@@ -13,6 +13,7 @@
  * `Ctrl-Shift-B` to set build target
  * `Ctrl-Enter` to build and run
  * Check snippets inside command palette
+ 
 ## OSX
 1. `sudo haxelib selfupdate`
 
