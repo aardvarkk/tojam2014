@@ -42,6 +42,7 @@ class Reg
 	* Keyboard input sets
 	*/
 	public static var UseKeyboard:Bool = true; // false if controllers?
+	public static var UseGamepad:Bool = false;
 	public static var SingleControllerMode:Bool = true; // turn off for multiplayer
 	public static var JUMP:Int = 10;
 	public static var KEY1:Int = 20;

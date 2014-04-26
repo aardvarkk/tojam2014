@@ -44,6 +44,20 @@ class Player extends FlxExtendedSprite
 
 	public var bubble:Bubble;
 
+	//#if (!FLX_NO_GAMEPAD && (cpp || neko || js))
+	private var gamepad(get, never):FlxGamepad;
+	private function get_gamepad():FlxGamepad 
+	{
+		var gamepad:FlxGamepad = FlxG.gamepads.lastActive;
+		if (gamepad == null)
+		{
+			// Make sure we don't get a crash on neko when no gamepad is active
+			gamepad = FlxG.gamepads.getByID(0);
+		}
+		return gamepad;
+	}
+	//#end
+
 	public function new(X:Int, Y:Int, Number:Int = 0)
 	{
 		super(X, Y);
@@ -234,27 +248,45 @@ class Player extends FlxExtendedSprite
 
 		if (Direction == FlxObject.UP)
 		{
-			return (FlxG.keys.anyPressed([Reg.keyset[controlSet][0]]));
+			if (Reg.UseGamepad)
+				return gamepad.dpadUp;
+			else
+				return (FlxG.keys.anyPressed([Reg.keyset[controlSet][0]]));
 		}
 		else if (Direction == FlxObject.DOWN)
 		{
-			return (FlxG.keys.anyPressed([Reg.keyset[controlSet][1]]));
+			if (Reg.UseGamepad)
+				return gamepad.dpadDown;
+			else
+				return (FlxG.keys.anyPressed([Reg.keyset[controlSet][1]]));
 		}
 		else if (Direction == FlxObject.LEFT)
 		{
-			return (FlxG.keys.anyPressed([Reg.keyset[controlSet][2]]));
+			if (Reg.UseGamepad)
+				return gamepad.dpadLeft;
+			else
+				return (FlxG.keys.anyPressed([Reg.keyset[controlSet][2]]));
 		}
 		else if (Direction == FlxObject.RIGHT)
 		{
-			return (FlxG.keys.anyPressed([Reg.keyset[controlSet][3]]));
+			if (Reg.UseGamepad)
+				return gamepad.dpadRight;
+			else
+				return (FlxG.keys.anyPressed([Reg.keyset[controlSet][3]]));
 		}
 		else if (Direction == Reg.JUMP)
 		{
-			return (FlxG.keys.anyPressed([Reg.keyset[controlSet][4]]));
+			if (Reg.UseGamepad)
+				return gamepad.justPressed(XboxButtonID.A);
+			else
+				return (FlxG.keys.anyPressed([Reg.keyset[controlSet][4]]));
 		}
 		else if (Direction == Reg.KEY1)
 		{
-			return (FlxG.keys.anyPressed([Reg.keyset[controlSet][5]]));
+			if (Reg.UseGamepad)
+				return gamepad.justPressed(XboxButtonID.X);
+			else
+				return (FlxG.keys.anyPressed([Reg.keyset[controlSet][5]]));
 		}
 		else
 		{
