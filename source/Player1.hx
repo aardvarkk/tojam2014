@@ -30,7 +30,6 @@ class Player1 extends Player
 	{
 		super(X, Y);
 		gravity = 450;
-		moveSpeed = 83;
 		maxVelocity.y = 500;
 		acceleration.y = gravity;
 		jumpStrength = 136;

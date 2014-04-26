@@ -18,8 +18,13 @@ class Player extends FlxExtendedSprite
 	public var number:Int;
 	public var selected:Bool = false;
 
+	public var gravity:Float = 450;
 	private var jumpTimer:Float;
 	private var jumpStrength:Float = 100;
+	private var runAccel = 900;
+	private var diveBombMaxVelocityMult = 3; // Multiplier to max velocity
+	private var diveBombBoostX = 300; // Instant boost to velocity in X
+	private var diveBombSetVelY = 100; // Instant set to velocity in Y
 	private var jumped:Bool = false;
 	private var landed:Bool = false;
 
@@ -33,32 +38,19 @@ class Player extends FlxExtendedSprite
 
 	private var respawnTimer:Float = 0;
 
-	private var moveSpeed:Float = 0;
-	public var gravity:Float = 400;
-	private var normalMaxVelocity:FlxPoint;
 	public var bubble:Bubble;
 
 	public function new(X:Int, Y:Int)
 	{
 		super(X, Y);
 
-		normalMaxVelocity = new FlxPoint(80, gravity * 2);
-		maxVelocity.x = 400;
-		normalMaxVelocity.x = 80;
-		maxVelocity.y = 500;
+		drag.x = gravity; // Ground friction
 		acceleration.y = gravity;
-		drag.x = normalMaxVelocity.x * 10;
 
 		solid = true;
 		diving = false;
 		health = 1;
 		number = 0; // set for 1p mode for testing by default
-
-		gravity = 450;
-		moveSpeed = 83;
-		maxVelocity.y = 500;
-		acceleration.y = gravity;
-		jumpStrength = 136;
 
 		if (number == 2) loadGraphic(Reg.CORGI2, true, 48, 32);
 		else if (number == 3) loadGraphic(Reg.CORGI3, true, 48, 32);
@@ -117,8 +109,7 @@ class Player extends FlxExtendedSprite
 		{
 			flipX = true;
 			facing = FlxObject.LEFT;
-			if (velocity.x > -normalMaxVelocity.x)
-				velocity.x -= normalMaxVelocity.x * .5;
+			acceleration.x -= runAccel;
 		}
 		
 		// Move Right
@@ -126,8 +117,7 @@ class Player extends FlxExtendedSprite
 		{
 			flipX = false;
 			facing = FlxObject.RIGHT;
-			if (velocity.x < normalMaxVelocity.x)
-				velocity.x += normalMaxVelocity.x * .5;
+			acceleration.x += runAccel;
 		}
 		
 		// Jump Reset
@@ -148,10 +138,26 @@ class Player extends FlxExtendedSprite
 			landed = false;
 		}
 		
-		//prevent bouncy mode
-		if (isPressing(Reg.JUMP) == true)
+		// Just hit jump
+		// It's either going to trigger a jump or a dive bomb, depending upon whether or not down key is held
+		if (FlxG.keys.anyJustPressed([Reg.keyset[number][4]]))
 		{
-			jumped = true;
+			// Starting dive bomb
+			// If BOTH trying to start a jump and holding down, start the divebomb
+			// Immediately set vertical velocity
+			if (FlxG.keys.anyPressed([Reg.keyset[number][1]]))
+			{
+				diving = true;
+				velocity.x += diveBombBoostX;
+				velocity.y = diveBombSetVelY;
+				maxVelocity.x *= diveBombMaxVelocityMult;
+				maxVelocity.y *= diveBombMaxVelocityMult;
+			}
+			// Starting a normal jump
+			else
+			{
+				jumped = true;
+			}
 		}
 		
 		// Variable Jump Control
@@ -179,18 +185,6 @@ class Player extends FlxExtendedSprite
 		{
 			jump();
 		}
-
-		// Dive bomb
-		if (landed == false &&
-			jumped == true &&
-			isPressing(FlxObject.DOWN) &&
-			(x >= FlxG.camera.scroll.x + FlxG.width - 100))
-		{
-			diving = true;
-			velocity.y += 25;
-			angularVelocity = 80;
-		}
-		
 	}
 
 	private function isPressing(Direction:Int):Bool
@@ -268,6 +262,8 @@ class Player extends FlxExtendedSprite
 		diving = false;
 		angularVelocity = 0;
 		angle = 0;
+		maxVelocity.x = Reg.RACERSPEED * 1.5;
+		maxVelocity.y = 2 * gravity; 
 	}
 
 	public function respawn(X:Float, Y:Float):Void

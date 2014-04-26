@@ -47,9 +47,8 @@ class Reg
 	public static var KEY3:Int = 80;
 	public static var keyset:Array<Dynamic> =
 	[
-		["UP", "DOWN", "LEFT", "RIGHT", "Z", "X"],
-		["UP", "DOWN", "LEFT", "RIGHT", "PERIOD", "SLASH"],
-		["T", "G", "F", "H", "Z", "X"]
+		// Ian's temp keyboard -- works well with Dvorak
+		["UP", "DOWN", "LEFT", "RIGHT", "Z", "V"]
 	];
 	/**
 	 * Title screen images
