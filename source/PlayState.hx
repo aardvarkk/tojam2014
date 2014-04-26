@@ -148,6 +148,7 @@ class PlayState extends FlxState
 		
 		// Collisions
 		FlxG.collide(_players, _buildings);
+		FlxG.overlap(_players, _racer, swap);
 
 		// Overlap
 
@@ -169,5 +170,10 @@ class PlayState extends FlxState
 
 		// Super
 		super.update();
+	}
+
+	public function swap(P:Player, R:FlxSprite):Void
+	{
+		FlxG.camera.flash(0xffff0000, 2);
 	}	
 }
