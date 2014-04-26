@@ -36,22 +36,12 @@ class Player1 extends Player
 		jumpStrength = 136;
 
 		loadGraphic(Reg.CORGI1, true, 48, 32);
-		width = 12;
+		width = 16;
 		height = 15;
-		offset.x = 17;
+		offset.x = 15;
 		offset.y = 16;
 
-		isSelected = true;
-
-		animation.add("idle", [0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 2], 3, true);
-		animation.add("walk", [3, 4, 5, 3, 6, 7], 10, true);	
-		animation.add("jump", [8, 9], 7, true);
-		animation.add("fall", [10, 11], 6, true);
-		animation.add("climb", [12, 13, 14, 15], 8, true);
-		animation.add("climbidle", [12, 16, 18, 17], 4, true);
-		animation.add("attack1", [24, 25, 25, 26, 26, 27], 24, false);
-		animation.add("attack2", [28, 29, 30, 31, 32], 10, false);
-		animation.add("attack3", [38, 39, 40, 41, 34, 35, 36, 37], 30, true);
+		selected = true;
 	}
 
 	override public function update():Void

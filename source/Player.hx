@@ -52,6 +52,14 @@ class Player extends FlxExtendedSprite
 		solid = true;
 		health = 1;
 		number = 0; // set for 1p mode for testing by default
+
+		animation.add("idle", [0, 0, 0, 0, 0, 0, 2, 1, 2, 1, 2, 1], 3, true);
+		animation.add("walk", [4, 5, 6, 7], 12, true);	
+		animation.add("jump", [5], 8, true);
+		animation.add("fall", [6], 8, true);
+		animation.add("climb", [8, 9], 8, true);
+		animation.add("climbidle", [8], 4, true);
+		animation.add("attack", [10], 4, false);
 	}
 
 	override public function update():Void
