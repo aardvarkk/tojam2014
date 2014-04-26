@@ -76,7 +76,7 @@ class PlayState extends FlxState
 		for (i in 0..._numPlayers)
 		{
 			var score = Reg.scores[i];
-			scoreString += 'P$i:$score\n';
+			scoreString += 'P${i+1}:$score\n';
 		}
 		return scoreString;
 	}
@@ -283,11 +283,13 @@ class PlayState extends FlxState
 		// kick out old rider if there is one
 		if (_rider != null)
 		{
+			Reg.scores[_rider.number] -= 200;
 			_rider.dismount();
 		}
 		// add new rider
 		_rider = P;
 		P.mount(R);
+		Reg.scores[P.number] += 500;
 	}	
 
 	public function endRound()

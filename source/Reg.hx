@@ -50,7 +50,6 @@ class Reg
 	public static var KEY3:Int = 80;
 	public static var keyset:Array<Dynamic> =
 	[
-		// Ian's temp keyboard -- works well with Dvorak
 		["UP", "DOWN", "LEFT", "RIGHT", "CONTROL", "ALT", "Z", "X"],
 		["W", "S", "A", "D", "R", "T", "Y", "U"],
 		["I","K","J","L","O","P","SEMICOLON","QUOTE"],
@@ -86,5 +85,5 @@ class Reg
 	 public static inline var RACERHEIGHT:Int = 25;
 	 public static inline var RACERSPEED:Int = 75;
 
-	 public static inline var LEVELLENGTH:Int = 1024;
+	 public static inline var LEVELLENGTH:Int = 2048;
 }
