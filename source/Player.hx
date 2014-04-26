@@ -40,7 +40,7 @@ class Player extends FlxExtendedSprite
 
 	public var bubble:Bubble;
 
-	public function new(X:Int, Y:Int)
+	public function new(X:Int, Y:Int, Number:Int = 0)
 	{
 		super(X, Y);
 
@@ -50,15 +50,31 @@ class Player extends FlxExtendedSprite
 		solid = true;
 		diving = false;
 		health = 1;
-		number = 0; // set for 1p mode for testing by default
+		number = Number;
 
-		if (number == 2) loadGraphic(Reg.CORGI2, true, 48, 32);
-		else if (number == 3) loadGraphic(Reg.CORGI3, true, 48, 32);
-		else if (number == 4) loadGraphic(Reg.CORGI4, true, 48, 32);
-		else loadGraphic(Reg.CORGI1, true, 48, 32);
+		if (number == 2)
+		{
+			loadGraphic(Reg.CORGI2, true, 48, 32);
+		}
+		else if (number == 3)
+		{
+			loadGraphic(Reg.CORGI3, true, 48, 32);
+		}
+		else if (number == 4)
+		{
+			loadGraphic(Reg.CORGI4, true, 48, 32);
+		}
+		else
+		{
+			loadGraphic(Reg.CORGI1, true, 48, 32);
+		}
 
 		bubble = new Bubble(X, Y);
 
+		gravity = 450;
+		maxVelocity.y = 500;
+		acceleration.y = gravity;
+		jumpStrength = 136;
 		width = 15;
 		height = 16;
 		offset.x = 16;
@@ -79,6 +95,7 @@ class Player extends FlxExtendedSprite
 	{
 		// Need to add global pause features later, but skip for now
 		controls();
+		animate();
 
 		if (respawnTimer > 0) // when it was >= 0 there were bugs
 		{
@@ -246,6 +263,30 @@ class Player extends FlxExtendedSprite
 		else
 		{
 			velocity.y = -jumpStrength * 1;
+		}
+	}
+
+	public function animate():Void
+	{
+		if (velocity.y > 0)
+		{
+			animation.play("fall");
+			
+		}
+		else if (velocity.y < 0)
+		{
+			animation.play("jump");
+		}
+		else
+		{
+			if (velocity.x != 0)
+			{
+				animation.play("walk");
+			}
+			else
+			{
+				animation.play("idle");
+			}
 		}
 	}
 

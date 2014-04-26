@@ -102,8 +102,13 @@ class PlayState extends FlxState
 		_weatherEmitter.start(false,10,0.007125);
 
 		_players = new FlxTypedGroup();
-		_p1 = new Player1(150,100);
+		_p1 = new Player(150,100,1);
+		_p2 = new Player(150,100,2);
+		_p3 = new Player(150,100,3);
+		_p4 = new Player(150,100,4);
 		_bubbles = new FlxTypedGroup();
+
+		_infoText = new FlxText(10,10, FlxG.width - 20, "HELLO!");
 
 		// Add objects to game from back to front
 		add(_backdropFar);
@@ -125,13 +130,23 @@ class PlayState extends FlxState
 
 		// Add players
 		_players.add(_p1);
+		_players.add(_p2);
+		_players.add(_p3);
+		_players.add(_p4);
 		_bubbles.add(_p1.bubble);
+		_bubbles.add(_p2.bubble);
+		_bubbles.add(_p3.bubble);
+		_bubbles.add(_p4.bubble);
 		add(_players);
 		add(_bubbles);
 
 		// Add racer
 		_racer = new Racer(FlxG.width - Reg.RACERWIDTH, FlxG.height - Reg.RACERHEIGHT);
 		add(_racer);
+
+		add(_infoText);
+		_infoText.scrollFactor.x = 0;
+		_infoText.scrollFactor.y = 0;
 
 		// The last stuff
 		//FlxG.sound.play("");

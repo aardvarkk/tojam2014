@@ -68,7 +68,7 @@ class Player1 extends Player
 		//attack();
 	}
 
-	public function animate():Void
+	override public function animate():Void
 	{
 		if (velocity.y > 0)
 		{
@@ -90,6 +90,5 @@ class Player1 extends Player
 				animation.play("idle");
 			}
 		}
-		
 	}
 }
