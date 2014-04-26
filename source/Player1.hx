@@ -3,18 +3,25 @@ package;
 import flixel.FlxG;
 import flixel.FlxObject;
 import flixel.FlxSprite;
+
 import flixel.addons.display.FlxExtendedSprite;
+
 import flixel.util.FlxPoint;
-import flixel.effects.particles.FlxEmitterExt;
-import flixel.effects.particles.FlxParticle;
-import flixel.addons.display.FlxExtendedSprite;
-import flixel.group.FlxTypedGroup;
-import flixel.input.gamepad.FlxGamepad;
-import flixel.input.gamepad.XboxButtonID;
 import flixel.util.FlxSpriteUtil;
 import flixel.util.FlxTimer;
 
-class Grimmer extends Player
+import flixel.effects.particles.FlxEmitterExt;
+import flixel.effects.particles.FlxParticle;
+
+import flixel.addons.display.FlxExtendedSprite;
+
+import flixel.group.FlxTypedGroup;
+
+import flixel.input.gamepad.FlxGamepad;
+import flixel.input.gamepad.XboxButtonID;
+import flixel.input.gamepad.PS4ButtonID;
+
+class Player1 extends Player
 {
 	public var weapon:FlxSprite;
 	public var tremor:FlxParticle;
@@ -28,7 +35,7 @@ class Grimmer extends Player
 		acceleration.y = gravity;
 		jumpStrength = 136;
 
-		loadGraphic(Reg.GRIMMER, true, 48, 32);
+		loadGraphic(Reg.CORGI1, true, 48, 32);
 		width = 12;
 		height = 15;
 		offset.x = 17;
