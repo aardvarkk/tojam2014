@@ -18,6 +18,16 @@ class RandomBuildings extends FlxGroup
 	{
 		super();
 
-		add(new Building(0, FlxG.height - 6*Reg.blockSize, MinBuildingX, 6));
+		FlxG.log.add(SizeX);
+		
+		var curX = 0;
+		var endX = 0;
+		while (endX < SizeX) {
+			FlxG.log.add(endX);
+			var addW = (MinBuildingX + 1) * Reg.blockSize;
+			endX += addW;
+			add(new Building(curX, FlxG.height - 6 * Reg.blockSize, MinBuildingX, 6));
+			curX += addW;
+		}
 	}
 }
