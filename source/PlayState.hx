@@ -54,7 +54,7 @@ class PlayState extends FlxState
 	private var _numPlayers:Int;
 	private var _round:Int;
 
-	public function new(NumPlayers:Int = 2, ?Round:Int = 0)
+	public function new(NumPlayers:Int = 4, ?Round:Int = 0)
 	{
 		super();
 		_numPlayers = NumPlayers;
@@ -103,9 +103,12 @@ class PlayState extends FlxState
 
 		_players = new FlxTypedGroup();
 		_p1 = new Player(150,100,1);
-		_p2 = new Player(150,100,2);
-		_p3 = new Player(150,100,3);
-		_p4 = new Player(150,100,4);
+		if (_numPlayers >= 2)
+			_p2 = new Player(150,100,2);
+		if (_numPlayers >= 3)
+			_p3 = new Player(150,100,3);
+		if (_numPlayers == 4)
+			_p4 = new Player(150,100,4);
 		_bubbles = new FlxTypedGroup();
 
 		_infoText = new FlxText(10,10, FlxG.width - 20, "HELLO!");
@@ -128,15 +131,25 @@ class PlayState extends FlxState
 			);
 		add(_buildings);
 
-		// Add players
+		// Add players in reverse order!
+		if (_numPlayers == 4)
+		{
+			_players.add(_p4);
+			_bubbles.add(_p4.bubble);
+		}
+		if (_numPlayers >= 3)
+		{
+			_players.add(_p3);
+			_bubbles.add(_p3.bubble);
+		}
+		if (_numPlayers >= 2)
+		{
+			_players.add(_p2);
+			_bubbles.add(_p2.bubble);
+		}
 		_players.add(_p1);
-		_players.add(_p2);
-		_players.add(_p3);
-		_players.add(_p4);
 		_bubbles.add(_p1.bubble);
-		_bubbles.add(_p2.bubble);
-		_bubbles.add(_p3.bubble);
-		_bubbles.add(_p4.bubble);
+		
 		add(_players);
 		add(_bubbles);
 
