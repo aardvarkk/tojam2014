@@ -89,6 +89,11 @@ class Player extends FlxExtendedSprite
 		// Need to add global pause features later, but skip for now
 		controls();
 
+		if (landed == false && jumped == true && dive == true)
+		{
+			solid = false;
+		}
+
 		super.update();
 	}
 
@@ -194,7 +199,6 @@ class Player extends FlxExtendedSprite
 			else
 			{
 				return false;
-				dive = false;
 			}
 		}
 		else if (Direction == FlxObject.LEFT)
@@ -273,6 +277,13 @@ class Player extends FlxExtendedSprite
 	{
 		// Override within the characters themselves
 		FlxG.sound.play("GewaltLand", 0.4);
+	}
+
+	override public function reset(X:Float, Y:Float):Void
+	{
+		solid = true;
+		dive = false;
+		super.reset(X, Y);
 	}
 
 }
