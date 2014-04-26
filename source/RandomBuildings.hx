@@ -1,5 +1,6 @@
 package;
 
+import flixel.FlxG;
 import flixel.group.FlxGroup;
 
 class RandomBuildings extends FlxGroup
@@ -17,6 +18,6 @@ class RandomBuildings extends FlxGroup
 	{
 		super();
 
-		add(new Building(MinBuildingX, 6));
+		add(new Building(0, FlxG.height - 6*Reg.blockSize, MinBuildingX, 6));
 	}
 }

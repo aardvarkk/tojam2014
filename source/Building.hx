@@ -7,12 +7,12 @@ import flixel.util.FlxColor;
 class Building extends FlxSprite
 {
 	// Width and height in BLOCKS
-	public function new(Width:Int, Height:Int)
+	public function new(X:Int, Y:Int, Width:Int, Height:Int)
 	{
-		super();
+		super(X, Y);
 
 		var sprite:FlxSprite = new FlxSprite().loadGraphic(Reg.LEVELTILES, true, Reg.blockSize, Reg.blockSize);
-		sprite.animation.frameIndex = 8;
+		sprite.animation.frameIndex = 8 * 15 + 9;
 		sprite.drawFrame();
 
 		makeGraphic(Width * Reg.blockSize, Height * Reg.blockSize, FlxColor.CHARTREUSE);
@@ -20,7 +20,7 @@ class Building extends FlxSprite
 		for (r in 0...Height) {
 			for (c in 0...Width) {
 				stamp(sprite, c * Reg.blockSize, r * Reg.blockSize);
-				FlxG.log.add("Row " + r + ", Column " + c);
+				// FlxG.log.add("Row " + r + ", Column " + c);
 			}
 		}
 	}
