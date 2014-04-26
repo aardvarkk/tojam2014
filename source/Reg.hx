@@ -74,4 +74,8 @@ class Reg
 	 * Map tiles
 	 */
 	 public static inline var LEVELTILES:String = "images/tiles_ruins.png";
+
+	 public static inline var RACERWIDTH:Int = 50;
+	 public static inline var RACERHEIGHT:Int = 25;
+	 public static inline var RACERSPEED:Int = 75;
 }

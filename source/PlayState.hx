@@ -47,6 +47,7 @@ class PlayState extends FlxState
 	private var _p3:Player;
 	private var _p4:Player;
 	private var _buildings:RandomBuildings;
+	private var _racer:Racer;
 	private var _camera:FlxCamera;
 
 	/**
@@ -111,6 +112,9 @@ class PlayState extends FlxState
 		_players.add(_p1);
 		add(_players);
 
+		// Add racer
+		_racer = new Racer(FlxG.width - Reg.RACERWIDTH, FlxG.height - Reg.RACERHEIGHT);
+		add(_racer);
 
 		// The last stuff
 		//FlxG.sound.play("");
@@ -118,7 +122,7 @@ class PlayState extends FlxState
 
 		FlxG.camera.setBounds(0,0, FlxG.width * 10, FlxG.height);
 
-		_camera.follow(_p1, FlxCamera.STYLE_PLATFORMER);
+		_camera.follow(_racer, FlxCamera.STYLE_PLATFORMER);
 
 		// Super
 		super.create();
