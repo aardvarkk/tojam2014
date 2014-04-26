@@ -19,7 +19,7 @@ class Building extends FlxSprite
 
 		for (r in 0...Height) {
 			for (c in 0...Width) {
-				stamp(sprite, r * Reg.blockSize, c * Reg.blockSize);
+				stamp(sprite, c * Reg.blockSize, r * Reg.blockSize);
 				FlxG.log.add("Row " + r + ", Column " + c);
 			}
 		}
