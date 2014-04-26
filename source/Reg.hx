@@ -37,21 +37,18 @@ class Reg
 	/**
 	 * Title screen images
 	 */
-	 public static inline var RIDER:String = "images/rider.png";
-	 public static inline var MOON:String = "images/intromoon.png";
-	 public static inline var TOWER:String = "images/newtowersmall.png";
-	 public static inline var TITLE:String = "images/hyliantitle.png";
-	 public static inline var START:String = "images/start.png";
+	 
 	 /**
 	 * Background images
 	 */
-	 public static inline var SNOWCLOUDS:String = "images/scroll_snowclouds.png";
-	 public static inline var INTROFLOOR:String = "images/scroll_introFloor.png";
+	 public static inline var SNOWCLOUDS:String = "images/scroll_menuclouds.png";
 	 /**
 	 * Game sprites
 	 */
-	 public static inline var GRIMMER:String = "images/grimmer.png";
-	 public static inline var GEWALT:String = "images/gewalt.png";
+	 public static inline var CORGI1:String = "images/corgi1.png";
+	 public static inline var CORGI2:String = "images/corgi2.png";
+	 public static inline var CORGI3:String = "images/corgi3.png";
+	 public static inline var CORGI4:String = "images/corgi4.png";
 	 /**
 	 * Particles
 	 */

@@ -58,7 +58,7 @@ class Player extends FlxExtendedSprite
 
 	public static var keys:Array<Dynamic> =
 	[
-		["UP", "DOWN", "LEFT", "RIGHT", "Z", "X"],
+		["UP", "DOWN", "LEFT", "RIGHT", "Z", "X", "A", "S"],
 		["UP", "DOWN", "LEFT", "RIGHT", "PERIOD", "SLASH"],
 		["T", "G", "F", "H", "Z", "X"]
 	];

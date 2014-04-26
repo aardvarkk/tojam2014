@@ -7,6 +7,7 @@ import flixel.FlxObject;
 import flixel.text.FlxText;
 import flixel.group.FlxGroup;
 import flixel.tile.FlxTilemap;
+import flixel.tile.FlxTileblock;
 
 class TiledPlayState extends FlxState
 {
