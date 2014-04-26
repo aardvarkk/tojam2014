@@ -72,6 +72,8 @@ class Reg
 	 public static inline var CORGI4:String = "images/corgi4.png";
 
 	 public static inline var BUBBLE:String = "images/bubble.png";
+
+	 public static inline var UFO:String = "images/ufo.png";
 	 /**
 	 * Particles
 	 */
@@ -81,8 +83,8 @@ class Reg
 	 */
 	 public static inline var LEVELTILES:String = "images/tiles_ruins.png";
 
-	 public static inline var RACERWIDTH:Int = 50;
-	 public static inline var RACERHEIGHT:Int = 25;
+	 public static inline var RACERWIDTH:Int = 48;
+	 public static inline var RACERHEIGHT:Int = 16;
 	 public static inline var RACERSPEED:Int = 75;
 
 	 public static inline var LEVELLENGTH:Int = 2048 * 4;

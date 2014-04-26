@@ -115,8 +115,8 @@ class Player extends FlxExtendedSprite
 		// Need to add global pause features later, but skip for now
 		if (ridingVehicle)
 		{
-			x = _vehicle.x + 20;
-			y = _vehicle.y + 10;
+			x = _vehicle.x + 24; // +20 good for 48x16
+			y = _vehicle.y - 12; // and -16
 			ridingControls();
 		}
 		else

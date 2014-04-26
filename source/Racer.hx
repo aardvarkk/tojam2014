@@ -8,7 +8,7 @@ class Racer extends FlxSprite
 	{
 		super(X, Y);
 
-		makeGraphic(Reg.RACERWIDTH, Reg.RACERHEIGHT, flixel.util.FlxColor.AQUAMARINE);
+		loadGraphic(Reg.UFO, true, 48, 32);
 
 		velocity.x = Reg.RACERSPEED;
 	}
