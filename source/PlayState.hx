@@ -62,7 +62,7 @@ class PlayState extends FlxState
 		_numPlayers = NumPlayers;
 		_round = Round;
 
-		for (i in 0..._numPlayers + 1)
+		for (i in 0..._numPlayers)
 		{
 			Reg.scores[i] = 0;
 		}
@@ -73,7 +73,7 @@ class PlayState extends FlxState
 	private function getScoreString()
 	{
 		var scoreString = "";
-		for (i in 0..._numPlayers + 1)
+		for (i in 0..._numPlayers)
 		{
 			var score = Reg.scores[i];
 			scoreString += 'P$i:$score\n';
@@ -139,7 +139,7 @@ class PlayState extends FlxState
 		// Create the random buildings
 		_buildings = new RandomBuildings(
 			0,
-			FlxG.width * 10, 
+			Reg.LEVELLENGTH, 
 			FlxG.height, 
 			2,
 			10,
@@ -183,10 +183,7 @@ class PlayState extends FlxState
 		//FlxG.sound.play("");
 		FlxG.camera.flash(0xffffffff,0.25);
 
-		FlxG.camera.setBounds(0,0, FlxG.width * 10, FlxG.height);
-
-		_camera.follow(_racer, FlxCamera.STYLE_LOCKON);
-		_camera.followLead.x = -130;
+		FlxG.camera.setBounds(0,0, Reg.LEVELLENGTH, FlxG.height);
 
 		// Super
 		super.create();
@@ -206,6 +203,9 @@ class PlayState extends FlxState
 	 */
 	override public function update():Void
 	{
+		// Slide camera to follow racer
+		_camera.scroll.x += Reg.RACERSPEED * FlxG.elapsed;
+
 		// Update player score strings visually
 		_infoText.text = getScoreString();
 
