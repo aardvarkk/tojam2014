@@ -41,6 +41,8 @@ class Reg
 	/**
 	* Keyboard input sets
 	*/
+	public static var UseKeyboard:Bool = true; // false if controllers?
+	public static var SingleControllerMode:Bool = true; // turn off for multiplayer
 	public static var JUMP:Int = 10;
 	public static var KEY1:Int = 20;
 	public static var KEY2:Int = 40;
@@ -48,7 +50,6 @@ class Reg
 	public static var keyset:Array<Dynamic> =
 	[
 		// Ian's temp keyboard -- works well with Dvorak
-		["UP", "DOWN", "LEFT", "RIGHT", "CONTROL", "ALT", "C", "V"],
 		["UP", "DOWN", "LEFT", "RIGHT", "CONTROL", "ALT", "C", "V"],
 		["W", "S", "A", "D", "R", "T", "Y", "U"],
 		["I","K","J","L","O","P","SEMICOLON","QUOTE"],

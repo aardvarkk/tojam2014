@@ -16,7 +16,11 @@ import flixel.input.gamepad.PS4ButtonID;
 class Player extends FlxExtendedSprite
 {
 	public var number:Int;
+	public var controlSet:Int = 0;
 	public var selected:Bool = false;
+
+	public var ridingVehicle:Bool = false;
+	private var _vehicle:FlxSprite;
 
 	public var gravity:Float = 450;
 	private var jumpTimer:Float;
@@ -52,22 +56,33 @@ class Player extends FlxExtendedSprite
 		health = 1;
 		number = Number;
 
-		if (number == 2)
+		if (number == 1)
 		{
 			loadGraphic(Reg.CORGI2, true, 48, 32);
 		}
-		else if (number == 3)
+		else if (number == 2)
 		{
 			loadGraphic(Reg.CORGI3, true, 48, 32);
 		}
-		else if (number == 4)
+		else if (number == 3)
 		{
 			loadGraphic(Reg.CORGI4, true, 48, 32);
 		}
 		else
 		{
 			loadGraphic(Reg.CORGI1, true, 48, 32);
+			selected = true;
 		}
+
+		if (Reg.UseKeyboard)
+		{
+			controlSet = number;
+
+			// override if Single controller mode
+			if (Reg.SingleControllerMode)
+				controlSet = 0;
+		}
+		// else // for controller inputs
 
 		bubble = new Bubble(X, Y);
 
@@ -79,8 +94,6 @@ class Player extends FlxExtendedSprite
 		height = 16;
 		offset.x = 16;
 		offset.y = 16;
-
-		selected = false; // handled separately
 
 		animation.add("idle", [0, 0, 0, 0, 0, 0, 2, 1, 2, 1, 2, 1], 3, true);
 		animation.add("walk", [4, 5, 6, 7], 12, true);	
@@ -94,9 +107,19 @@ class Player extends FlxExtendedSprite
 	override public function update():Void
 	{
 		// Need to add global pause features later, but skip for now
-		controls();
+		if (ridingVehicle)
+		{
+			x = _vehicle.x + 20;
+			y = _vehicle.y + 10;
+			ridingControls();
+		}
+		else
+		{
+			movingControls();
+		}
 		animate();
 
+		// Respawn stuff
 		if (respawnTimer > 0) // when it was >= 0 there were bugs
 		{
 			respawnTimer -= FlxG.elapsed;
@@ -117,7 +140,12 @@ class Player extends FlxExtendedSprite
 		super.update();
 	}
 
-	public function controls():Void
+	public function ridingControls():Void
+	{
+
+	}
+
+	public function movingControls():Void
 	{
 		acceleration.x = 0;
 
@@ -157,12 +185,15 @@ class Player extends FlxExtendedSprite
 		
 		// Just hit jump
 		// It's either going to trigger a jump or a dive bomb, depending upon whether or not down key is held
-		if (FlxG.keys.anyJustPressed([Reg.keyset[number][4]]))
+		if (FlxG.keys.anyJustPressed([Reg.keyset[controlSet][4]]))
 		{
+			// if not selected in multi mode exit
+			if (Reg.SingleControllerMode == true && selected == false) return;
+
 			// Starting dive bomb
 			// If not already diving and BOTH trying to start a jump and holding down, start the divebomb
 			// Immediately set vertical velocity
-			if (!diving && FlxG.keys.anyPressed([Reg.keyset[number][1]]))
+			if (!diving && FlxG.keys.anyPressed([Reg.keyset[controlSet][1]]))
 			{
 				diving = true;
 				velocity.x += diveBombBoostX;
@@ -206,32 +237,32 @@ class Player extends FlxExtendedSprite
 
 	private function isPressing(Direction:Int):Bool
 	{
-		if (number == 0 && selected == false)
+		if (Reg.SingleControllerMode == true && selected == false)
 			return false;
 
 		if (Direction == FlxObject.UP)
 		{
-			return (FlxG.keys.anyPressed([Reg.keyset[number][0]]));
+			return (FlxG.keys.anyPressed([Reg.keyset[controlSet][0]]));
 		}
 		else if (Direction == FlxObject.DOWN)
 		{
-			return (FlxG.keys.anyPressed([Reg.keyset[number][1]]));
+			return (FlxG.keys.anyPressed([Reg.keyset[controlSet][1]]));
 		}
 		else if (Direction == FlxObject.LEFT)
 		{
-			return (FlxG.keys.anyPressed([Reg.keyset[number][2]]));
+			return (FlxG.keys.anyPressed([Reg.keyset[controlSet][2]]));
 		}
 		else if (Direction == FlxObject.RIGHT)
 		{
-			return (FlxG.keys.anyPressed([Reg.keyset[number][3]]));
+			return (FlxG.keys.anyPressed([Reg.keyset[controlSet][3]]));
 		}
 		else if (Direction == Reg.JUMP)
 		{
-			return (FlxG.keys.anyPressed([Reg.keyset[number][4]]));
+			return (FlxG.keys.anyPressed([Reg.keyset[controlSet][4]]));
 		}
 		else if (Direction == Reg.KEY1)
 		{
-			return (FlxG.keys.anyPressed([Reg.keyset[number][5]]));
+			return (FlxG.keys.anyPressed([Reg.keyset[controlSet][5]]));
 		}
 		else
 		{
@@ -302,6 +333,7 @@ class Player extends FlxExtendedSprite
 		jumped = false;
 		super.reset(X, Y);
 		diving = false;
+		solid = true;
 		angularVelocity = 0;
 		angle = 0;
 		maxVelocity.x = Reg.RACERSPEED * 1.5;
@@ -313,6 +345,22 @@ class Player extends FlxExtendedSprite
 		reset(X, Y);
 		respawnTimer = 2;
 		bubble.reset(x - 10, y - 12);
+	}
+
+	public function mount(Vehicle:FlxSprite):Void
+	{
+		_vehicle = Vehicle;
+		ridingVehicle = true;
+		acceleration.y = 0;
+		velocity.x = 0;
+		velocity.y = 0;
+	}
+
+	public function dismount():Void
+	{
+		_vehicle = null;
+		ridingVehicle = false;
+		acceleration.y = gravity;
 	}
 
 }

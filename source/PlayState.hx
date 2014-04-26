@@ -53,8 +53,8 @@ class PlayState extends FlxState
 	private var _camera:FlxCamera;
 	private var _numPlayers:Int;
 	private var _round:Int;
-	private var _selectedPlayer:Int = 1;
-	private var _singleControllerMode:Bool = true;
+	private var _selectedPlayer:Int = 0;
+	private var _rider:Player;
 
 	public function new(NumPlayers:Int = 4, ?Round:Int = 0)
 	{
@@ -104,13 +104,13 @@ class PlayState extends FlxState
 		_weatherEmitter.start(false,10,0.007125);
 
 		_players = new FlxTypedGroup();
-		_p1 = new Player(150,100,1);
+		_p1 = new Player(150,100,0);
 		if (_numPlayers >= 2)
-			_p2 = new Player(150,100,2);
+			_p2 = new Player(150,100,1);
 		if (_numPlayers >= 3)
-			_p3 = new Player(150,100,3);
+			_p3 = new Player(150,100,2);
 		if (_numPlayers == 4)
-			_p4 = new Player(150,100,4);
+			_p4 = new Player(150,100,3);
 		_bubbles = new FlxTypedGroup();
 
 		_infoText = new FlxText(10,10, FlxG.width - 20, "HELLO!");
@@ -162,18 +162,6 @@ class PlayState extends FlxState
 		add(_infoText);
 		_infoText.scrollFactor.x = 0;
 		_infoText.scrollFactor.y = 0;
-
-		// Debug controls, essentially - press space to cycle players
-		// players all think their own control is 0
-		// this allows a separate map for debug mode that isn't cramped
-		if (_singleControllerMode)
-		{
-			for (p in _players)
-			{
-				p.number = 0;
-			}
-			_p1.selected = true;
-		}
 
 		// The last stuff
 		//FlxG.sound.play("");
@@ -234,27 +222,14 @@ class PlayState extends FlxState
 		if (FlxG.keys.justPressed.SPACE)
 		{
 			_selectedPlayer += 1;
-			if (_selectedPlayer > 4) _selectedPlayer = 1;
+			if (_selectedPlayer > 3) _selectedPlayer = 0;
 
-			if (_selectedPlayer == 1)
+			for (p in _players)
 			{
-				_p1.selected = true;
-				_p2.selected = _p3.selected = _p4.selected = false;
-			}
-			else if (_selectedPlayer == 2)
-			{
-				_p2.selected = true;
-				_p1.selected = _p3.selected = _p4.selected = false;
-			}
-			else if (_selectedPlayer == 3)
-			{
-				_p3.selected = true;
-				_p1.selected = _p2.selected = _p4.selected = false;
-			}
-			else if (_selectedPlayer == 4)
-			{
-				_p4.selected = true;
-				_p1.selected = _p2.selected = _p3.selected = false;
+				if (p.number == _selectedPlayer)
+					p.selected = true;
+				else
+					p.selected = false;
 			}
 		}
 
@@ -264,7 +239,19 @@ class PlayState extends FlxState
 
 	public function swap(P:Player, R:FlxSprite):Void
 	{
-		FlxG.camera.flash(0xffff0000, 2);
+		// if the player colliding is the one who's already riding, don't do anything
+		if (P == _rider)
+			return;
+		// kick out old rider if there is one
+		if (_rider != null)
+		{
+			_rider.dismount;
+			FlxG.log.add('kicked out $_rider');
+		}
+		// add new rider
+		_rider = P;
+		P.mount(R);
+		FlxG.log.add('$P is now the new rider');
 	}	
 
 	public function endRound()
