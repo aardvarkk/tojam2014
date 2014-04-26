@@ -281,9 +281,9 @@ class Player extends FlxExtendedSprite
 
 	override public function reset(X:Float, Y:Float):Void
 	{
+		super.reset(X, Y);
 		solid = true;
 		dive = false;
-		super.reset(X, Y);
 	}
 
 }
