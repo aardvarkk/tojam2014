@@ -148,7 +148,29 @@ class Player extends FlxExtendedSprite
 
 	public function ridingControls():Void
 	{
+		_vehicle.acceleration.y = 0;
 
+		if (isPressing(FlxObject.UP) && _vehicle.y >= 40)
+		{
+			_vehicle.acceleration.y -= runAccel * .5;
+		}
+		else if (isPressing(FlxObject.DOWN) && _vehicle.y <= FlxG.height - 50)
+		{
+			_vehicle.acceleration.y += runAccel * .5;
+		}
+
+		if (_vehicle.y < 50)
+		{
+			_vehicle.velocity.y = 0;
+			_vehicle.acceleration.y = 0;
+			_vehicle.y = 50;
+		}
+		else if (_vehicle.y > FlxG.height - 40)
+		{
+			_vehicle.velocity.y = 0;
+			_vehicle.acceleration.y = 0;
+			_vehicle.y = FlxG.height - 40;
+		}
 	}
 
 	public function movingControls():Void
@@ -287,6 +309,20 @@ class Player extends FlxExtendedSprite
 				return gamepad.justPressed(XboxButtonID.X);
 			else
 				return (FlxG.keys.anyPressed([Reg.keyset[controlSet][5]]));
+		}
+		else if (Direction == Reg.KEY2)
+		{
+			if (Reg.UseGamepad)
+				return gamepad.justPressed(XboxButtonID.Y);
+			else
+				return (FlxG.keys.anyPressed([Reg.keyset[controlSet][6]]));
+		}
+		else if (Direction == Reg.KEY3)
+		{
+			if (Reg.UseGamepad)
+				return gamepad.justPressed(XboxButtonID.B);
+			else
+				return (FlxG.keys.anyPressed([Reg.keyset[controlSet][7]]));
 		}
 		else
 		{

@@ -51,7 +51,7 @@ class Reg
 	public static var keyset:Array<Dynamic> =
 	[
 		// Ian's temp keyboard -- works well with Dvorak
-		["UP", "DOWN", "LEFT", "RIGHT", "CONTROL", "ALT", "C", "V"],
+		["UP", "DOWN", "LEFT", "RIGHT", "CONTROL", "ALT", "Z", "X"],
 		["W", "S", "A", "D", "R", "T", "Y", "U"],
 		["I","K","J","L","O","P","SEMICOLON","QUOTE"],
 		["NUMPADFIVE","NUMPADTWO","NUMPADONE","NUMPADTHREE","NUMPADSEVEN","NUMPADEIGHT","NUMPADNINE","NUMPADMINUS"]

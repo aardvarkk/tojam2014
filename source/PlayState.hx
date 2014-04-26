@@ -132,6 +132,7 @@ class PlayState extends FlxState
 		_infoText = new FlxText(10,10, FlxG.width - 20, null);
 
 		_racer = new Racer(FlxG.width - Reg.RACERWIDTH, FlxG.height - Reg.RACERHEIGHT);
+		_racer.drag.y = 100;
 
 		// Add objects to game from back to front
 		add(_backdropFar);
