@@ -71,4 +71,8 @@ class Reg
 	 * Particles
 	 */
 	 public static inline var PARTICLE:String = "images/snowparticles.png";
+	 /*
+	 * Map tiles
+	 */
+	 public static inline var LEVELTILES:String = "images/tiles_ruins.png";
 }
