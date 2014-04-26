@@ -93,7 +93,7 @@ class PlayState extends FlxState
 		//FlxG.mouse.visible = false;
 
 		_camera = FlxG.camera;
-		FlxG.camera.setBounds(0,0, FlxG.width * 10, FlxG.height);
+		FlxG.camera.setBounds(0,0, Reg.LEVELLENGTH, FlxG.height);
 
 		FlxG.cameras.bgColor = 0xff486878;
 

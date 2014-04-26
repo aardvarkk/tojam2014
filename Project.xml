@@ -13,7 +13,7 @@
 	<!--------------------------------WINDOW SETTINGS------------------------------->
 	
 	<!--These window settings apply to all targets-->
-	<window width="1440" height="720" fps="60" background="#111112" hardware="true" vsync="true" />
+	<window width="2400" height="1350" fps="60" background="#111112" hardware="true" vsync="true" />
 	<!--<window width="1440" height="720" fps="60" background="#111112" hardware="true" vsync="true" />-->
 	<!--<window width="960" height="480" fps="60" background="#111112" hardware="true" vsync="true" />-->
 	
