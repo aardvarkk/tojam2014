@@ -61,8 +61,8 @@
 	</assets>
 	<assets path="assets/music" if="flash">
 		<!-- -->
-		<music path="20120510_SLEEPY_CHIMERA_v3_fade.mp3" id="TitleBGM" />
-		<music path="20100605_DEVIL'S_CORRIDOR_loop.mp3" id="MenuBGM" />
+		<music path="20120510_SLEEPY_CHIMERA_v3_fade.ogg" id="TitleBGM" />
+		<music path="20100605_DEVIL'S_CORRIDOR_loop.ogg" id="MenuBGM" />
 		<!-- -->
 	</assets>
 
