@@ -91,10 +91,11 @@ class PlayState extends FlxState
 
 		// Create the random buildings
 		_buildings = new RandomBuildings(
+			0,
 			FlxG.width * 10, 
 			FlxG.height, 
 			2,
-			15,
+			10,
 			1,
 			5,
 			3

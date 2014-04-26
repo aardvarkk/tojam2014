@@ -3,19 +3,26 @@ package;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.util.FlxColor;
+import flixel.util.FlxRandom;
 
 class Building extends FlxSprite
 {
 	// Width and height in BLOCKS
-	public function new(X:Int, Y:Int, Width:Int, Height:Int)
+	public function new(X:Int, Y:Int, Width:Int, Height:Int, TileIndex:Int)
 	{
 		super(X, Y);
+		moves = false;
+		immovable = true;
 
+		// FlxG.log.add('Building at $X,$Y,$Width,$Height');
 		var sprite:FlxSprite = new FlxSprite().loadGraphic(Reg.LEVELTILES, true, Reg.blockSize, Reg.blockSize);
-		sprite.animation.frameIndex = 8 * 15 + 9;
+		sprite.animation.frameIndex = TileIndex;
 		sprite.drawFrame();
 
-		makeGraphic(Width * Reg.blockSize, Height * Reg.blockSize, FlxColor.CHARTREUSE);
+		var color = FlxRandom.int();
+		color = color | 0xff000000;
+
+		makeGraphic(Width * Reg.blockSize, Height * Reg.blockSize, color);
 
 		for (r in 0...Height) {
 			for (c in 0...Width) {

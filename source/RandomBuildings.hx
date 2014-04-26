@@ -1,6 +1,7 @@
 package;
 
 import flixel.FlxG;
+import flixel.util.FlxRandom;
 import flixel.group.FlxGroup;
 
 class RandomBuildings extends FlxGroup
@@ -14,20 +15,33 @@ class RandomBuildings extends FlxGroup
 	// MinDX: Minimum distance between left sides of buildings in blocks
 	// MaxDX: Maximum distance between buildings in blocks
 	// MaxDY: Maximum upward distance between buildings in blocks (maximum downward is just SizeY/BlockSize)
-	public function new(SizeX:Int, SizeY:Int, MinBuildingX:Int, MaxBuildingX:Int, MinDX:Int, MaxDX:Int, MaxDY:Int)
+	public function new(Seed:Int, SizeX:Int, SizeY:Int, MinBuildingX:Int, MaxBuildingX:Int, MinDX:Int, MaxDX:Int, MaxDY:Int)
 	{
 		super();
 
-		FlxG.log.add(SizeX);
+		FlxRandom.globalSeed = Seed;
 		
+		var maxH = Math.floor(FlxG.height / Reg.blockSize - 1);
 		var curX = 0;
-		var endX = 0;
-		while (endX < SizeX) {
-			FlxG.log.add(endX);
-			var addW = (MinBuildingX + 1) * Reg.blockSize;
-			endX += addW;
-			add(new Building(curX, FlxG.height - 6 * Reg.blockSize, MinBuildingX, 6));
-			curX += addW;
+		var buildingW = 0;
+		var buildingH = 0;
+		var prvBuildingH = FlxRandom.intRanged(0, maxH);
+		var tileIndexAdd = 0;
+		while (curX + buildingW < SizeX) {
+			buildingW = FlxRandom.intRanged(MinBuildingX, MaxBuildingX);
+			buildingH = FlxRandom.intRanged(1, Std.int(Math.min(prvBuildingH + MaxDY, maxH)));
+
+			var X = curX;
+			var Y = FlxG.height - buildingH * Reg.blockSize;
+			// FlxG.log.add('Add building @ $X, $Y of block size $buildingW x $buildingH');
+
+			add(new Building(X, Y, buildingW, buildingH, 8 * 15 + 9 + tileIndexAdd));
+			tileIndexAdd = tileIndexAdd == 0 ? 1 : 0;
+
+			var shiftX = FlxRandom.intRanged(MinDX, buildingW + MaxDX);
+			curX += shiftX * Reg.blockSize;
+			// FlxG.log.add('Shifted forward by $shiftX blocks');
+			prvBuildingH = buildingH;
 		}
 	}
 }
