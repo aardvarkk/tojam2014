@@ -14,8 +14,6 @@ class GameClass extends FlxGame
 	var skipSplash:Bool = false; // Whether to skip the flixel splash screen that appears in release mode.
 	var startFullscreen:Bool = true; // Whether to start the game in fullscreen on desktop targets
 
-	public var blockSize:Int = 16; // Size of smallest detail block
-
 	/**
 	 * You can pretty much ignore this logic and edit the variables above.
 	 */
