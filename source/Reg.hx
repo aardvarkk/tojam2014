@@ -76,7 +76,7 @@ class Reg
 	public static var KEY3:Int = 80;
 	public static var keyset:Array<Dynamic> =
 	[
-		["UP", "DOWN", "LEFT", "RIGHT", "CONTROL", "ALT", "C", "V"],
+		["UP", "DOWN", "LEFT", "RIGHT", "CONTROL", "ALT", "Z", "X"],
 		["W", "S", "A", "D", "R", "T", "Y", "U"],
 		["I","K","J","L","O","P","SEMICOLON","QUOTE"],
 		["NUMPADFIVE","NUMPADTWO","NUMPADONE","NUMPADTHREE","NUMPADSEVEN","NUMPADEIGHT","NUMPADNINE","NUMPADMINUS"]
@@ -98,6 +98,8 @@ class Reg
 	 public static inline var CORGI4:String = "images/corgi4.png";
 
 	 public static inline var BUBBLE:String = "images/bubble.png";
+
+	 public static inline var UFO:String = "images/ufo.png";
 	 /**
 	 * Particles
 	 */
@@ -107,11 +109,9 @@ class Reg
 	 */
 	 public static inline var LEVELTILES:String = "images/tiles_ruins.png";
 
-	 public static inline var RACERWIDTH:Int = 50;
-	 public static inline var RACERHEIGHT:Int = 25;
+	 public static inline var RACERWIDTH:Int = 48;
+	 public static inline var RACERHEIGHT:Int = 16;
 	 public static inline var RACERSPEED:Int = 75;
 
-	 public static inline var LEVELLENGTH:Int = 1024;
-
-	 public static inline var LINESPACE:Int = 25;
+	 public static inline var LEVELLENGTH:Int = 2048 * 4;
 }

@@ -115,8 +115,8 @@ class Player extends FlxExtendedSprite
 		// Need to add global pause features later, but skip for now
 		if (ridingVehicle)
 		{
-			x = _vehicle.x + 20;
-			y = _vehicle.y + 10;
+			x = _vehicle.x + 24; // +20 good for 48x16
+			y = _vehicle.y - 12; // and -16
 			ridingControls();
 		}
 		else
@@ -148,7 +148,29 @@ class Player extends FlxExtendedSprite
 
 	public function ridingControls():Void
 	{
+		_vehicle.acceleration.y = 0;
 
+		if (isPressing(FlxObject.UP) && _vehicle.y >= 40)
+		{
+			_vehicle.acceleration.y -= runAccel * .25;
+		}
+		else if (isPressing(FlxObject.DOWN) && _vehicle.y <= FlxG.height - 50)
+		{
+			_vehicle.acceleration.y += runAccel * .25;
+		}
+
+		if (_vehicle.y < 50)
+		{
+			_vehicle.velocity.y = 0;
+			_vehicle.acceleration.y = 0;
+			_vehicle.y = 50;
+		}
+		else if (_vehicle.y > FlxG.height - 40)
+		{
+			_vehicle.velocity.y = 0;
+			_vehicle.acceleration.y = 0;
+			_vehicle.y = FlxG.height - 40;
+		}
 	}
 
 	public function movingControls():Void
@@ -288,6 +310,20 @@ class Player extends FlxExtendedSprite
 			else
 				return (FlxG.keys.anyPressed([Reg.keyset[controlSet][5]]));
 		}
+		else if (Direction == Reg.KEY2)
+		{
+			if (Reg.UseGamepad)
+				return gamepad.justPressed(XboxButtonID.Y);
+			else
+				return (FlxG.keys.anyPressed([Reg.keyset[controlSet][6]]));
+		}
+		else if (Direction == Reg.KEY3)
+		{
+			if (Reg.UseGamepad)
+				return gamepad.justPressed(XboxButtonID.B);
+			else
+				return (FlxG.keys.anyPressed([Reg.keyset[controlSet][7]]));
+		}
 		else
 		{
 			return false;
@@ -323,25 +359,32 @@ class Player extends FlxExtendedSprite
 
 	public function animate():Void
 	{
-		if (velocity.y > 0)
+		if (!ridingVehicle)
 		{
-			animation.play("fall");
-			
-		}
-		else if (velocity.y < 0)
-		{
-			animation.play("jump");
-		}
-		else
-		{
-			if (velocity.x != 0)
+			if (velocity.y > 0)
 			{
-				animation.play("walk");
+				animation.play("fall");
+				
+			}
+			else if (velocity.y < 0)
+			{
+				animation.play("jump");
 			}
 			else
 			{
-				animation.play("idle");
+				if (velocity.x != 0)
+				{
+					animation.play("walk");
+				}
+				else
+				{
+					animation.play("idle");
+				}
 			}
+		}
+		else // riding
+		{
+			animation.play("idle");
 		}
 	}
 
@@ -382,6 +425,8 @@ class Player extends FlxExtendedSprite
 		acceleration.y = 0;
 		velocity.x = 0;
 		velocity.y = 0;
+		facing = FlxObject.LEFT;
+		flipX = true;
 	}
 
 	public function dismount():Void
