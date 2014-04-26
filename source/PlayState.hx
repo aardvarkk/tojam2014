@@ -77,7 +77,6 @@ class PlayState extends FlxState
 		// Initialize things
 		_backdropFar = new FlxBackdrop(Reg.SNOWCLOUDS,0.5,0,true,false);
 		
-		/*
 		_weatherEmitter = new FlxEmitter(-240,-5);
 		_weatherEmitter.setSize(720,0);
 		_weatherEmitter.makeParticles(Reg.PARTICLE,400,0,true,0);
@@ -86,7 +85,6 @@ class PlayState extends FlxState
 		_weatherEmitter.setAlpha(1,1,0,0.5);
 		_weatherEmitter.setRotation(0,0);
 		_weatherEmitter.start(false,10,0.007125);
-		*/
 
 		_players = new FlxGroup();
 		_p1 = new Player1(120,120);
@@ -94,7 +92,7 @@ class PlayState extends FlxState
 		// Add objects to game from back to front
 		add(_backdropFar);
 
-		//add(_weatherEmitter);
+		add(_weatherEmitter);
 
 		// Create the random buildings
 		_buildings = new RandomBuildings(

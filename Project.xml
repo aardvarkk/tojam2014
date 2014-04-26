@@ -37,7 +37,7 @@
 	<assets path="assets/levels" rename="levels" />
 
 	<!--Flash requires .mp3 - if="flash"-->
-	<assets path="assets/sounds" >
+	<assets path="assets/sounds" if="flash">
 	<!-- -->
 		<music path="howl.mp3" id="Howl" />
 		<music path="howlbase.mp3" id="HowlBase" />
@@ -59,7 +59,7 @@
 		<music path="gewaltslash2.mp3" id="GewaltSlash2" />
 	<!-- -->
 	</assets>
-	<assets path="assets/music" >
+	<assets path="assets/music" if="flash">
 		<!-- -->
 		<music path="20120510_SLEEPY_CHIMERA_v3_fade.mp3" id="TitleBGM" />
 		<music path="20100605_DEVIL'S_CORRIDOR_loop.mp3" id="MenuBGM" />

@@ -25,6 +25,7 @@ class Player extends FlxExtendedSprite
 
 	public var attacking:Bool = false;
 	public var attackTimer:Float = -1;
+	public var dive:Bool = true;
 
 	public var invulnerable:Bool = false;
 	private var invTimer:Float = 0.8;
@@ -52,6 +53,27 @@ class Player extends FlxExtendedSprite
 		solid = true;
 		health = 1;
 		number = 0; // set for 1p mode for testing by default
+
+
+		// thing
+
+		gravity = 450;
+		moveSpeed = 83;
+		maxVelocity.y = 500;
+		acceleration.y = gravity;
+		jumpStrength = 136;
+
+		if (number == 2) loadGraphic(Reg.CORGI2, true, 48, 32);
+		else if (number == 3) loadGraphic(Reg.CORGI3, true, 48, 32);
+		else if (number == 4) loadGraphic(Reg.CORGI4, true, 48, 32);
+		else loadGraphic(Reg.CORGI1, true, 48, 32);
+
+		width = 15;
+		height = 16;
+		offset.x = 16;
+		offset.y = 16;
+
+		selected = true;
 
 		animation.add("idle", [0, 0, 0, 0, 0, 0, 2, 1, 2, 1, 2, 1], 3, true);
 		animation.add("walk", [4, 5, 6, 7], 12, true);	
@@ -160,11 +182,20 @@ class Player extends FlxExtendedSprite
 		else if (Direction == FlxObject.DOWN)
 		{
 			if (number == 0 && selected)
+			{
 				return (FlxG.keys.anyPressed([Reg.keyset[0][1]]));
+				dive = true;
+			}
 			else if (number > 0)
+			{
 				return (FlxG.keys.anyPressed([Reg.keyset[number][1]]));
+				dive = true;
+			}
 			else
+			{
 				return false;
+				dive = false;
+			}
 		}
 		else if (Direction == FlxObject.LEFT)
 		{
@@ -241,7 +272,7 @@ class Player extends FlxExtendedSprite
 	public function playLandingSound():Void
 	{
 		// Override within the characters themselves
-		FlxG.sound.play("GrimmerLand", 0.4);
+		// FlxG.sound.play("GrimmerLand", 0.4);
 	}
 
 }
