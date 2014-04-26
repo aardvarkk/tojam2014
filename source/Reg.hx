@@ -84,4 +84,6 @@ class Reg
 	 public static inline var RACERWIDTH:Int = 50;
 	 public static inline var RACERHEIGHT:Int = 25;
 	 public static inline var RACERSPEED:Int = 75;
+
+	 public static inline var LEVELLENGTH:Int = 1024;
 }

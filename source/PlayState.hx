@@ -56,13 +56,29 @@ class PlayState extends FlxState
 	private var _selectedPlayer:Int = 0;
 	private var _rider:Player;
 
-	public function new(NumPlayers:Int = 4, ?Round:Int = 0)
+	public function new(NumPlayers:Int = 2, ?Round:Int = 0)
 	{
 		super();
 		_numPlayers = NumPlayers;
 		_round = Round;
 
+		for (i in 0..._numPlayers)
+		{
+			Reg.scores[i] = 0;
+		}
+
 		FlxG.log.add('Starting game round $_round with $_numPlayers players');
+	}
+
+	private function getScoreString()
+	{
+		var scoreString = "";
+		for (i in 0..._numPlayers)
+		{
+			var score = Reg.scores[i];
+			scoreString += 'P$i:$score\n';
+		}
+		return scoreString;
 	}
 
 	/**
@@ -113,7 +129,7 @@ class PlayState extends FlxState
 			_p4 = new Player(150,100,3);
 		_bubbles = new FlxTypedGroup();
 
-		_infoText = new FlxText(10,10, FlxG.width - 20, "HELLO!");
+		_infoText = new FlxText(10,10, FlxG.width - 20, null);
 
 		_racer = new Racer(FlxG.width - Reg.RACERWIDTH, FlxG.height - Reg.RACERHEIGHT);
 
@@ -125,7 +141,7 @@ class PlayState extends FlxState
 		// Create the random buildings
 		_buildings = new RandomBuildings(
 			0,
-			FlxG.width * 10, 
+			Reg.LEVELLENGTH, 
 			FlxG.height, 
 			2,
 			10,
@@ -177,8 +193,7 @@ class PlayState extends FlxState
 		//FlxG.sound.play("");
 		FlxG.camera.flash(0xffffffff,0.25);
 
-		_camera.follow(_racer, FlxCamera.STYLE_LOCKON);
-		_camera.followLead.x = -130;
+		FlxG.camera.setBounds(0,0, Reg.LEVELLENGTH, FlxG.height);
 
 		// Watchlist
 		FlxG.watch.add(this, "_numPlayers", "Players");
@@ -206,6 +221,11 @@ class PlayState extends FlxState
 	 */
 	override public function update():Void
 	{
+		// Slide camera to follow racer
+		_camera.scroll.x += Reg.RACERSPEED * FlxG.elapsed;
+
+		// Update player score strings visually
+		_infoText.text = getScoreString();
 
 		// Resize the world - collisions are only detected within the world bounds
 		FlxG.worldBounds.set(FlxG.camera.scroll.x - 20, FlxG.camera.scroll.y - 20, FlxG.width + 20, FlxG.height + 20);
@@ -222,6 +242,7 @@ class PlayState extends FlxState
 			if (p.y > FlxG.height + 20 || p.x + p.width < _camera.scroll.x - 20)
 			{
 				p.respawn(_camera.scroll.x + 48, 48);
+				Reg.scores[p.number] -= 100;
 			}
 			if (p.diving == false)
 			{

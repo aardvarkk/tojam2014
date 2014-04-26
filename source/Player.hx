@@ -48,12 +48,6 @@ class Player extends FlxExtendedSprite
 	{
 		super(X, Y);
 
-		drag.x = gravity; // Ground friction
-		acceleration.y = gravity;
-
-		solid = true;
-		diving = false;
-		health = 1;
 		number = Number;
 
 		if (number == 1)
@@ -86,10 +80,6 @@ class Player extends FlxExtendedSprite
 
 		bubble = new Bubble(X, Y);
 
-		gravity = 450;
-		maxVelocity.y = 500;
-		acceleration.y = gravity;
-		jumpStrength = 136;
 		width = 15;
 		height = 16;
 		offset.x = 16;
@@ -102,6 +92,8 @@ class Player extends FlxExtendedSprite
 		animation.add("climb", [8, 9], 8, true);
 		animation.add("climbidle", [8], 4, true);
 		animation.add("attack", [10], 4, false);
+
+		reset(X, Y);
 	}
 
 	override public function update():Void
@@ -330,14 +322,18 @@ class Player extends FlxExtendedSprite
 
 	override public function reset(X:Float, Y:Float):Void
 	{
-		jumped = false;
 		super.reset(X, Y);
+
+		acceleration.y = gravity;
 		diving = false;
-		solid = true;
-		angularVelocity = 0;
-		angle = 0;
+		drag.x = gravity; // Ground friction
+		gravity = 450;
+		health = 1;
+		jumped = false;
+		jumpStrength = 136;
 		maxVelocity.x = Reg.RACERSPEED * 1.5;
 		maxVelocity.y = 2 * gravity; 
+		solid = true;
 	}
 
 	public function respawn(X:Float, Y:Float):Void
