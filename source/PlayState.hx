@@ -56,13 +56,29 @@ class PlayState extends FlxState
 	private var _selectedPlayer:Int = 0;
 	private var _rider:Player;
 
-	public function new(NumPlayers:Int = 4, ?Round:Int = 0)
+	public function new(NumPlayers:Int = 2, ?Round:Int = 0)
 	{
 		super();
 		_numPlayers = NumPlayers;
 		_round = Round;
 
+		for (i in 0..._numPlayers + 1)
+		{
+			Reg.scores[i] = 0;
+		}
+
 		FlxG.log.add('Starting game round $_round with $_numPlayers players');
+	}
+
+	private function getScoreString()
+	{
+		var scoreString = "";
+		for (i in 0..._numPlayers + 1)
+		{
+			var score = Reg.scores[i];
+			scoreString += 'P$i:$score\n';
+		}
+		return scoreString;
 	}
 
 	/**
@@ -113,7 +129,7 @@ class PlayState extends FlxState
 			_p4 = new Player(150,100,3);
 		_bubbles = new FlxTypedGroup();
 
-		_infoText = new FlxText(10,10, FlxG.width - 20, "HELLO!");
+		_infoText = new FlxText(10,10, FlxG.width - 20, null);
 
 		// Add objects to game from back to front
 		add(_backdropFar);
@@ -190,6 +206,8 @@ class PlayState extends FlxState
 	 */
 	override public function update():Void
 	{
+		// Update player score strings visually
+		_infoText.text = getScoreString();
 
 		// Resize the world - collisions are only detected within the world bounds
 		FlxG.worldBounds.set(FlxG.camera.scroll.x - 20, FlxG.camera.scroll.y - 20, FlxG.width + 20, FlxG.height + 20);
@@ -206,6 +224,7 @@ class PlayState extends FlxState
 			if (p.y > FlxG.height + 20 || p.x + p.width < _camera.scroll.x - 20)
 			{
 				p.respawn(_camera.scroll.x + 48, 48);
+				Reg.scores[p.number] -= 100;
 			}
 			if (p.diving == false)
 			{
