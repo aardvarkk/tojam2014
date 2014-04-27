@@ -67,19 +67,19 @@ class Player extends FlxExtendedSprite
 
 		if (number == 1)
 		{
-			loadGraphic(Reg.CORGI2, true, 48, 32);
+			loadGraphic(Reg.MONKEY1, true, 16, 16);
 		}
 		else if (number == 2)
 		{
-			loadGraphic(Reg.CORGI3, true, 48, 32);
+			loadGraphic(Reg.MONKEY1, true, 16, 16);
 		}
 		else if (number == 3)
 		{
-			loadGraphic(Reg.CORGI4, true, 48, 32);
+			loadGraphic(Reg.MONKEY1, true, 16, 16);
 		}
 		else
 		{
-			loadGraphic(Reg.CORGI1, true, 48, 32);
+			loadGraphic(Reg.MONKEY1, true, 16, 16);
 			selected = true;
 		}
 
@@ -95,16 +95,16 @@ class Player extends FlxExtendedSprite
 
 		bubble = new Bubble(X, Y);
 
-		width = 15;
-		height = 16;
-		offset.x = 16;
-		offset.y = 16;
+		width = 10;
+		height = 13;
+		offset.x = 3;
+		offset.y = 3;
 
-		animation.add("idle", [0, 0, 0, 0, 0, 0, 2, 1, 2, 1, 2, 1], 3, true);
+		animation.add("idle", [0, 1, 2, 3], 6, true);
 		animation.add("walk", [4, 5, 6, 7], 12, true);	
-		animation.add("jump", [5], 8, true);
-		animation.add("fall", [6], 8, true);
-		animation.add("climb", [8, 9], 8, true);
+		animation.add("jump", [9, 10, 11, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12], 8, true);
+		animation.add("fall", [12], 8, true);
+		animation.add("climb", [11, 12], 8, true);
 		animation.add("climbidle", [8], 4, true);
 		animation.add("attack", [10], 4, false);
 
