@@ -117,7 +117,7 @@ class PlayState extends FlxState
 
 		if (FlxG.sound.music != null)
 		{
-			FlxG.sound.music.stop();
+			//FlxG.sound.music.stop();
 		}
 
 		// WHERE I LEFT OFF - For autoscrolling backgrounds, for now, the best solution
