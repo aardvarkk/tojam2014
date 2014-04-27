@@ -45,6 +45,7 @@ class PlayState extends FlxState
 	private var _buildingsMid:FlxBackdrop;
 	private var _buildingsNear:FlxBackdrop;
 	private var _foreground:FlxBackdrop;
+	private var _foreground2:FlxBackdrop;
 	private var _mist:FlxBackdrop;
 	private var _mist2:FlxBackdrop;
 	private var _weatherEmitter:FlxEmitter;
@@ -149,12 +150,14 @@ class PlayState extends FlxState
 		_buildingsNear = new FlxBackdrop(Reg.BUILDINGSNEAR,0.4,0,true,false); 
 		_mist2 = new FlxBackdrop(Reg.MIST2,1.15,0,true,false);
 		_foreground = new FlxBackdrop(Reg.JUNGLEFOLIAGE,1.3,0,true,false);
+		_foreground2 = new FlxBackdrop(Reg.JUNGLEFOLIAGE2,1.3,0,true,false);
 		
 		_mountainsFar.y = FlxG.height - 180;
 		_buildingsMid.y = FlxG.height - 128;
 		_buildingsNear.y = FlxG.height - 80;
 		_mist.y = FlxG.height - 138; // actually 128 though
 		_mist2.y = FlxG.height - 98; // actually 128 though
+		_foreground2.y = FlxG.height - 48;
 
 		_weatherEmitter = new FlxEmitter(-240,0,200);
 		_weatherEmitter.setSize(720,FlxG.height);
@@ -302,6 +305,7 @@ class PlayState extends FlxState
 		add(_weatherEmitter);
 
 		add(_foreground);
+		add(_foreground2);
 
 		for (ms in _monkeyScoreSprites) 
 		{

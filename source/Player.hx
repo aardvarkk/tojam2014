@@ -6,6 +6,7 @@ import flixel.FlxSprite;
 import flixel.util.FlxPoint;
 import flixel.util.FlxSpriteUtil;
 import flixel.util.FlxTimer;
+import flixel.util.FlxRandom;
 import flixel.effects.particles.FlxEmitterExt;
 import flixel.addons.display.FlxExtendedSprite;
 import flixel.group.FlxTypedGroup;
@@ -59,6 +60,9 @@ class Player extends FlxExtendedSprite
 	private var _jumpStrings = ["LightOoh", "TinyOoh1", "TinyOoh2", "TinyOoh3", "TinyOoh4", "TinyOoh5", "TinyOoh6", "TinyOoh7", "TinyOoh8", "TinyOoh9"];
 	private var _deathStrings = ["Megascreech1", "Megascreech2", "Megascreech3", "Squak"];
 	private var _gamepad:FlxGamepad;
+	public var autoscrollMonkey:Bool = false;
+	private var autoJumpTimer:Float = 0;
+	private var autoJumpDelay:Float = 0.1;
 
 	public function new(X:Int, Y:Int, Number:Int, Bombs:FlxTypedGroup<Bomb>, Boomerangs:FlxTypedGroup<Boomerang>, Missiles:FlxTypedGroup<Missile>)
 	{
@@ -111,7 +115,7 @@ class Player extends FlxExtendedSprite
 		offset.y = 3;
 
 		animation.add("idle", [0, 1, 2, 3], 6, true);
-		animation.add("walk", [4, 5, 6, 7], 12, true);	
+		animation.add("walk", [4, 5, 6], 12, true);	
 		animation.add("jump", [9, 10, 11, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12], 8, true);
 		animation.add("fall", [12], 8, true);
 		animation.add("climb", [11, 12], 8, true);
@@ -139,6 +143,45 @@ class Player extends FlxExtendedSprite
 		{
 			movingControls();
 		}
+
+		if (autoscrollMonkey)
+		{
+			acceleration.x = 0;
+			acceleration.x += (runAccel * 0.75);
+			if (isTouching(FlxObject.WALL))
+				{
+					jumpStrength = 300;
+					if (autoJumpTimer < 0)
+					{
+						jump();
+						//velocity.x -= 50;
+						//velocity.y -= 20;
+						autoJumpTimer = autoJumpDelay;
+					}
+				}
+			autoJumpTimer -= FlxG.elapsed;
+			if (autoJumpTimer < 0 && isTouching(FlxObject.FLOOR))
+			{
+				var j = FlxRandom.intRanged(0,9);
+				if (j == 9)
+				{
+					jump();
+					autoJumpTimer = autoJumpDelay;
+				}
+			}
+			if (y > FlxG.height)
+			{
+				y = -50;
+				x -= 50;
+				FlxG.sound.play("LightOoh");
+			}
+			if (x > FlxG.camera.scroll.x + FlxG.width || x < FlxG.camera.scroll.x)
+			{
+				y = -50;
+				x = FlxG.camera.scroll.x + 50;
+			}
+		}
+
 		animate();
 
 		// Respawn stuff
