@@ -18,5 +18,8 @@
 1. `sudo haxelib selfupdate`
 1. `haxelib upgrade`
 
+## Haxe bugs
+1. system/FlxSound line 241 -- comment out entire if/else block
+
 # [Tiled](http://www.mapeditor.org/) (Map Editor)
 1. See [HaxeFlixel Demos](http://haxeflixel.com/demos/) for example usage
