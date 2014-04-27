@@ -46,6 +46,7 @@
 		<music path="monkey_jump3.wav" id="Jump3" />
 		<music path="monkey_jump4.wav" id="Jump4" />
 		<music path="monkey_bananabomb.wav" id="Bananabomb" />
+		<music path="explosion.wav" id="Explosion" />
 		<!-- <music path="monkey_ukiiii.wav" id="Uki" /> -->
 		<music path="death_yell1.wav" id="Uki" />
 		<music path="monkey_splosion.wav" id="Boom" />

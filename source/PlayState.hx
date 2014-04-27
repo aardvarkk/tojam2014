@@ -51,6 +51,7 @@ class PlayState extends FlxState
 	private var _players:FlxTypedGroup<Player>;
 	private var _bubbles:FlxTypedGroup<Bubble>;
 	private var _beams:FlxTypedGroup<Beam>;
+	public var explosions:FlxTypedGroup<Explosion>;
 	public var _bombs:FlxTypedGroup<Bomb>;
 	private var _p1:Player;
 	private var _p2:Player;
@@ -67,6 +68,7 @@ class PlayState extends FlxState
 	private var _roundOver:Bool = false;
 	private var _cartScoreTimer:FlxTimer;
 	private var _respawnPlayerTimer:FlxTimer;
+	private var _crosshair:Crosshair;
 
 	public function new(NumPlayers:Int = 2, ?Round:Int = 0)
 	{
@@ -146,13 +148,17 @@ class PlayState extends FlxState
 
 		_weatherEmitter = new FlxEmitter(-240,0,200);
 		_weatherEmitter.setSize(720,FlxG.height);
-		_weatherEmitter.makeParticles(Reg.PARTICLE,100,0,true,0);
-		_weatherEmitter.setXSpeed(-80,-350); // 10-100 looks good - try it in ruins?
-		_weatherEmitter.setYSpeed(50,-200);
-		_weatherEmitter.setAlpha(1,1,0,0.5);
-		_weatherEmitter.setRotation(-50,50);
+		_weatherEmitter.makeParticles(Reg.PARTICLE,200,0,true,0);
+		_weatherEmitter.setXSpeed(-150,-50); // 10-100 looks good - try it in ruins?
+		_weatherEmitter.setYSpeed(-150,-50);
+		_weatherEmitter.setAlpha(0,1,0,1);
+		_weatherEmitter.setRotation(-100,100);
 		_weatherEmitter.start(false,10,0.007125);
 
+<<<<<<< HEAD
+=======
+		explosions = new FlxTypedGroup();
+>>>>>>> ac62708429f74a2d2b670a18e943bf15ab53cb3a
 		_bombs = new FlxTypedGroup();
 		_players = new FlxTypedGroup();
 		_p1 = new Player(150,100,0, _bombs);
@@ -164,10 +170,16 @@ class PlayState extends FlxState
 			_p4 = new Player(150,100,3, _bombs);
 		_bubbles = new FlxTypedGroup();
 		_beams = new FlxTypedGroup();
+
+		_crosshair = new Crosshair();
 		
-		for (b in 0...10)
+		for (b in 0...5)
 		{
 			_bombs.add(new Bomb());
+		}
+		for (e in 0...10)
+		{
+			explosions.add(new Explosion());
 		}
 
 		_infoText = new FlxText(10,10, FlxG.width - 20, null);
@@ -225,7 +237,7 @@ class PlayState extends FlxState
 		{
 			if (p.number == _round)
 			{
-				p.mount(_racer);
+				p.mount(_racer, _crosshair);
 				_rider = p;
 			}
 		}
@@ -236,6 +248,9 @@ class PlayState extends FlxState
 		add(_bubbles);
 		add(_beams);
 		add(_bombs);
+		add(explosions);
+
+		add(_crosshair);
 
 		add(_weatherEmitter);
 
@@ -364,7 +379,6 @@ class PlayState extends FlxState
 					p.selected = false;
 			}
 		}
-
 		// Super
 		super.update();
 	}
@@ -382,7 +396,7 @@ class PlayState extends FlxState
 		}
 		// add new rider
 		_rider = P;
-		P.mount(R);
+		P.mount(R, _crosshair);
 		Reg.scores[P.number] += 500;
 	}	
 
@@ -390,8 +404,8 @@ class PlayState extends FlxState
 	{
 		P.velocity.x += R.velocity.x * 2;
 		P.velocity.y += R.velocity.y * 2;
+		explosions.recycle(Explosion,[],true,false).boom(R, R.velocity.x, R.velocity.y);
 		R.kill();
-		//add particle effects for explosion
 	}
 
 	public function endRoundTimer(Timer:FlxTimer)
