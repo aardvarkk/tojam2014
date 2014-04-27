@@ -79,7 +79,7 @@ class MenuState extends FlxState
 
 		// Create the random buildings
 		_buildings = new RandomBuildings(
-			719872998,
+			1298712,
 			Reg.LEVELLENGTH, 
 			FlxG.height, 
 			2,
@@ -90,7 +90,7 @@ class MenuState extends FlxState
 			);
 		add(_buildings);
 
-		_p = new Player(100,100,0,null,null,null);
+		_p = new Player(240,1,0,null,null,null);
 		_p.selected = true;
 		add(_p);
 
