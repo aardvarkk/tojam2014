@@ -4,7 +4,7 @@ import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.FlxState;
 import flixel.FlxCamera;
-import flixel.replay.FlxReplay;
+import flixel.system.replay.FlxReplay;
 import flixel.text.FlxText;
 import flixel.ui.FlxButton;
 import flixel.util.FlxMath;
@@ -119,7 +119,7 @@ class MenuState extends FlxState
 		FlxG.camera.follow(_p,FlxCamera.STYLE_PLATFORMER,new FlxPoint(50,0),4);
 
 		//FlxG.vcr.loadReplay(Assets.getText("data/demo1.fgr"));
-		FlxG.vcr.startRecording();
+		//FlxG.vcr.startRecording();
 
 		super.create();
 	}
