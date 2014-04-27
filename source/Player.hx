@@ -33,7 +33,7 @@ class Player extends FlxExtendedSprite
 	private var jumped:Bool = false;
 	private var landed:Bool = false;
 	public var climbing:Bool = false;
-	private var _bombs:FlxTypedGroup<Bomb>;
+	public var _bombs:FlxTypedGroup<Bomb>;
 
 	public var attacking:Bool = false;
 	public var attackTimer:Float = -1;
@@ -66,12 +66,13 @@ class Player extends FlxExtendedSprite
 	}
 	//#end
 
-	public function new(X:Int, Y:Int, Number:Int)
+	public function new(X:Int, Y:Int, Number:Int, Bombs:FlxTypedGroup<Bomb>)
 	{
 		super(X, Y);
 
 		number = Number;
-		//_bombs = Bombs; // ref to the bomb group
+		_bombs = Bombs; // ref to the bomb group
+		FlxG.watch.add(this,"bombs","Bombs");
 
 		if (number == 1)
 		{
@@ -184,7 +185,8 @@ class Player extends FlxExtendedSprite
 
 		if (isPressing(Reg.KEY1))
 		{
-			// BOMB!
+			FlxG.log.add("Shot a bomb!");
+			_bombs.recycle(Bomb,[],true,false).shoot(this, 210);
 		}
 	}
 

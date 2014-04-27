@@ -49,7 +49,7 @@ class PlayState extends FlxState
 	private var _players:FlxTypedGroup<Player>;
 	private var _bubbles:FlxTypedGroup<Bubble>;
 	private var _beams:FlxTypedGroup<Beam>;
-	private var _bombs:FlxTypedGroup<Bomb>;
+	public var _bombs:FlxTypedGroup<Bomb>;
 	private var _p1:Player;
 	private var _p2:Player;
 	private var _p3:Player;
@@ -148,18 +148,19 @@ class PlayState extends FlxState
 		_weatherEmitter.setRotation(0,0);
 		_weatherEmitter.start(false,10,0.007125);
 
-		_players = new FlxTypedGroup();
-		_p1 = new Player(150,100,0);
-		if (_numPlayers >= 2)
-			_p2 = new Player(150,100,1);
-		if (_numPlayers >= 3)
-			_p3 = new Player(150,100,2);
-		if (_numPlayers == 4)
-			_p4 = new Player(150,100,3);
-		_bubbles = new FlxTypedGroup();
-		_beams = new FlxTypedGroup();
 
 		_bombs = new FlxTypedGroup();
+		_players = new FlxTypedGroup();
+		_p1 = new Player(150,100,0, _bombs);
+		if (_numPlayers >= 2)
+			_p2 = new Player(150,100,1, _bombs);
+		if (_numPlayers >= 3)
+			_p3 = new Player(150,100,2, _bombs);
+		if (_numPlayers == 4)
+			_p4 = new Player(150,100,3, _bombs);
+		_bubbles = new FlxTypedGroup();
+		_beams = new FlxTypedGroup();
+		
 		for (b in 0...10)
 		{
 			_bombs.add(new Bomb());
@@ -232,6 +233,7 @@ class PlayState extends FlxState
 		add(_players);
 		add(_bubbles);
 		add(_beams);
+		add(_bombs);
 
 		add(_infoText);
 		_infoText.scrollFactor.x = 0;

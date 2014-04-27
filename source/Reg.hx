@@ -76,7 +76,7 @@ class Reg
 	public static var KEY3:Int = 80;
 	public static var keyset:Array<Dynamic> =
 	[
-		["UP", "DOWN", "LEFT", "RIGHT", "CONTROL", "ALT", "Z", "X"],
+		["UP", "DOWN", "LEFT", "RIGHT", "Z", "X", "C", "V"],
 		["W", "S", "A", "D", "R", "T", "Y", "U"],
 		["I","K","J","L","O","P","SEMICOLON","QUOTE"],
 		["NUMPADFIVE","NUMPADTWO","NUMPADONE","NUMPADTHREE","NUMPADSEVEN","NUMPADEIGHT","NUMPADNINE","NUMPADMINUS"]
