@@ -115,7 +115,7 @@ class Reg
 	 /**
 	 * Particles
 	 */
-	 public static inline var PARTICLE:String = "images/snowparticles.png";
+	 public static inline var PARTICLE:String = "images/leaves02.png";
 	 public static inline var BOMB:String = "images/enemydeath.png";
 	 /*
 	 * Map tiles

@@ -36,7 +36,7 @@ import flixel.input.gamepad.XboxButtonID;
 class PlayState extends FlxState
 {
 	// Variables live here
-	private var _background:FlxBackdrop;
+	//private var _background:FlxBackdrop;
 	private var _cloudsFar:FlxBackdrop;
 	private var _cloudsMid:FlxBackdrop;
 	private var _cloudsNear:FlxBackdrop;
@@ -114,7 +114,7 @@ class PlayState extends FlxState
 		_camera = FlxG.camera;
 		FlxG.camera.setBounds(0,0, Reg.LEVELLENGTH, FlxG.height);
 
-		FlxG.cameras.bgColor = 0xff486878;
+		FlxG.cameras.bgColor = 0xff4a9294;
 
 		if (FlxG.sound.music != null)
 		{
@@ -127,7 +127,7 @@ class PlayState extends FlxState
 		// since we don't want the split screen cameras to fuck it up
 
 		// Initialize things
-		_background = new FlxBackdrop(Reg.BACKGROUND,0.0675,0,true, false);
+		//_background = new FlxBackdrop(Reg.BACKGROUND,0.0675,0,true, false);
 		_cloudsFar = new FlxBackdrop(Reg.CLOUDSFAR,0.125,0,true,false);
 		_cloudsMid = new FlxBackdrop(Reg.CLOUDSMID,0.25,0,true,false);
 		_cloudsNear = new FlxBackdrop(Reg.CLOUDSNEAR,0.5,0,true,false);
@@ -135,17 +135,17 @@ class PlayState extends FlxState
 		_buildingsMid = new FlxBackdrop(Reg.BUILDINGSMID,0.25,0,true,false);
 		_buildingsNear = new FlxBackdrop(Reg.BUILDINGSNEAR,0.5,0,true,false); 
 		
-		_mountainsFar.y = FlxG.height - 80;
-		_buildingsMid.y = FlxG.height - 64;
-		_buildingsNear.y = FlxG.height - 64;
+		_mountainsFar.y = FlxG.height - 180;
+		_buildingsMid.y = FlxG.height - 128;
+		_buildingsNear.y = FlxG.height - 80;
 
-		_weatherEmitter = new FlxEmitter(-240,-5);
-		_weatherEmitter.setSize(720,0);
-		_weatherEmitter.makeParticles(Reg.PARTICLE,200,0,true,0);
+		_weatherEmitter = new FlxEmitter(-240,0,200);
+		_weatherEmitter.setSize(720,FlxG.height);
+		_weatherEmitter.makeParticles(Reg.PARTICLE,100,0,true,0);
 		_weatherEmitter.setXSpeed(-80,-350); // 10-100 looks good - try it in ruins?
-		_weatherEmitter.setYSpeed(100,400);
+		_weatherEmitter.setYSpeed(50,-200);
 		_weatherEmitter.setAlpha(1,1,0,0.5);
-		_weatherEmitter.setRotation(0,0);
+		_weatherEmitter.setRotation(-50,50);
 		_weatherEmitter.start(false,10,0.007125);
 
 
@@ -172,15 +172,13 @@ class PlayState extends FlxState
 		_racer.drag.y = 300;
 
 		// Add objects to game from back to front
-		add(_background);
+		//add(_background);
 		add(_cloudsFar);
 		add(_mountainsFar);
 		add(_cloudsMid);
 		add(_buildingsMid);
 		add(_cloudsNear);
 		add(_buildingsNear);
-
-		add(_weatherEmitter);
 
 		// Create the random buildings
 		_buildings = new RandomBuildings(
@@ -234,6 +232,8 @@ class PlayState extends FlxState
 		add(_bubbles);
 		add(_beams);
 		add(_bombs);
+
+		add(_weatherEmitter);
 
 		add(_infoText);
 		_infoText.scrollFactor.x = 0;

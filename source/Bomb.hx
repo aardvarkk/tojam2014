@@ -18,6 +18,10 @@ class Bomb extends FlxSprite
 
 	override public function update():Void
 	{
+
+		if (!isOnScreen())
+			kill();
+
 		super.update();
 	}
 
