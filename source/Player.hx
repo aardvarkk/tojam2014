@@ -149,7 +149,7 @@ class Player extends FlxExtendedSprite
 			bubble.x = x - 10;
 			bubble.y = y - 12;
 
-			if (isPressing(Reg.JUMP) || respawnTimer <= 0)
+			if (isPressing(Reg.JUMP) || x > FlxG.camera.scroll.x + 100 || respawnTimer <= 0)
 			{
 				jumped = true;
 				landed = false;
