@@ -67,6 +67,7 @@ class PlayState extends FlxState
 	private var _roundOver:Bool = false;
 	private var _cartScoreTimer:FlxTimer;
 	private var _respawnPlayerTimer:FlxTimer;
+	private var _crosshair:Crosshair;
 
 	public function new(NumPlayers:Int = 2, ?Round:Int = 0)
 	{
@@ -165,6 +166,8 @@ class PlayState extends FlxState
 			_p4 = new Player(150,100,3, _bombs);
 		_bubbles = new FlxTypedGroup();
 		_beams = new FlxTypedGroup();
+
+		_crosshair = new Crosshair();
 		
 		for (b in 0...5)
 		{
@@ -230,7 +233,7 @@ class PlayState extends FlxState
 		{
 			if (p.number == _round)
 			{
-				p.mount(_racer);
+				p.mount(_racer, _crosshair);
 				_rider = p;
 			}
 		}
@@ -242,6 +245,8 @@ class PlayState extends FlxState
 		add(_beams);
 		add(_bombs);
 		add(explosions);
+
+		add(_crosshair);
 
 		add(_weatherEmitter);
 
@@ -367,7 +372,6 @@ class PlayState extends FlxState
 					p.selected = false;
 			}
 		}
-
 		// Super
 		super.update();
 	}
@@ -385,7 +389,7 @@ class PlayState extends FlxState
 		}
 		// add new rider
 		_rider = P;
-		P.mount(R);
+		P.mount(R, _crosshair);
 		Reg.scores[P.number] += 500;
 	}	
 

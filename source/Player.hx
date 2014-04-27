@@ -50,6 +50,9 @@ class Player extends FlxExtendedSprite
 	public var bubble:Bubble;
 	public var beam:Beam;
 
+	private var _aim:Float = 180;
+	private var _crosshair:Crosshair;
+
 	private var _jumpStrings = ["Jump1", "Jump2", "Jump3", "Jump4"];
 
 	//#if (!FLX_NO_GAMEPAD && (cpp || neko || js))
@@ -72,7 +75,7 @@ class Player extends FlxExtendedSprite
 
 		number = Number;
 		_bombs = Bombs; // ref to the bomb group
-		FlxG.watch.add(this,"bombs","Bombs");
+		FlxG.watch.add(this,"_aim","Aim");
 
 		if (number == 1)
 		{
@@ -128,6 +131,9 @@ class Player extends FlxExtendedSprite
 		{
 			x = _vehicle.x + 24; // +20 good for 48x16
 			y = _vehicle.y - 12; // and -16
+			_crosshair.angle = _aim;
+			_crosshair.x = x + width / 2;
+			_crosshair.y = y + height / 2;
 			ridingControls();
 			if (attackTimer > 0)
 				attackTimer -= FlxG.elapsed;
@@ -172,6 +178,15 @@ class Player extends FlxExtendedSprite
 			_vehicle.acceleration.y += runAccel * .25;
 		}
 
+		if (isPressing(FlxObject.LEFT))
+		{
+			_aim -= 4;
+		}
+		else if (isPressing(FlxObject.RIGHT))
+		{
+			_aim += 4;
+		}
+
 		if (_vehicle.y < 50)
 		{
 			_vehicle.velocity.y = 0;
@@ -189,7 +204,7 @@ class Player extends FlxExtendedSprite
 			if (isPressing(Reg.KEY1))
 			{
 				FlxG.log.add("Shot a bomb!");
-				_bombs.recycle(Bomb,[],true,false).shoot(this, 210);
+				_bombs.recycle(Bomb,[],true,false).shoot(this, _aim);
 				attackTimer = 0.25;
 			}
 		}
@@ -456,8 +471,9 @@ class Player extends FlxExtendedSprite
 		bubble.reset(x - 10, y - 12);
 	}
 
-	public function mount(Vehicle:FlxSprite):Void
+	public function mount(Vehicle:FlxSprite, Aimer:Crosshair):Void
 	{
+		_crosshair = Aimer;
 		_vehicle = Vehicle;
 		ridingVehicle = true;
 		acceleration.y = 0;
@@ -471,6 +487,7 @@ class Player extends FlxExtendedSprite
 	{
 		ridingVehicle = false;
 		_vehicle = null;
+		_crosshair = null;
 		acceleration.y = gravity;
 		x = 0;
 		y = 0;
