@@ -232,7 +232,7 @@ class MenuState extends FlxState
 
 	private function onSelectionMade():Void
 	{
-		FlxG.cameras.fade(0xff131c1b, 1, false, onDemoFaded);
+		FlxG.cameras.fade(0xffffffff, 2, false, onDemoFaded);
 	}
 	
 	/**
