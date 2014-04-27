@@ -420,6 +420,7 @@ class PlayState extends FlxState
 		P.velocity.y += R.velocity.y * 2;
 		explosions.recycle(Explosion,[],true,false).boom(R, R.velocity.x, R.velocity.y);
 		R.kill();
+		FlxG.sound.play("Megascreech1");
 	}
 
 	public function splatOnPlayer(P:Player, R:FlxSprite):Void
@@ -428,6 +429,7 @@ class PlayState extends FlxState
 		P.velocity.y += R.velocity.y * 2;
 		bananapops.recycle(Bananapop,[],true,false).boom(R, R.velocity.x, R.velocity.y);
 		R.kill();
+		FlxG.sound.play("Screech1");
 	}
 
 	public function endRoundTimer(Timer:FlxTimer)
