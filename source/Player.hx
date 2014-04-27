@@ -12,6 +12,7 @@ import flixel.group.FlxTypedGroup;
 import flixel.input.gamepad.FlxGamepad;
 import flixel.input.gamepad.XboxButtonID;
 import flixel.input.gamepad.PS4ButtonID;
+import flixel.util.FlxRandom;
 
 class Player extends FlxExtendedSprite
 {
@@ -48,6 +49,8 @@ class Player extends FlxExtendedSprite
 
 	public var bubble:Bubble;
 	public var beam:Beam;
+
+	private var _jumpStrings = ["Jump1", "Jump2", "Jump3", "Jump4"];
 
 	//#if (!FLX_NO_GAMEPAD && (cpp || neko || js))
 	private var gamepad(get, never):FlxGamepad;
@@ -243,6 +246,7 @@ class Player extends FlxExtendedSprite
 			// Immediately set vertical velocity
 			if (!diving && FlxG.keys.anyPressed([Reg.keyset[controlSet][1]]))
 			{
+				FlxG.sound.play("Divebomb");
 				diving = true;
 				velocity.x += diveBombBoostX;
 				velocity.y = diveBombSetVelY;
@@ -356,7 +360,7 @@ class Player extends FlxExtendedSprite
 		if (jumpTimer < 0.02)
 		{
 			landed = false;
-			FlxG.sound.play("Jump1");
+			FlxG.sound.play(_jumpStrings[FlxRandom.intRanged(0, _jumpStrings.length-1)]);
 
 			// WALL JUMP KICKBACK
 			if (climbing && !isTouching(FlxObject.FLOOR))
@@ -471,7 +475,7 @@ class Player extends FlxExtendedSprite
 		super.kill();
 		deathTimer = 1;
 		FlxG.sound.play("Uki");
-		FlxG.sound.play("Bananabomb");
+		// FlxG.sound.play("Bananabomb");
 		beam.reset(x + width/2, y);
 	}
 
