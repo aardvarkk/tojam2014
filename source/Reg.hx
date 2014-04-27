@@ -87,9 +87,10 @@ class Reg
 	public static var keyset:Array<Dynamic> =
 	[
 		["UP", "DOWN", "LEFT", "RIGHT", "Z", "X", "C", "V"],
+		["NUMPADFIVE", "NUMPADTWO", "NUMPADONE", "NUMPADTHREE", "R", "T", "Y", "U"],
+		//["NUMPADFIVE","NUMPADTWO","NUMPADONE","NUMPADTHREE","NUMPADSEVEN","NUMPADEIGHT","NUMPADNINE","NUMPADMINUS"],
 		["W", "S", "A", "D", "R", "T", "Y", "U"],
-		["I","K","J","L","O","P","SEMICOLON","QUOTE"],
-		["NUMPADFIVE","NUMPADTWO","NUMPADONE","NUMPADTHREE","NUMPADSEVEN","NUMPADEIGHT","NUMPADNINE","NUMPADMINUS"]
+		["I","K","J","L","O","P","SEMICOLON","QUOTE"]
 	];
 	/**
 	 * Title screen images
