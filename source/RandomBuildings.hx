@@ -20,7 +20,7 @@ class RandomBuildings extends FlxGroup
 		super();
 
 		// If they want a seed, use it
-		if (Seed != null)
+		if (Seed >= 0)
 		{
 			FlxRandom.globalSeed = Seed;			
 		}

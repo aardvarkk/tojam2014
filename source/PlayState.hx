@@ -243,7 +243,7 @@ class PlayState extends FlxState
 
 		// Create the random buildings
 		_buildings = new RandomBuildings(
-			null,
+			-1,
 			Reg.LEVELLENGTH, 
 			FlxG.height, 
 			2,

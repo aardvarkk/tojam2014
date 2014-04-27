@@ -109,7 +109,7 @@ class MenuState extends FlxState
 
 		// Create the random buildings
 		_buildings = new RandomBuildings(
-			null,
+			-1,
 			Reg.LEVELLENGTH * 2, 
 			FlxG.height, 
 			2,
