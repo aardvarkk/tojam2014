@@ -39,6 +39,7 @@ class MenuState extends FlxState
 	private var _p4:Player;
 	private var _replay:FlxReplay;
 	private var choosePlayers:FlxText;
+	private var names:FlxText;
 
 	private static var recording:Bool = false;
 	private static var replaying:Bool = false;
@@ -174,6 +175,13 @@ class MenuState extends FlxState
         _fourPlayers.scrollFactor.x = 0;
         _fourPlayers.alignment = "center";
         add(_fourPlayers);
+
+        names = new FlxText(0,FlxG.height - 16,FlxG.width,"Ian Clarkson   +   Steven Circuiton   +   Colin Marjoram");
+        names.color = 0xffffffff;
+        names.size = 8;
+        names.scrollFactor.x = 0;
+        names.alignment = "center";
+        add(names);
 
         FlxG.camera.flash(0xff111112,2.5);
 
