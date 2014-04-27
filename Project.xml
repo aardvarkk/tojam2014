@@ -39,7 +39,8 @@
 	<!--Flash requires .ogg - if="flash"-->
 	<assets path="assets/sounds">
 	<!-- -->
-		<music path="monkey_land.wav" id="Landing" />
+		<!-- <music path="monkey_land.wav" id="Landing" /> -->
+		<music path="footfall.wav" id="Landing" />
 		<music path="monkey_jump.wav" id="Jump1" />
 		<music path="monkey_jump2.wav" id="Jump2" />
 		<music path="monkey_jump3.wav" id="Jump3" />
