@@ -163,11 +163,11 @@ class Player extends FlxExtendedSprite
 	{
 		_vehicle.acceleration.y = 0;
 
-		if (isPressing(FlxObject.UP) && _vehicle.y >= 40)
+		if (isPressing(FlxObject.UP) && (_vehicle.y + _vehicle.height/2 > FlxG.height/2))
 		{
 			_vehicle.acceleration.y -= runAccel * .25;
 		}
-		else if (isPressing(FlxObject.DOWN) && _vehicle.y <= FlxG.height - 50)
+		else if (isPressing(FlxObject.DOWN) && (_vehicle.y + _vehicle.height < FlxG.height))
 		{
 			_vehicle.acceleration.y += runAccel * .25;
 		}
@@ -181,18 +181,19 @@ class Player extends FlxExtendedSprite
 			_aim += 4;
 		}
 
-		if (_vehicle.y < 50)
+		if (_vehicle.y + _vehicle.height/2 < FlxG.height/2)
 		{
 			_vehicle.velocity.y = 0;
 			_vehicle.acceleration.y = 0;
-			_vehicle.y = 50;
+			_vehicle.y = FlxG.height/2 - _vehicle.height/2;
 		}
-		else if (_vehicle.y > FlxG.height - 40)
+		else if (_vehicle.y + _vehicle.height > FlxG.height)
 		{
 			_vehicle.velocity.y = 0;
 			_vehicle.acceleration.y = 0;
-			_vehicle.y = FlxG.height - 40;
+			_vehicle.y = FlxG.height - _vehicle.height;
 		}
+
 		if (attackTimer <= 0)
 		{
 			if (isPressing(Reg.KEY1))
