@@ -35,6 +35,7 @@ class Player extends FlxExtendedSprite
 	public var climbing:Bool = false;
 	private var _bombs:FlxTypedGroup<Bomb>;
 	private var _boomerangs:FlxTypedGroup<Boomerang>;
+	private var _missiles:FlxTypedGroup<Missile>;
 
 	public var attacking:Bool = false;
 	public var attackTimer:Float = 0;
@@ -59,13 +60,14 @@ class Player extends FlxExtendedSprite
 	private var _deathStrings = ["Megascreech1", "Megascreech2", "Megascreech3", "Squak"];
 	private var _gamepad:FlxGamepad;
 
-	public function new(X:Int, Y:Int, Number:Int, Bombs:FlxTypedGroup<Bomb>, Boomerangs:FlxTypedGroup<Boomerang>)
+	public function new(X:Int, Y:Int, Number:Int, Bombs:FlxTypedGroup<Bomb>, Boomerangs:FlxTypedGroup<Boomerang>, Missiles:FlxTypedGroup<Missile>)
 	{
 		super(X, Y);
 
 		number = Number;
 		_bombs = Bombs; // ref to the bomb group
 		_boomerangs = Boomerangs;
+		_missiles = Missiles;
 
 		if (number == 1)
 		{
@@ -207,6 +209,12 @@ class Player extends FlxExtendedSprite
 			{
 				FlxG.log.add("Shot a boomerang!");
 				_boomerangs.recycle(Boomerang,[],true,false).shoot(this, _aim);
+				attackTimer = ATTACKDELAY;
+			}
+			else if (isPressing(Reg.KEY3))
+			{
+				FlxG.log.add("Shot a missile!");
+				_missiles.recycle(Missile,[],true,false).shoot(this, _aim);
 				attackTimer = ATTACKDELAY;
 			}
 		}

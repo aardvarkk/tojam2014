@@ -46,6 +46,7 @@ class PlayState extends FlxState
 	private var _buildingsNear:FlxBackdrop;
 	private var _foreground:FlxBackdrop;
 	private var _mist:FlxBackdrop;
+	private var _mist2:FlxBackdrop;
 	private var _weatherEmitter:FlxEmitter;
 	private var _infoText:FlxText;
 	private var _players:FlxTypedGroup<Player>;
@@ -53,8 +54,10 @@ class PlayState extends FlxState
 	private var _beams:FlxTypedGroup<Beam>;
 	public var explosions:FlxTypedGroup<Explosion>;
 	public var bananapops:FlxTypedGroup<Bananapop>;
+	public var stinkbombs:FlxTypedGroup<Stinkbomb>;
 	public var _bombs:FlxTypedGroup<Bomb>;
 	public var _boomerangs:FlxTypedGroup<Boomerang>;
+	public var _missiles:FlxTypedGroup<Missile>;
 	private var _p1:Player;
 	private var _p2:Player;
 	private var _p3:Player;
@@ -138,16 +141,18 @@ class PlayState extends FlxState
 		_cloudsFar = new FlxBackdrop(Reg.CLOUDSFAR,0.125,0,true,false);
 		_cloudsMid = new FlxBackdrop(Reg.CLOUDSMID,0.25,0,true,false);
 		_cloudsNear = new FlxBackdrop(Reg.CLOUDSNEAR,0.5,0,true,false);
-		_mountainsFar = new FlxBackdrop(Reg.MOUNTAINSFAR,0.125,0,true,false);
-		_buildingsMid = new FlxBackdrop(Reg.BUILDINGSMID,0.25,0,true,false);
-		_buildingsNear = new FlxBackdrop(Reg.BUILDINGSNEAR,0.5,0,true,false); 
-		_foreground = new FlxBackdrop(Reg.JUNGLEFOLIAGE,1.3,0,true,false);
+		_mountainsFar = new FlxBackdrop(Reg.MOUNTAINSFAR,0.1,0,true,false);
+		_buildingsMid = new FlxBackdrop(Reg.BUILDINGSMID,0.2,0,true,false);
 		_mist = new FlxBackdrop(Reg.MIST,0.45,0,true,false);
+		_buildingsNear = new FlxBackdrop(Reg.BUILDINGSNEAR,0.4,0,true,false); 
+		_mist2 = new FlxBackdrop(Reg.MIST2,1.15,0,true,false);
+		_foreground = new FlxBackdrop(Reg.JUNGLEFOLIAGE,1.3,0,true,false);
 		
 		_mountainsFar.y = FlxG.height - 180;
 		_buildingsMid.y = FlxG.height - 128;
 		_buildingsNear.y = FlxG.height - 80;
-		_mist.y = FlxG.height - 128;
+		_mist.y = FlxG.height - 138; // actually 128 though
+		_mist2.y = FlxG.height - 98; // actually 128 though
 
 		_weatherEmitter = new FlxEmitter(-240,0,200);
 		_weatherEmitter.setSize(720,FlxG.height);
@@ -160,16 +165,18 @@ class PlayState extends FlxState
 
 		explosions = new FlxTypedGroup();
 		bananapops = new FlxTypedGroup();
+		stinkbombs = new FlxTypedGroup();
 		_bombs = new FlxTypedGroup();
+		_missiles = new FlxTypedGroup();
 		_boomerangs = new FlxTypedGroup();
 		_players = new FlxTypedGroup();
-		_p1 = new Player(150,100,0, _bombs, _boomerangs);
+		_p1 = new Player(150,100,0, _bombs, _boomerangs, _missiles);
 		if (_numPlayers >= 2)
-			_p2 = new Player(150,100,1, _bombs, _boomerangs);
+			_p2 = new Player(150,100,1, _bombs, _boomerangs, _missiles);
 		if (_numPlayers >= 3)
-			_p3 = new Player(150,100,2, _bombs, _boomerangs);
+			_p3 = new Player(150,100,2, _bombs, _boomerangs, _missiles);
 		if (_numPlayers == 4)
-			_p4 = new Player(150,100,3, _bombs, _boomerangs);
+			_p4 = new Player(150,100,3, _bombs, _boomerangs, _missiles);
 		_bubbles = new FlxTypedGroup();
 		_beams = new FlxTypedGroup();
 
@@ -179,8 +186,10 @@ class PlayState extends FlxState
 		{
 			_bombs.add(new Bomb());
 			_boomerangs.add(new Boomerang());
+			_missiles.add(new Missile());
 			explosions.add(new Explosion());
 			bananapops.add(new Bananapop());
+			stinkbombs.add(new Stinkbomb());
 		}
 
 		_infoText = new FlxText(10,10, FlxG.width - 20, null);
@@ -194,6 +203,7 @@ class PlayState extends FlxState
 		add(_mountainsFar);
 		add(_cloudsMid);
 		add(_buildingsMid);
+		add(_mist);
 		add(_cloudsNear);
 		add(_buildingsNear);
 
@@ -250,15 +260,19 @@ class PlayState extends FlxState
 		add(_beams);
 		add(_bombs);
 		add(_boomerangs);
+		add(_missiles);
+
+		add(_mist2);
+
 		add(bananapops);
 		add(explosions);
+		add(stinkbombs);
 
 		add(_crosshair);
 
 		add(_weatherEmitter);
 
 		add(_foreground);
-		add(_mist);
 
 		add(_infoText);
 		_infoText.scrollFactor.x = 0;
@@ -335,6 +349,7 @@ class PlayState extends FlxState
 			//FlxG.collide(_players, _buildings);
 			FlxG.overlap(_players, _racer, swap);
 			FlxG.collide(_players, _players);
+			FlxG.collide(_bombs, _buildings, bombBounce);
 
 			// Overlap
 
@@ -360,6 +375,7 @@ class PlayState extends FlxState
 				{
 					FlxG.overlap(p, _bombs, explodeOnPlayer);
 					FlxG.overlap(p, _boomerangs, splatOnPlayer);
+					FlxG.overlap(p, _missiles, stankOnPlayer);
 				}
 			}
 
@@ -399,6 +415,25 @@ class PlayState extends FlxState
 		super.update();
 	}
 
+	public function bombBounce(B:Bomb, R:Building):Void
+	{
+		if (B.isTouching(FlxObject.FLOOR))
+		{
+			FlxG.log.add("Bomb hit floor");
+			B.velocity.y = -75;
+		}
+		else if (B.isTouching(FlxObject.LEFT))
+		{
+			FlxG.log.add("Bomb hit wall");
+			B.velocity.x = 50;
+		}
+		else if (B.isTouching(FlxObject.RIGHT))
+		{
+			FlxG.log.add("Bomb hit wall");
+			B.velocity.x = -50;
+		}
+	}
+
 	public function swap(P:Player, R:FlxSprite):Void
 	{
 		// if the player colliding is the one who's already riding, don't do anything
@@ -420,7 +455,7 @@ class PlayState extends FlxState
 	{
 		P.velocity.x += R.velocity.x * 2;
 		P.velocity.y += R.velocity.y * 2;
-		explosions.recycle(Explosion,[],true,false).boom(R, R.velocity.x, R.velocity.y);
+		explosions.recycle(Explosion,[],true,false).boom(R, R.velocity.x/4, R.velocity.y/4);
 		R.kill();
 		FlxG.sound.play("Megascreech1");
 	}
@@ -429,9 +464,18 @@ class PlayState extends FlxState
 	{
 		P.velocity.x += R.velocity.x * 2;
 		P.velocity.y += R.velocity.y * 2;
-		bananapops.recycle(Bananapop,[],true,false).boom(R, R.velocity.x, R.velocity.y);
+		bananapops.recycle(Bananapop,[],true,false).boom(R, R.velocity.x/4, R.velocity.y/4);
 		R.kill();
 		FlxG.sound.play("Screech1");
+	}
+
+	public function stankOnPlayer(P:Player, R:FlxSprite):Void
+	{
+		P.velocity.x += R.velocity.x * 2;
+		P.velocity.y += R.velocity.y * 2;
+		stinkbombs.recycle(Stinkbomb,[],true,false).boom(R, R.velocity.x/4, R.velocity.y/4);
+		R.kill();
+		FlxG.sound.play("Megascreech2");
 	}
 
 	public function endRoundTimer(Timer:FlxTimer)

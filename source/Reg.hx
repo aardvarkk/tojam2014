@@ -101,6 +101,7 @@ class Reg
 	 public static inline var BUILDINGSNEAR:String = "images/buildingsNear.png";
 	 public static inline var JUNGLEFOLIAGE:String = "images/jungleforeground.png";
 	 public static inline var MIST:String = "images/mist.png";
+	 public static inline var MIST2:String = "images/mist2.png";
 	 /**
 	 * Game sprites
 	 */
@@ -125,6 +126,8 @@ class Reg
 	 public static inline var PARTICLE:String = "images/leaves02.png";
 	 public static inline var BANANA:String = "images/banana.png";
 	 public static inline var BOMB:String = "images/bomb.png";
+	 public static inline var MISSILE:String = "images/missile.png";
+	 public static inline var STINKBOMB:String = "images/stinkbomb.png";
 	 public static inline var EXPLOSION:String = "images/explosion1.png";
 	 public static inline var BANANAPOP:String = "images/bananapop.png";
 	 /*
