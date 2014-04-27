@@ -145,4 +145,5 @@ class Reg
 	 public static inline var RACERSPEED:Int = 75;
 
 	 public static inline var LEVELLENGTH:Int = 2048 * 4;
+	 public static inline var DEMOSEED:Int = 635918;
 }

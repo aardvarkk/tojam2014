@@ -33,6 +33,13 @@ class MenuState extends FlxState
 	private var _weatherEmitter:FlxEmitter;
 	private var _buildings:RandomBuildings;
 	private var _p:Player;
+	private var _replay:FlxReplay;
+	public static var choosePlayers:FlxText;
+
+	private static var recording:Bool = false;
+	private static var replaying:Bool = false;
+	private static var playbackOnly:Bool = true; // this is for when you don't wanna record at all
+
 
 	private var _numPlayers = 2;
 	private var _twoPlayers:FlxText;
@@ -92,7 +99,7 @@ class MenuState extends FlxState
 
 		// Create the random buildings
 		_buildings = new RandomBuildings(
-			1298712,
+			Reg.DEMOSEED,
 			Reg.LEVELLENGTH, 
 			FlxG.height, 
 			2,
@@ -119,7 +126,7 @@ class MenuState extends FlxState
         add(title);
         title.scrollFactor.x = 0;
 
-        var choosePlayers = new FlxText(0, FlxG.height/2, FlxG.width, "Choose Number of Players");
+        choosePlayers = new FlxText(0, FlxG.height/2 + 50, FlxG.width, "Press Any Button...");
         choosePlayers.alignment = "center";
         choosePlayers.color = 0xff111112;
         add(choosePlayers);
@@ -151,8 +158,20 @@ class MenuState extends FlxState
 		FlxG.camera.setBounds(0,0, Reg.LEVELLENGTH, FlxG.height);
 		FlxG.camera.follow(_p,FlxCamera.STYLE_PLATFORMER,new FlxPoint(50,0),4);
 
-		//FlxG.vcr.loadReplay(Assets.getText("data/demo1.fgr"));
-		//FlxG.vcr.startRecording();
+		if (!playbackOnly)
+		{
+			if (!recording && !replaying)
+			{
+				startRecord();
+			}
+			
+			if (recording) 
+			{
+				_p.selected = true;
+				choosePlayers.text = "RECORDING";
+			}
+		}
+		
 	}
 	
 	/**
@@ -163,6 +182,13 @@ class MenuState extends FlxState
 	{
 		super.destroy();
 	}
+
+	public static function pressedStart():Void
+	{
+		choosePlayers.text = "Choose the number of players (2-4)";
+	}
+
+
 
 	/**
 	 * Function that is called once every frame.
@@ -195,7 +221,7 @@ class MenuState extends FlxState
         // START THE GAME!
 		if (isJustPressing(Reg.JUMP) || isJustPressing(Reg.KEY1) || isJustPressing(Reg.KEY2) || isJustPressing(Reg.KEY3))
 		{
-			FlxG.switchState(new PlayState(_numPlayers));	
+			onSelectionMade();	
 		}
 
 		FlxG.collide(_p, _buildings);
@@ -203,6 +229,52 @@ class MenuState extends FlxState
 		_prvDpadLefts  = _curDpadLefts;
 		_prvDpadRights = _curDpadRights;
 	}	
+
+	private function onSelectionMade():Void
+	{
+		FlxG.cameras.fade(0xffffffff, 2, false, onDemoFaded);
+	}
+	
+	/**
+	 * Finally, we have another function called by FlxG.fade(), this time
+	 * in relation to the callback above.  It stops the replay, and resets the game
+	 * once the gameplay demo has faded out.
+	 */
+	private function onDemoFaded():Void
+	{
+		FlxG.switchState(new PlayState(_numPlayers));	
+	}
+
+	private function startRecord():Void 
+	{
+		recording = true;
+		replaying = false;
+
+		/**
+		 *Note FlxG.recordReplay will restart the game or state
+		 *This function will trigger a flag in FlxGame
+		 *and let the internal FlxReplay to record input on every frame
+		 */
+		FlxG.vcr.startRecording(false);
+	}
+
+	private function startPlay():Void 
+	{
+		replaying = true;
+		recording = false;
+
+		/**
+		 * Here we get a string from stopRecoding()
+		 * which records all the input during recording
+		 * Then we load the save
+		 */
+
+		var save:String = FlxG.vcr.stopRecording();
+		/**
+		 * NOTE "ANY" or other key wont work under debug mode!
+		 */
+		FlxG.vcr.loadReplay(save, new MenuState(), ["ANY", "MOUSE"], 0, startRecord);
+	}
 
 	private function isDpadPressed(Direction:Int):Bool
 	{
