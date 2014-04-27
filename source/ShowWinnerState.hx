@@ -104,7 +104,7 @@ class ShowWinnerState extends FlxState
 
 		if (_waitOver) 
 		{
-	        var startAgain = new FlxText(0, FlxG.height/2 + 90, FlxG.width, "Press Any Key...");
+	        var startAgain = new FlxText(0, FlxG.height/2 + 90, FlxG.width, "Press Any Button...");
 	        startAgain.alignment = "center";
 	        startAgain.color = 0xff111112;
 	        add(startAgain);
