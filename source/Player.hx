@@ -528,7 +528,7 @@ class Player extends FlxExtendedSprite
 		health = 1;
 		jumped = false;
 		jumpStrength = 136;
-		maxVelocity.x = Reg.RACERSPEED * 1.5;
+		maxVelocity.x = Reg.RACERSPEED * 2.25;
 		maxVelocity.y = 2 * gravity; 
 		solid = true;
 	}
