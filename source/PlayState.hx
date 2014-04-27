@@ -155,10 +155,7 @@ class PlayState extends FlxState
 		_weatherEmitter.setRotation(-100,100);
 		_weatherEmitter.start(false,10,0.007125);
 
-<<<<<<< HEAD
-=======
 		explosions = new FlxTypedGroup();
->>>>>>> ac62708429f74a2d2b670a18e943bf15ab53cb3a
 		_bombs = new FlxTypedGroup();
 		_players = new FlxTypedGroup();
 		_p1 = new Player(150,100,0, _bombs);

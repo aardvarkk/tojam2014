@@ -62,7 +62,6 @@ class Player extends FlxExtendedSprite
 
 		number = Number;
 		_bombs = Bombs; // ref to the bomb group
-<<<<<<< HEAD
 		
 		_gamepad = FlxG.gamepads.getByID(Number); // grab our gamepad
 
@@ -72,9 +71,7 @@ class Player extends FlxExtendedSprite
 		}
 
 		FlxG.watch.add(this,"bombs","Bombs");
-=======
 		FlxG.watch.add(this,"_aim","Aim");
->>>>>>> ac62708429f74a2d2b670a18e943bf15ab53cb3a
 
 		if (number == 1)
 		{
