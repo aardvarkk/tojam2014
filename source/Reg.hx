@@ -88,14 +88,14 @@ class Reg
 	 /**
 	 * Background images
 	 */
-	 public static inline var SNOWCLOUDS:String = "images/scroll_menuclouds.png";
 	 public static inline var CLOUDSFAR:String = "images/cloudsFar.png";
 	 public static inline var CLOUDSMID:String = "images/cloudsMid.png";
 	 public static inline var CLOUDSNEAR:String = "images/cloudsNear.png";
 	 public static inline var MOUNTAINSFAR:String = "images/mountainsFar.png";
 	 public static inline var BUILDINGSMID:String = "images/buildingsMid.png";
 	 public static inline var BUILDINGSNEAR:String = "images/buildingsNear.png";
-	 public static inline var BACKGROUND:String = "images/background.png";
+	 public static inline var JUNGLEFOLIAGE:String = "images/jungleforeground.png";
+	 public static inline var MIST:String = "images/mist.png";
 	 /**
 	 * Game sprites
 	 */

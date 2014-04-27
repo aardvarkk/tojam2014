@@ -44,6 +44,7 @@ class PlayState extends FlxState
 	private var _buildingsMid:FlxBackdrop;
 	private var _buildingsNear:FlxBackdrop;
 	private var _foreground:FlxBackdrop;
+	private var _mist:FlxBackdrop;
 	private var _weatherEmitter:FlxEmitter;
 	private var _infoText:FlxText;
 	private var _players:FlxTypedGroup<Player>;
@@ -134,10 +135,13 @@ class PlayState extends FlxState
 		_mountainsFar = new FlxBackdrop(Reg.MOUNTAINSFAR,0.125,0,true,false);
 		_buildingsMid = new FlxBackdrop(Reg.BUILDINGSMID,0.25,0,true,false);
 		_buildingsNear = new FlxBackdrop(Reg.BUILDINGSNEAR,0.5,0,true,false); 
+		_foreground = new FlxBackdrop(Reg.JUNGLEFOLIAGE,1.3,0,true,false);
+		_mist = new FlxBackdrop(Reg.MIST,0.45,0,true,false);
 		
 		_mountainsFar.y = FlxG.height - 180;
 		_buildingsMid.y = FlxG.height - 128;
 		_buildingsNear.y = FlxG.height - 80;
+		_mist.y = FlxG.height - 128;
 
 		_weatherEmitter = new FlxEmitter(-240,0,200);
 		_weatherEmitter.setSize(720,FlxG.height);
@@ -234,6 +238,9 @@ class PlayState extends FlxState
 		add(_bombs);
 
 		add(_weatherEmitter);
+
+		add(_foreground);
+		add(_mist);
 
 		add(_infoText);
 		_infoText.scrollFactor.x = 0;
