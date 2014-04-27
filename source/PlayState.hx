@@ -49,6 +49,7 @@ class PlayState extends FlxState
 	private var _players:FlxTypedGroup<Player>;
 	private var _bubbles:FlxTypedGroup<Bubble>;
 	private var _beams:FlxTypedGroup<Beam>;
+	private var _bombs:FlxTypedGroup<Bomb>;
 	private var _p1:Player;
 	private var _p2:Player;
 	private var _p3:Player;
@@ -157,6 +158,12 @@ class PlayState extends FlxState
 			_p4 = new Player(150,100,3);
 		_bubbles = new FlxTypedGroup();
 		_beams = new FlxTypedGroup();
+
+		_bombs = new FlxTypedGroup();
+		for (b in 0...10)
+		{
+			_bombs.add(new Bomb());
+		}
 
 		_infoText = new FlxText(10,10, FlxG.width - 20, null);
 

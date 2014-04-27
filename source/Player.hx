@@ -32,6 +32,7 @@ class Player extends FlxExtendedSprite
 	private var jumped:Bool = false;
 	private var landed:Bool = false;
 	public var climbing:Bool = false;
+	private var _bombs:FlxTypedGroup<Bomb>;
 
 	public var attacking:Bool = false;
 	public var attackTimer:Float = -1;
@@ -62,11 +63,12 @@ class Player extends FlxExtendedSprite
 	}
 	//#end
 
-	public function new(X:Int, Y:Int, Number:Int = 0)
+	public function new(X:Int, Y:Int, Number:Int)
 	{
 		super(X, Y);
 
 		number = Number;
+		//_bombs = Bombs; // ref to the bomb group
 
 		if (number == 1)
 		{
@@ -175,6 +177,11 @@ class Player extends FlxExtendedSprite
 			_vehicle.velocity.y = 0;
 			_vehicle.acceleration.y = 0;
 			_vehicle.y = FlxG.height - 40;
+		}
+
+		if (isPressing(Reg.KEY1))
+		{
+			// BOMB!
 		}
 	}
 
