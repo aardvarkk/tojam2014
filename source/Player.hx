@@ -56,7 +56,7 @@ class Player extends FlxExtendedSprite
 	private var _aim:Float = 180;
 	private var _crosshair:Crosshair;
 
-	private var _jumpStrings = ["QuadOoh", "LightOoh", "LightScreech", "TripleOoh", "Screech1"];
+	private var _jumpStrings = ["LightOoh", "TinyOoh1", "TinyOoh2", "TinyOoh3", "TinyOoh4", "TinyOoh5", "TinyOoh6", "TinyOoh7", "TinyOoh8", "TinyOoh9"];
 	private var _deathStrings = ["Megascreech1", "Megascreech2", "Megascreech3", "Squak"];
 	private var _gamepad:FlxGamepad;
 

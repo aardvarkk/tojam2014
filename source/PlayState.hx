@@ -432,6 +432,7 @@ class PlayState extends FlxState
 			FlxG.log.add("Bomb hit wall");
 			B.velocity.x = -50;
 		}
+		FlxG.sound.play("BombBounce");
 	}
 
 	public function swap(P:Player, R:FlxSprite):Void

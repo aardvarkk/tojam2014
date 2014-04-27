@@ -57,9 +57,18 @@
 		<music path="monkey_lightheartedoo1.wav" id="LightOoh" />
 		<music path="monkey_lightheartedscreech1.wav" id="LightScreech" />
 		<music path="monkey_squak1.wav" id="Squak" />
-		<!-- <music path="monkey_ukiiii.wav" id="Uki" /> -->
+		<music path="monkey_tinyooh1.wav" id="TinyOoh1" />
+		<music path="monkey_tinyooh2.wav" id="TinyOoh2" />
+		<music path="monkey_tinyooh3.wav" id="TinyOoh3" />
+		<music path="monkey_tinyooh4.wav" id="TinyOoh4" />
+		<music path="monkey_tinyooh5.wav" id="TinyOoh5" />
+		<music path="monkey_tinyooh6.wav" id="TinyOoh6" />
+		<music path="monkey_tinyooh7.wav" id="TinyOoh7" />
+		<music path="monkey_tinyooh8.wav" id="TinyOoh8" />
+		<music path="monkey_tinyooh9.wav" id="TinyOoh9" />
 		<music path="death_yell1.wav" id="Uki" />
 		<music path="monkey_splosion.wav" id="Boom" />
+		<music path="bombbounce.wav" id="BombBounce" />
 		<music path="divebomb.wav" id="Divebomb" />
 		<music path="ambient_jungle.wav" id="Ambient Jungle" />
 	<!-- -->
