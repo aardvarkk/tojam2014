@@ -25,11 +25,6 @@ class Bomb extends FlxSprite
 
 		angularVelocity = Math.abs(velocity.x) * 3;
 
-		if (velocity.y < 0)
-			solid = false;
-		else
-			solid = true;
-
 		if (!isOnScreen())
 			kill();
 

@@ -349,7 +349,14 @@ class PlayState extends FlxState
 			//FlxG.collide(_players, _buildings);
 			FlxG.overlap(_players, _racer, swap);
 			FlxG.collide(_players, _players);
-			FlxG.collide(_bombs, _buildings, bombBounce);
+
+			for (b in _bombs)
+			{
+				if (b.velocity.y >= 0)
+				{
+					FlxG.collide(b, _buildings, bombBounce);
+				}
+			}
 
 			// Overlap
 
