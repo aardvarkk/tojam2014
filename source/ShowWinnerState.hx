@@ -17,6 +17,7 @@ class ShowWinnerState extends FlxState
 	private var _buildingsMid:FlxBackdrop;
 	private var _buildingsNear:FlxBackdrop;
 	private var _foreground:FlxBackdrop;
+	private var _foreground2:FlxBackdrop;
 	private var _mist:FlxBackdrop;
 	private var _mist2:FlxBackdrop;
 	private var _weatherEmitter:FlxEmitter;
@@ -45,6 +46,7 @@ class ShowWinnerState extends FlxState
 		_buildingsNear.y = FlxG.height - 80;
 		_mist.y = FlxG.height - 138; // actually 128 though
 		_mist2.y = FlxG.height - 98; // actually 128 though
+		_foreground2.y = FlxG.height - 48;
 
 		_weatherEmitter = new FlxEmitter(-240,0,200);
 		_weatherEmitter.setSize(720,FlxG.height);
@@ -65,6 +67,7 @@ class ShowWinnerState extends FlxState
 		add(_mist2);
 		add(_weatherEmitter);
 		add(_foreground);
+		add(_foreground2);
 
 		var winner = Reg.getWinner();
 

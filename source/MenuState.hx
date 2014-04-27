@@ -28,6 +28,7 @@ class MenuState extends FlxState
 	private var _buildingsMid:FlxBackdrop;
 	private var _buildingsNear:FlxBackdrop;
 	private var _foreground:FlxBackdrop;
+	private var _foreground2:FlxBackdrop;
 	private var _mist:FlxBackdrop;
 	private var _mist2:FlxBackdrop;
 	private var _weatherEmitter:FlxEmitter;
@@ -55,6 +56,9 @@ class MenuState extends FlxState
 	private var _prvDpadRights:Bool = false;
 	private var _curDpadRights:Bool = false;
 
+	private var _timer:Float = 0;
+	private var _timeLimit:Int = 90;
+
 	/**
 	 * Function that is called up when to state is created to set it up. 
 	 */
@@ -76,12 +80,14 @@ class MenuState extends FlxState
 		_buildingsNear = new FlxBackdrop(Reg.BUILDINGSNEAR,0.4,0,true,false); 
 		_mist2 = new FlxBackdrop(Reg.MIST2,1.15,0,true,false);
 		_foreground = new FlxBackdrop(Reg.JUNGLEFOLIAGE,1.3,0,true,false);
+		_foreground2 = new FlxBackdrop(Reg.JUNGLEFOLIAGE2,1.3,0,true,false);
 		
 		_mountainsFar.y = FlxG.height - 180;
 		_buildingsMid.y = FlxG.height - 128;
 		_buildingsNear.y = FlxG.height - 80;
 		_mist.y = FlxG.height - 138; // actually 128 though
 		_mist2.y = FlxG.height - 98; // actually 128 though
+		_foreground2.y = FlxG.height - 48;
 
 		_weatherEmitter = new FlxEmitter(-240,0,200);
 		_weatherEmitter.setSize(720,FlxG.height);
@@ -102,8 +108,8 @@ class MenuState extends FlxState
 
 		// Create the random buildings
 		_buildings = new RandomBuildings(
-			Reg.DEMOSEED,
-			Reg.LEVELLENGTH, 
+			null,
+			Reg.LEVELLENGTH * 2, 
 			FlxG.height, 
 			2,
 			10,
@@ -113,13 +119,13 @@ class MenuState extends FlxState
 			);
 		add(_buildings);
 
-		_p = new Player(240,1,0,null,null,null);
+		_p = new Player(240,60,0,null,null,null);
 		_p.autoscrollMonkey = true;
-		_p2 = new Player(140,1,1,null,null,null);
+		_p2 = new Player(140,-50,1,null,null,null);
 		_p2.autoscrollMonkey = true;
-		_p3 = new Player(100,1,2,null,null,null);
+		_p3 = new Player(100,-100,2,null,null,null);
 		_p3.autoscrollMonkey = true;
-		_p4 = new Player(80,1,3,null,null,null);
+		_p4 = new Player(80,20,3,null,null,null);
 		_p4.autoscrollMonkey = true;
 		add(_p4);
 		add(_p3);
@@ -129,6 +135,7 @@ class MenuState extends FlxState
 		add(_mist2);
 		add(_weatherEmitter);
 		add(_foreground);
+		add(_foreground2);
 
 
         var title = new FlxText(0, 80, FlxG.width, "CONCRETE JUNGLE");
@@ -170,7 +177,7 @@ class MenuState extends FlxState
 
         FlxG.camera.flash(0xff111112,2.5);
 
-		FlxG.camera.setBounds(0,0, Reg.LEVELLENGTH, FlxG.height);
+		FlxG.camera.setBounds(0,0, Reg.LEVELLENGTH * 2, FlxG.height);
 		FlxG.camera.follow(_p,FlxCamera.STYLE_PLATFORMER,new FlxPoint(50,0),4);
 
 		if (!playbackOnly)
@@ -214,6 +221,13 @@ class MenuState extends FlxState
 
 		super.update();
 
+		_timer += FlxG.elapsed;
+		if (_timer > _timeLimit)
+		{
+			_timer = 0;
+			resetState();
+		}
+
 		FlxG.camera.scroll.x += 3;
 
 		_curDpadLefts  = isDpadPressed(FlxObject.LEFT);
@@ -255,14 +269,19 @@ class MenuState extends FlxState
 		FlxG.cameras.fade(0xffffffff, 2, false, onDemoFaded);
 	}
 	
-	/**
-	 * Finally, we have another function called by FlxG.fade(), this time
-	 * in relation to the callback above.  It stops the replay, and resets the game
-	 * once the gameplay demo has faded out.
-	 */
 	private function onDemoFaded():Void
 	{
 		FlxG.switchState(new PlayState(_numPlayers));	
+	}
+
+	private function resetState():Void
+	{
+		FlxG.cameras.fade(0xff111112, 2, false, onResetFaded);	
+	}
+
+	private function onResetFaded():Void
+	{
+		FlxG.resetState();
 	}
 
 	private function startRecord():Void 

@@ -105,6 +105,7 @@ class Reg
 	 public static inline var BUILDINGSMID:String = "images/buildingsMid.png";
 	 public static inline var BUILDINGSNEAR:String = "images/buildingsNear.png";
 	 public static inline var JUNGLEFOLIAGE:String = "images/jungleforeground.png";
+	 public static inline var JUNGLEFOLIAGE2:String = "images/jungleforegroundbot.png";
 	 public static inline var MIST:String = "images/mist.png";
 	 public static inline var MIST2:String = "images/mist2.png";
 	 /**

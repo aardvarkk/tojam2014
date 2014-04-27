@@ -115,7 +115,7 @@ class Player extends FlxExtendedSprite
 		offset.y = 3;
 
 		animation.add("idle", [0, 1, 2, 3], 6, true);
-		animation.add("walk", [4, 5, 6, 7], 12, true);	
+		animation.add("walk", [4, 5, 6], 12, true);	
 		animation.add("jump", [9, 10, 11, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12], 8, true);
 		animation.add("fall", [12], 8, true);
 		animation.add("climb", [11, 12], 8, true);
@@ -146,15 +146,16 @@ class Player extends FlxExtendedSprite
 
 		if (autoscrollMonkey)
 		{
-			velocity.x = 120;
+			acceleration.x = 0;
+			acceleration.x += (runAccel * 0.75);
 			if (isTouching(FlxObject.WALL))
 				{
 					jumpStrength = 300;
 					if (autoJumpTimer < 0)
 					{
 						jump();
-						velocity.x -= 50;
-						velocity.y -= 20;
+						//velocity.x -= 50;
+						//velocity.y -= 20;
 						autoJumpTimer = autoJumpDelay;
 					}
 				}
@@ -171,7 +172,13 @@ class Player extends FlxExtendedSprite
 			if (y > FlxG.height)
 			{
 				y = -50;
-				FlxG.sound.play("Squak");
+				x -= 50;
+				FlxG.sound.play("LightOoh");
+			}
+			if (x > FlxG.camera.scroll.x + FlxG.width || x < FlxG.camera.scroll.x)
+			{
+				y = -50;
+				x = FlxG.camera.scroll.x + 50;
 			}
 		}
 
