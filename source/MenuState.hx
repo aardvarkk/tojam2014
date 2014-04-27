@@ -145,7 +145,7 @@ class MenuState extends FlxState
         add(title);
         title.scrollFactor.x = 0;
 
-        choosePlayers = new FlxText(0, FlxG.height/2 + 50, FlxG.width, "Press Any Button...");
+        choosePlayers = new FlxText(0, FlxG.height/2 + 50, FlxG.width, "Choose Number of Players");
         choosePlayers.alignment = "center";
         choosePlayers.color = 0xff111112;
         add(choosePlayers);
