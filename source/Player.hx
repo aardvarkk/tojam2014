@@ -248,7 +248,7 @@ class Player extends FlxExtendedSprite
 			// Immediately set vertical velocity
 			if (!diving && FlxG.keys.anyPressed([Reg.keyset[controlSet][1]]))
 			{
-				FlxG.sound.play("Divebomb");
+				FlxG.sound.play("Divebomb", 4);
 				diving = true;
 				velocity.x += diveBombBoostX;
 				velocity.y = diveBombSetVelY;
