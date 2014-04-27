@@ -298,6 +298,17 @@ class PlayState extends FlxState
 	{
 		// trace(FlxG.gamepads.getActiveGamepadIDs());
 		// trace(FlxG.gamepads.anyButton());
+		// for (gp in FlxG.gamepads.getActiveGamepads()) {
+		// 	for (button in gp.buttons) {
+		// 		if (button != null && button.id != null)
+		// 		{
+		// 			trace('gp with id ${gp.id} has button $button');
+		// 		}
+		// 	}
+		// 	// trace('${gp.dpadUp}');
+		// 	// trace('${gp.hat}');
+		// 	// trace('${gp.ball}');
+		// }
 
 		// Game actively playing
 		if (!_roundOver) 

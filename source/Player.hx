@@ -338,28 +338,28 @@ class Player extends FlxExtendedSprite
 		else if (Direction == Reg.JUMP)
 		{
 			if (_gamepad != null)
-				return _gamepad.pressed(XboxButtonID.A);
+				return _gamepad.pressed(PS4ButtonID.X_BUTTON);
 			else
 				return (FlxG.keys.anyPressed([Reg.keyset[controlSet][4]]));
 		}
 		else if (Direction == Reg.KEY1)
 		{
 			if (_gamepad != null)
-				return _gamepad.pressed(XboxButtonID.X);
+				return _gamepad.pressed(PS4ButtonID.SQUARE_BUTTON);
 			else
 				return (FlxG.keys.anyPressed([Reg.keyset[controlSet][5]]));
 		}
 		else if (Direction == Reg.KEY2)
 		{
 			if (_gamepad != null)
-				return _gamepad.pressed(XboxButtonID.Y);
+				return _gamepad.pressed(PS4ButtonID.TRIANGLE_BUTTON);
 			else
 				return (FlxG.keys.anyPressed([Reg.keyset[controlSet][6]]));
 		}
 		else if (Direction == Reg.KEY3)
 		{
 			if (_gamepad != null)
-				return _gamepad.pressed(XboxButtonID.B);
+				return _gamepad.pressed(PS4ButtonID.CIRCLE_BUTTON);
 			else
 				return (FlxG.keys.anyPressed([Reg.keyset[controlSet][7]]));
 		}
@@ -407,28 +407,28 @@ class Player extends FlxExtendedSprite
 		else if (Direction == Reg.JUMP)
 		{
 			if (_gamepad != null)
-				return _gamepad.justPressed(XboxButtonID.A);
+				return _gamepad.justPressed(PS4ButtonID.X_BUTTON);
 			else
 				return (FlxG.keys.anyJustPressed([Reg.keyset[controlSet][4]]));
 		}
 		else if (Direction == Reg.KEY1)
 		{
 			if (_gamepad != null)
-				return _gamepad.justPressed(XboxButtonID.X);
+				return _gamepad.justPressed(PS4ButtonID.SQUARE_BUTTON);
 			else
 				return (FlxG.keys.anyJustPressed([Reg.keyset[controlSet][5]]));
 		}
 		else if (Direction == Reg.KEY2)
 		{
 			if (_gamepad != null)
-				return _gamepad.justPressed(XboxButtonID.Y);
+				return _gamepad.justPressed(PS4ButtonID.TRIANGLE_BUTTON);
 			else
 				return (FlxG.keys.anyJustPressed([Reg.keyset[controlSet][6]]));
 		}
 		else if (Direction == Reg.KEY3)
 		{
 			if (_gamepad != null)
-				return _gamepad.justPressed(XboxButtonID.B);
+				return _gamepad.justPressed(PS4ButtonID.CIRCLE_BUTTON);
 			else
 				return (FlxG.keys.anyJustPressed([Reg.keyset[controlSet][7]]));
 		}
