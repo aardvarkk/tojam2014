@@ -23,6 +23,8 @@ class Bomb extends FlxSprite
 	override public function update():Void
 	{
 
+		angularVelocity = Math.abs(velocity.x) * 3;
+
 		if (!isOnScreen())
 			kill();
 
@@ -32,10 +34,11 @@ class Bomb extends FlxSprite
 	public function shoot(P:FlxSprite, Angle:Float):Void
 	{
 		reset(P.x, P.y + P.height / 2);
-		acceleration.y = 200; // gravity
+		acceleration.x = 180; // boomerange
+		//acceleration.y = 200; // bombe
 		angularVelocity = -200;
-		velocity.x = Math.cos(Angle * Math.PI/180) * speed;
-		velocity.y = Math.sin(Angle * Math.PI/180) * speed;
+		velocity.x = Math.cos(Angle * Math.PI/180) * speed * 1.5;
+		velocity.y = Math.sin(Angle * Math.PI/180) * speed * 1.5;
 	}
 
 	override public function reset(X:Float, Y:Float):Void
