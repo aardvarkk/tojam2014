@@ -89,7 +89,7 @@ class Player extends FlxExtendedSprite
 			loadGraphic(Reg.MONKEY4, true, 16, 16);
 		}
 
-		if (Reg.UseKeyboard)
+		if (Reg.UseGamepad == false)
 		{
 			controlSet = number;
 
