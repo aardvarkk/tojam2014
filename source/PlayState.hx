@@ -62,6 +62,7 @@ class PlayState extends FlxState
 	//private var _bombs:FlxTypedGroup<Bomb>;
 	private var _roundOver:Bool = false;
 	private var _cartScoreTimer:FlxTimer;
+	private var _respawnPlayerTimer:FlxTimer;
 
 	public function new(NumPlayers:Int = 2, ?Round:Int = 0)
 	{
@@ -71,11 +72,17 @@ class PlayState extends FlxState
 		startRound(Round);
 	}
 
-	public function accumulateCartScore(Timer:FlxTimer) {
+	public function accumulateCartScore(Timer:FlxTimer)
+	{
 		trace('accumulateCartScore');
 		if (!_roundOver) {
 			Reg.scores[_rider.number] += 25;
 		}
+	}
+
+	public function respawnPlayer(P:Player):Void
+	{
+		P.respawn(_camera.scroll.x + 48, 48);
 	}
 
 	public function startRound(Round:Int)
@@ -277,9 +284,15 @@ class PlayState extends FlxState
 			// off-screen kill
 			for (p in _players)
 			{
-				if (p.y > FlxG.height + 20 || p.x + p.width < _camera.scroll.x - 20)
+				if (p.alive == false)
 				{
-					p.respawn(_camera.scroll.x + 48, 48);
+					p.deathTimer -= FlxG.elapsed;
+					if (p.deathTimer < 0)
+						respawnPlayer(p);
+				}
+				if (p.alive == true && (p.y > FlxG.height + 20 || p.x + p.width < _camera.scroll.x - 20))
+				{
+					p.kill();
 					Reg.scores[p.number] -= 100;
 				}
 				if (p.diving == false)

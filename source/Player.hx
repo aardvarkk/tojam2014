@@ -41,6 +41,8 @@ class Player extends FlxExtendedSprite
 	private var invTimer:Float = 0.8;
 	private var invDuration:Float = 0.8;
 
+	public var deathTimer:Float = 0;
+
 	private var respawnTimer:Float = 0;
 
 	public var bubble:Bubble;
@@ -453,6 +455,13 @@ class Player extends FlxExtendedSprite
 		x = 0;
 		y = 0;
 		kill();
+	}
+
+	override public function kill():Void
+	{
+		super.kill();
+		deathTimer = 1;
+		FlxG.sound.play("Uki");
 	}
 
 }
