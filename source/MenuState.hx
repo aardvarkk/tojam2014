@@ -33,6 +33,9 @@ class MenuState extends FlxState
 	private var _weatherEmitter:FlxEmitter;
 	private var _buildings:RandomBuildings;
 	private var _p:Player;
+	private var _p2:Player;
+	private var _p3:Player;
+	private var _p4:Player;
 	private var _replay:FlxReplay;
 	public static var choosePlayers:FlxText;
 
@@ -111,7 +114,16 @@ class MenuState extends FlxState
 		add(_buildings);
 
 		_p = new Player(240,1,0,null,null,null);
-		_p.selected = true;
+		_p.autoscrollMonkey = true;
+		_p2 = new Player(140,1,1,null,null,null);
+		_p2.autoscrollMonkey = true;
+		_p3 = new Player(100,1,2,null,null,null);
+		_p3.autoscrollMonkey = true;
+		_p4 = new Player(80,1,3,null,null,null);
+		_p4.autoscrollMonkey = true;
+		add(_p4);
+		add(_p3);
+		add(_p2);
 		add(_p);
 
 		add(_mist2);
@@ -139,17 +151,20 @@ class MenuState extends FlxState
         _threePlayers.color = _numPlayers == 3 ? 0xffffffff : 0xff111112;
         _threePlayers.size = 32;
         _threePlayers.alignment = "center";
+        _threePlayers.scrollFactor.x = 0;
         add(_threePlayers);
 
         _twoPlayers = new FlxText(-textSpread, FlxG.height/2 + 10, FlxG.width, "2");
         _twoPlayers.color = _numPlayers == 2 ? 0xffffffff : 0xff111112;
         _twoPlayers.size = 32;
+        _twoPlayers.scrollFactor.x = 0;
         _twoPlayers.alignment = "center";
         add(_twoPlayers);
 
         _fourPlayers = new FlxText(textSpread, FlxG.height/2 + 10, FlxG.width, "4");
         _fourPlayers.color = _numPlayers == 4 ? 0xffffffff : 0xff111112;
         _fourPlayers.size = 32;
+        _fourPlayers.scrollFactor.x = 0;
         _fourPlayers.alignment = "center";
         add(_fourPlayers);
 
@@ -199,6 +214,8 @@ class MenuState extends FlxState
 
 		super.update();
 
+		FlxG.camera.scroll.x += 3;
+
 		_curDpadLefts  = isDpadPressed(FlxObject.LEFT);
 		_curDpadRights = isDpadPressed(FlxObject.RIGHT);
 
@@ -225,6 +242,9 @@ class MenuState extends FlxState
 		}
 
 		FlxG.collide(_p, _buildings);
+		FlxG.collide(_p2, _buildings);
+		FlxG.collide(_p3, _buildings);
+		FlxG.collide(_p4, _buildings);
 
 		_prvDpadLefts  = _curDpadLefts;
 		_prvDpadRights = _curDpadRights;
