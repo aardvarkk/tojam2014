@@ -9,6 +9,8 @@ class Racer extends FlxSprite
 		super(X, Y);
 
 		loadGraphic(Reg.UFO, true, 48, 32);
+		width = 32;
+		offset.x = 8; 
 
 		velocity.x = Reg.RACERSPEED;
 	}

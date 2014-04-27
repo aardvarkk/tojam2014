@@ -130,8 +130,8 @@ class Player extends FlxExtendedSprite
 		// Need to add global pause features later, but skip for now
 		if (ridingVehicle)
 		{
-			x = _vehicle.x + 24; // +20 good for 48x16
-			y = _vehicle.y - 12; // and -16
+			x = _vehicle.x + 12; // +20 good for 48x16
+			y = _vehicle.y; // and -16
 			_crosshair.angle = _aim;
 			_crosshair.x = x + width / 2;
 			_crosshair.y = y + height / 2;

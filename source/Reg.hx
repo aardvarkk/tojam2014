@@ -124,7 +124,7 @@ class Reg
 	 public static inline var BUBBLE:String = "images/bubble.png";
 	 public static inline var BEAM:String = "images/beam.png";
 
-	 public static inline var UFO:String = "images/ufo.png";
+	 public static inline var UFO:String = "images/hand.png";
 
 	 public static inline var CROSSHAIR:String = "images/crosshair.png";
 	 /**
