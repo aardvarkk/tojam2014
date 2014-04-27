@@ -55,7 +55,8 @@ class Player extends FlxExtendedSprite
 	private var _aim:Float = 180;
 	private var _crosshair:Crosshair;
 
-	private var _jumpStrings = ["Jump1", "Jump2", "Jump3", "Jump4"];
+	private var _jumpStrings = ["QuadOoh", "LightOoh", "LightScreech", "TripleOoh", "Screech1"];
+	private var _deathStrings = ["Megascreech1", "Megascreech2", "Megascreech3", "Squak"];
 	private var _gamepad:FlxGamepad;
 
 	public function new(X:Int, Y:Int, Number:Int, Bombs:FlxTypedGroup<Bomb>, Boomerangs:FlxTypedGroup<Boomerang>)
@@ -566,7 +567,7 @@ class Player extends FlxExtendedSprite
 	{
 		super.kill();
 		deathTimer = 1;
-		FlxG.sound.play("Uki");
+		FlxG.sound.play(_deathStrings[FlxRandom.intRanged(0, _deathStrings.length-1)]);
 		// FlxG.sound.play("Bananabomb");
 		// beam.reset(x + width/2, y);
 	}
