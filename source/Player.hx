@@ -68,7 +68,6 @@ class Player extends FlxExtendedSprite
 		{
 			FlxG.log.add('Player $number using gamepad ${_gamepad.id}');
 		}
-
 		if (number == 1)
 		{
 			loadGraphic(Reg.MONKEY1, true, 16, 16);
