@@ -209,8 +209,9 @@ class Player extends FlxExtendedSprite
 		}
 		else if (isTouching(FlxObject.WALL))
 		{
+			// WALL JUMP
 			climbing = true;
-			velocity.y = 0;
+			velocity.y = 30;
 			landed = true;
 			jumpTimer = 0;
 		}
@@ -345,6 +346,15 @@ class Player extends FlxExtendedSprite
 		{
 			landed = false;
 			FlxG.sound.play("Jump1");
+
+			// WALL JUMP KICKBACK
+			if (climbing && !isTouching(FlxObject.FLOOR))
+			{
+				if (facing == FlxObject.LEFT)
+					velocity.x = 100;
+				else
+					velocity.x = -100;
+			}
 		}
 		
 		//Jump
