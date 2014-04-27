@@ -37,23 +37,22 @@
 	<assets path="assets/levels" rename="levels" />
 
 	<!--Flash requires .ogg - if="flash"-->
-	<assets path="assets/sounds" unless="flash">
+	<assets path="assets/sounds">
 	<!-- -->
 		<music path="monkey_land.wav" id="Landing" />
 		<music path="monkey_jump.wav" id="Jump1" />
 		<music path="monkey_jump2.wav" id="Jump2" />
 		<music path="monkey_jump3.wav" id="Jump3" />
 		<music path="monkey_jump4.wav" id="Jump4" />
-		<music path="monkey_bananabomb.ogg" id="Bananabomb" />
-		<music path="monkey_ukiiii.ogg" id="Uki" />
-		<music path="monkey_splosion.ogg" id="Boom" />
+		<music path="monkey_bananabomb.wav" id="Bananabomb" />
+		<music path="monkey_ukiiii.wav" id="Uki" />
+		<music path="monkey_splosion.wav" id="Boom" />
 		<music path="ambient_jungle.wav" id="Ambient Jungle" />
 	<!-- -->
 	</assets>
-	<assets path="assets/music" if="flash">
+	<assets path="assets/music">
 		<!-- -->
-		<music path="20120510_SLEEPY_CHIMERA_v3_fade.ogg" id="TitleBGM" />
-		<music path="20100605_DEVIL'S_CORRIDOR_loop.ogg" id="MenuBGM" />
+		<music path="thesofarchannel_dtmf.wav" id="music" />
 		<!-- -->
 	</assets>
 

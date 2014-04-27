@@ -241,7 +241,7 @@ class PlayState extends FlxState
 		// Keep track of scores for players
 		_cartScoreTimer = new FlxTimer(1, accumulateCartScore, 0);
 
-        FlxG.sound.play("Ambient Jungle", 0.4, true, true);
+        FlxG.sound.play("Ambient Jungle", 0.4, true);
 
 		// Super
 		super.create();

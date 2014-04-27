@@ -19,6 +19,8 @@ class MenuState extends FlxState
 	{
 		super.create();
 
+		FlxG.sound.playMusic("music", 0.3, true);
+
 		// Set a background color
         FlxG.cameras.bgColor = 0xff111112;
 
