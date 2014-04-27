@@ -53,6 +53,10 @@
 		<music path="monkey_screech1.wav" id="Screech1" />
 		<music path="monkey_quietoo1.wav" id="Ooh" />
 		<music path="monkey_tripleoo1.wav" id="TripleOoh" />
+		<music path="monkey_quadoo.wav" id="QuadOoh" />
+		<music path="monkey_lightheartedoo1.wav" id="LightOoh" />
+		<music path="monkey_lightheartedscreech1.wav" id="LightScreech" />
+		<music path="monkey_squak1.wav" id="Squak" />
 		<!-- <music path="monkey_ukiiii.wav" id="Uki" /> -->
 		<music path="death_yell1.wav" id="Uki" />
 		<music path="monkey_splosion.wav" id="Boom" />
