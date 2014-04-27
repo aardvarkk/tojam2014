@@ -74,7 +74,6 @@ class PlayState extends FlxState
 
 	public function accumulateCartScore(Timer:FlxTimer)
 	{
-		trace('accumulateCartScore');
 		if (!_roundOver) {
 			Reg.scores[_rider.number] += 25;
 		}
@@ -241,6 +240,8 @@ class PlayState extends FlxState
 
 		// Keep track of scores for players
 		_cartScoreTimer = new FlxTimer(1, accumulateCartScore, 0);
+
+        FlxG.sound.play("Ambient Jungle", 0.4, true, true);
 
 		// Super
 		super.create();
