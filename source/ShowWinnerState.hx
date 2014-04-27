@@ -6,6 +6,7 @@ import flixel.text.FlxText;
 import flixel.util.FlxTimer;
 import flixel.addons.display.FlxBackdrop;
 import flixel.effects.particles.FlxEmitter;
+import flixel.FlxSprite;
 
 class ShowWinnerState extends FlxState
 {
@@ -20,6 +21,7 @@ class ShowWinnerState extends FlxState
 	private var _mist2:FlxBackdrop;
 	private var _weatherEmitter:FlxEmitter;
 	private var _waitOver:Bool = false;
+	private var _winnerGraphic:FlxSprite;
 
 	override public function create()
 	{
@@ -60,20 +62,6 @@ class ShowWinnerState extends FlxState
 		add(_mist);
 		add(_cloudsNear);
 		add(_buildingsNear);
-
-		// // Create the random buildings
-		// _buildings = new RandomBuildings(
-		// 	1298712,
-		// 	Reg.LEVELLENGTH, 
-		// 	FlxG.height, 
-		// 	2,
-		// 	10,
-		// 	1,
-		// 	5,
-		// 	3
-		// 	);
-		// add(_buildings);
-
 		add(_mist2);
 		add(_weatherEmitter);
 		add(_foreground);
@@ -86,7 +74,29 @@ class ShowWinnerState extends FlxState
         title.alignment = "center";
         add(title);
 
-		add(new FlxText(0, 250, FlxG.width, Reg.getScoreString()));
+        _winnerGraphic = new FlxSprite();
+        if (winner == 0)
+        {
+        	_winnerGraphic.loadGraphic(Reg.MONKEY1, true, 16, 16);
+        }
+        else if (winner == 1)
+        {
+        	_winnerGraphic.loadGraphic(Reg.MONKEY2, true, 16, 16);
+        }
+        else if (winner == 2)
+        {
+        	_winnerGraphic.loadGraphic(Reg.MONKEY3, true, 16, 16);
+        }
+        else
+        {
+        	_winnerGraphic.loadGraphic(Reg.MONKEY4, true, 16, 16);
+        }
+
+        _winnerGraphic.x = FlxG.width/2 - _winnerGraphic.width/2;
+        _winnerGraphic.y = FlxG.height/2 - _winnerGraphic.height/2 + 30;
+   		_winnerGraphic.animation.add("idle", [0, 1, 2, 3], 6, true);
+   		_winnerGraphic.scale.set(3, 3);
+   		add(_winnerGraphic);
 
         // var title = new FlxText(0, 80, FlxG.width, "CONCRETE JUNGLE");
         // title.size = 40;
@@ -95,11 +105,15 @@ class ShowWinnerState extends FlxState
         // add(title);
         // title.scrollFactor.x = 0;
 
-		super.create();
+        trace(Reg.scores);
 	}
 
 	override public function update()
 	{
+		super.update();
+
+        _winnerGraphic.animation.play("idle");
+
 		new FlxTimer(2, waitOver);
 
 		if (_waitOver) 

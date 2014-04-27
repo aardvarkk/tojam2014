@@ -69,16 +69,16 @@ class Player extends FlxExtendedSprite
 		_boomerangs = Boomerangs;
 		_missiles = Missiles;
 
-		if (number == 1)
+		if (number == 0)
 		{
 			loadGraphic(Reg.MONKEY1, true, 16, 16);
 			selected = true;
 		}
-		else if (number == 2)
+		else if (number == 1)
 		{
 			loadGraphic(Reg.MONKEY2, true, 16, 16);
 		}
-		else if (number == 3)
+		else if (number == 2)
 		{
 			loadGraphic(Reg.MONKEY3, true, 16, 16);
 		}
