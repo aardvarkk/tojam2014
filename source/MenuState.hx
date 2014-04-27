@@ -10,6 +10,7 @@ import flixel.util.FlxMath;
 import flixel.util.FlxPoint;
 import flixel.addons.display.FlxBackdrop;
 import flixel.effects.particles.FlxEmitter;
+import openfl.Assets;
 
 /**
  * A FlxState which can be used for the game's menu.
@@ -113,6 +114,8 @@ class MenuState extends FlxState
 
 		FlxG.camera.setBounds(0,0, Reg.LEVELLENGTH, FlxG.height);
 		FlxG.camera.follow(_p,FlxCamera.STYLE_PLATFORMER,new FlxPoint(50,0),4);
+
+		//FlxG.vcr.loadReplay(Assets.getText("data/demo1.fgr"));
 
 		super.create();
 	}
