@@ -69,7 +69,7 @@ class Reg
 	*/
 	public static var UseKeyboard:Bool = true; // false if controllers?
 	public static var UseGamepad:Bool = false;
-	public static var SingleControllerMode:Bool = false; // turn off for multiplayer
+	public static var SingleControllerMode:Bool = true; // turn off for multiplayer
 	public static var JUMP:Int = 10;
 	public static var KEY1:Int = 20;
 	public static var KEY2:Int = 40;
@@ -119,6 +119,7 @@ class Reg
 	 */
 	 public static inline var PARTICLE:String = "images/leaves02.png";
 	 public static inline var BANANA:String = "images/banana.png";
+	 public static inline var BOMB:String = "images/bomb.png";
 	 public static inline var EXPLOSION:String = "images/explosion1.png";
 	 public static inline var BANANAPOP:String = "images/bananapop.png";
 	 /*
