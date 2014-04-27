@@ -185,10 +185,8 @@ class MenuState extends FlxState
 
 	public static function pressedStart():Void
 	{
-		choosePlayers.text = "Choose the number of players (2-4)";
+		choosePlayers.text = "Number of Players";
 	}
-
-
 
 	/**
 	 * Function that is called once every frame.

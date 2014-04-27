@@ -28,7 +28,7 @@ class Reg
 	 * Generic scores Array that can be used for cross-state stuff.
 	 * Example usage: Storing the scores for level.
 	 */
-	static public var scores:Array<Dynamic> = [];
+	static public var scores:Array<Int> = [];
 		
 	static public function resetScores() 
 	{
@@ -41,7 +41,7 @@ class Reg
 		for (i in 0...scores.length)
 		{
 			var score = Reg.scores[i];
-			scoreString += 'P${i+1}:$score\n';
+			scoreString += '    $score\n';
 		}
 		return scoreString;
 	}

@@ -75,6 +75,8 @@ class PlayState extends FlxState
 	private var _respawnPlayerTimer:FlxTimer;
 	private var _crosshair:Crosshair;
 
+	private var _monkeyScoreSprites:Array<FlxSprite> = new Array<FlxSprite>();
+
 	public function new(NumPlayers:Int = 2, ?Round:Int = 0)
 	{
 		super();
@@ -170,16 +172,42 @@ class PlayState extends FlxState
 		_missiles = new FlxTypedGroup();
 		_boomerangs = new FlxTypedGroup();
 		_players = new FlxTypedGroup();
+
 		_p1 = new Player(150,100,0, _bombs, _boomerangs, _missiles);
-		if (_numPlayers >= 2)
-			_p2 = new Player(150,100,1, _bombs, _boomerangs, _missiles);
+
+		var scoreP1 = new FlxSprite();
+		scoreP1.loadGraphic(Reg.MONKEY1, true, 16, 16);
+		scoreP1.scrollFactor.x = 0;
+		_monkeyScoreSprites.push(scoreP1);
+
+		_p2 = new Player(150,100,1, _bombs, _boomerangs, _missiles);
+		var scoreP2 = new FlxSprite();
+		scoreP2.loadGraphic(Reg.MONKEY2, true, 16, 16);
+		scoreP2.scrollFactor.x = 0;
+		_monkeyScoreSprites.push(scoreP2);
+		
 		if (_numPlayers >= 3)
+		{
 			_p3 = new Player(150,100,2, _bombs, _boomerangs, _missiles);
+			var scoreP3 = new FlxSprite();
+			scoreP3.loadGraphic(Reg.MONKEY3, true, 16, 16);
+			scoreP3.scrollFactor.x = 0;
+			scoreP3.visible = false;
+			_monkeyScoreSprites.push(scoreP3);
+		}
+
 		if (_numPlayers == 4)
+		{
 			_p4 = new Player(150,100,3, _bombs, _boomerangs, _missiles);
+			var scoreP4 = new FlxSprite();
+			scoreP4.loadGraphic(Reg.MONKEY4, true, 16, 16);
+			scoreP4.scrollFactor.x = 0;
+			scoreP4.visible = false;
+			_monkeyScoreSprites.push(scoreP4);
+		}
+
 		_bubbles = new FlxTypedGroup();
 		_beams = new FlxTypedGroup();
-
 		_crosshair = new Crosshair();
 		
 		for (a in 0...5)
@@ -193,6 +221,7 @@ class PlayState extends FlxState
 		}
 
 		_infoText = new FlxText(10,10, FlxG.width - 20, null);
+		_infoText.size = 8;
 
 		_racer = new Racer(FlxG.width - Reg.RACERWIDTH, FlxG.height - Reg.RACERHEIGHT - 100);
 		_racer.drag.y = 300;
@@ -274,10 +303,15 @@ class PlayState extends FlxState
 
 		add(_foreground);
 
+		for (ms in _monkeyScoreSprites) 
+		{
+			add(ms);
+		}
+
 		add(_infoText);
 		_infoText.scrollFactor.x = 0;
 		_infoText.scrollFactor.y = 0;
-		_infoText.color = 0;
+		_infoText.color = 0xffffffff;
 
 		// The last stuff
 		//FlxG.sound.play("");
@@ -286,17 +320,18 @@ class PlayState extends FlxState
 		FlxG.camera.setBounds(0,0, Reg.LEVELLENGTH, FlxG.height);
 
 		// Watchlist
-		FlxG.watch.add(this, "_numPlayers", "Players");
-		FlxG.watch.add(this, "_round", "Round");
-		FlxG.watch.add(_p1, "ridingVehicle", "P1 Riding");
-		FlxG.watch.add(_p2, "ridingVehicle", "P2 Riding");
-		FlxG.watch.add(_p3, "ridingVehicle", "P3 Riding");
-		FlxG.watch.add(_p4, "ridingVehicle", "P4 Riding");
+		// FlxG.watch.add(this, "_numPlayers", "Players");
+		// FlxG.watch.add(this, "_round", "Round");
+		// FlxG.watch.add(_p1, "ridingVehicle", "P1 Riding");
+		// FlxG.watch.add(_p2, "ridingVehicle", "P2 Riding");
+		// FlxG.watch.add(_p3, "ridingVehicle", "P3 Riding");
+		// FlxG.watch.add(_p4, "ridingVehicle", "P4 Riding");
 
 		// Keep track of scores for players
 		_cartScoreTimer = new FlxTimer(1, accumulateCartScore, 0);
 
         FlxG.sound.play("Ambient Jungle", 0.4, true);
+
 
 		// Super
 		super.create();
@@ -309,6 +344,18 @@ class PlayState extends FlxState
 	override public function destroy():Void
 	{
 		super.destroy();
+	}
+
+	public function drawScores(X:Int, Y:Int)
+	{
+		var lineAdd = 11;
+		for (i in 0..._numPlayers)
+		{
+			trace('$i to $X ${Y + (i * lineAdd)}');
+			_monkeyScoreSprites[i].x = X;
+			_monkeyScoreSprites[i].y = Y + (i * lineAdd);
+			_monkeyScoreSprites[i].visible = true;
+		}
 	}
 
 	/**
@@ -330,17 +377,18 @@ class PlayState extends FlxState
 		// 	// trace('${gp.ball}');
 		// }
 
+		// Update player score strings visually
+		_infoText.text = 'Round: ${_round + 1} of ${_numPlayers}\n';
+		_infoText.text += 'Remaining: ${Math.max(0, Math.round(Reg.LEVELLENGTH - _racer.x - _racer.width))}m\n';
+		_infoText.text += Reg.getScoreString();
+		drawScores(9, 28);
+
 		// Game actively playing
 		if (!_roundOver) 
 		{
 			// Slide camera to follow racer
 			_camera.scroll.x += Reg.RACERSPEED * FlxG.elapsed;
 			_weatherEmitter.x = _camera.scroll.x;
-
-			// Update player score strings visually
-			_infoText.text = 'Round: ${_round + 1} of ${_numPlayers}\n';
-			_infoText.text += 'Distance Remaining: ${Math.round(Reg.LEVELLENGTH - _racer.x - _racer.width)}m\n';
-			_infoText.text += Reg.getScoreString();
 
 			// Resize the world - collisions are only detected within the world bounds
 			FlxG.worldBounds.set(FlxG.camera.scroll.x - 20, FlxG.camera.scroll.y - 20, FlxG.width + 20, FlxG.height + 20);
@@ -395,8 +443,7 @@ class PlayState extends FlxState
 		// Round is over!
 		else 
 		{
-			_infoText.text = Reg.getScoreString();
-			_infoText.text += "\nROUND OVER!";
+			// _infoText.text = Reg.getScoreString();
 			new FlxTimer(2, endRoundTimer);
 		}
 
