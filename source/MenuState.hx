@@ -12,6 +12,10 @@ import flixel.util.FlxPoint;
 import flixel.addons.display.FlxBackdrop;
 import flixel.effects.particles.FlxEmitter;
 import openfl.Assets;
+import haxe.io.Eof;
+import sys.io.File;
+import sys.io.FileInput;
+import sys.io.FileOutput;
 
 /**
  * A FlxState which can be used for the game's menu.
@@ -31,6 +35,14 @@ class MenuState extends FlxState
 	private var _weatherEmitter:FlxEmitter;
 	private var _buildings:RandomBuildings;
 	private var _p:Player;
+	private var _replay:FlxReplay;
+	public static var choosePlayers:FlxText;
+	private var _numPlayers:Int;
+
+	private static var recording:Bool = false;
+	private static var replaying:Bool = false;
+	private static var playbackOnly:Bool = true; // this is for when you don't wanna record at all
+
 
 	/**
 	 * Function that is called up when to state is created to set it up. 
@@ -80,7 +92,7 @@ class MenuState extends FlxState
 
 		// Create the random buildings
 		_buildings = new RandomBuildings(
-			1298712,
+			Reg.DEMOSEED,
 			Reg.LEVELLENGTH, 
 			FlxG.height, 
 			2,
@@ -107,7 +119,7 @@ class MenuState extends FlxState
         add(title);
         title.scrollFactor.x = 0;
 
-        var choosePlayers = new FlxText(0, FlxG.height/2 + 50, FlxG.width, "Choose Number of Players (2-4)");
+        choosePlayers = new FlxText(0, FlxG.height/2 + 50, FlxG.width, "Press Any Button...");
         choosePlayers.alignment = "center";
         choosePlayers.color = 0xff111112;
         add(choosePlayers);
@@ -118,10 +130,22 @@ class MenuState extends FlxState
 		FlxG.camera.setBounds(0,0, Reg.LEVELLENGTH, FlxG.height);
 		FlxG.camera.follow(_p,FlxCamera.STYLE_PLATFORMER,new FlxPoint(50,0),4);
 
-		//FlxG.vcr.loadReplay(Assets.getText("data/demo1.fgr"));
-		//FlxG.vcr.startRecording();
-
-		super.create();
+		if (!playbackOnly)
+		{
+			if (!recording && !replaying)
+			{
+				startRecord();
+			}
+			
+			if (recording) 
+			{
+				_p.selected = true;
+				choosePlayers.text = "RECORDING";
+			}
+		}
+		else
+		{
+		}
 	}
 	
 	/**
@@ -133,6 +157,13 @@ class MenuState extends FlxState
 		super.destroy();
 	}
 
+	public static function pressedStart():Void
+	{
+		choosePlayers.text = "Choose the number of players (2-4)";
+	}
+
+
+
 	/**
 	 * Function that is called once every frame.
 	 */
@@ -142,20 +173,69 @@ class MenuState extends FlxState
 
 		super.update();
 
-		if (FlxG.keys.anyJustPressed(["TWO", "THREE", "FOUR"]))
+		if (FlxG.keys.anyJustPressed(["TWO", "THREE", "FOUR"])  && _numPlayers == null)
 		{
 			if (FlxG.keys.anyJustPressed(["TWO"])) {
-				FlxG.switchState(new PlayState(2));	
+				_numPlayers = 2;
 			}
 			else if (FlxG.keys.anyJustPressed(["THREE"])) {
-				FlxG.switchState(new PlayState(3));	
+				_numPlayers = 3;
 			}
 			else if (FlxG.keys.anyJustPressed(["FOUR"])) {
-				FlxG.switchState(new PlayState(4));	
+				_numPlayers = 4;
 			}			
+
+			onSelectionMade();
 		}
 
 		FlxG.collide(_p, _buildings);
 
 	}	
+
+	private function onSelectionMade():Void
+	{
+		FlxG.cameras.fade(0xff131c1b, 1, false, onDemoFaded);
+	}
+	
+	/**
+	 * Finally, we have another function called by FlxG.fade(), this time
+	 * in relation to the callback above.  It stops the replay, and resets the game
+	 * once the gameplay demo has faded out.
+	 */
+	private function onDemoFaded():Void
+	{
+		FlxG.switchState(new PlayState(_numPlayers));	
+	}
+
+	private function startRecord():Void 
+	{
+		recording = true;
+		replaying = false;
+
+		/**
+		 *Note FlxG.recordReplay will restart the game or state
+		 *This function will trigger a flag in FlxGame
+		 *and let the internal FlxReplay to record input on every frame
+		 */
+		FlxG.vcr.startRecording(false);
+	}
+
+	private function startPlay():Void 
+	{
+		replaying = true;
+		recording = false;
+
+		/**
+		 * Here we get a string from stopRecoding()
+		 * which records all the input during recording
+		 * Then we load the save
+		 */
+
+		var save:String = FlxG.vcr.stopRecording();
+		/**
+		 * NOTE "ANY" or other key wont work under debug mode!
+		 */
+		FlxG.vcr.loadReplay(save, new MenuState(), ["ANY", "MOUSE"], 0, startRecord);
+	}
+
 }
