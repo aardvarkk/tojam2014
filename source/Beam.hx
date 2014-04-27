@@ -3,7 +3,7 @@ package;
 import flixel.FlxG;
 import flixel.FlxSprite;
 
-class MonkeyDeath extends FlxSprite
+class Beam extends FlxSprite
 {
 
 	private var timer:Float = 0;
@@ -12,10 +12,9 @@ class MonkeyDeath extends FlxSprite
 	{
 		super(X, Y);
 
-		loadGraphic(Reg.DEATHLASERVERTICAL, true, 40, 40);
-		animation.add("bub", [0,1,2], 12, true);
-		animation.add("pop", [3], 6, false);
-
+		loadGraphic(Reg.BEAM, true, 80, 592);
+		animation.add("fire", [6,5,4,3,2,1,0,7], 40, false);
+		solid = false;
 		kill();
 	}
 
@@ -35,18 +34,12 @@ class MonkeyDeath extends FlxSprite
 
 	public function appear():Void
 	{
-		animation.play("bub");
-	}
-
-	public function die():Void
-	{
-		animation.play("pop");
-		timer = 0.25;
+		animation.play("fire");
 	}
 
 	override public function reset(X:Float, Y:Float):Void
 	{
-		super.reset(X, Y);
+		super.reset(X - width/2, FlxG.height - height);
 		visible = true;
 		solid = false;
 		appear();

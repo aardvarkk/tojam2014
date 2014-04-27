@@ -106,6 +106,7 @@ class Reg
 	 public static inline var CORGI4:String = "images/corgi4.png";
 
 	 public static inline var BUBBLE:String = "images/bubble.png";
+	 public static inline var BEAM:String = "images/beam.png";
 
 	 public static inline var UFO:String = "images/ufo.png";
 	 /**

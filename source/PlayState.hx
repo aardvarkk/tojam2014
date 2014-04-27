@@ -48,6 +48,7 @@ class PlayState extends FlxState
 	private var _infoText:FlxText;
 	private var _players:FlxTypedGroup<Player>;
 	private var _bubbles:FlxTypedGroup<Bubble>;
+	private var _beams:FlxTypedGroup<Beam>;
 	private var _p1:Player;
 	private var _p2:Player;
 	private var _p3:Player;
@@ -155,6 +156,7 @@ class PlayState extends FlxState
 		if (_numPlayers == 4)
 			_p4 = new Player(150,100,3);
 		_bubbles = new FlxTypedGroup();
+		_beams = new FlxTypedGroup();
 
 		_infoText = new FlxText(10,10, FlxG.width - 20, null);
 
@@ -190,19 +192,23 @@ class PlayState extends FlxState
 		{
 			_players.add(_p4);
 			_bubbles.add(_p4.bubble);
+			_beams.add(_p4.beam);
 		}
 		if (_numPlayers >= 3)
 		{
 			_players.add(_p3);
 			_bubbles.add(_p3.bubble);
+			_beams.add(_p3.beam);
 		}
 		if (_numPlayers >= 2)
 		{
 			_players.add(_p2);
 			_bubbles.add(_p2.bubble);
+			_beams.add(_p2.beam);
 		}
 		_players.add(_p1);
 		_bubbles.add(_p1.bubble);
+		_beams.add(_p1.beam);
 
 		// mount the player whose turn it is?
 		for (p in _players)
@@ -218,6 +224,7 @@ class PlayState extends FlxState
 		
 		add(_players);
 		add(_bubbles);
+		add(_beams);
 
 		add(_infoText);
 		_infoText.scrollFactor.x = 0;

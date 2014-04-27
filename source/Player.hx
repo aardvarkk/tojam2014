@@ -46,6 +46,7 @@ class Player extends FlxExtendedSprite
 	private var respawnTimer:Float = 0;
 
 	public var bubble:Bubble;
+	public var beam:Beam;
 
 	//#if (!FLX_NO_GAMEPAD && (cpp || neko || js))
 	private var gamepad(get, never):FlxGamepad;
@@ -96,6 +97,7 @@ class Player extends FlxExtendedSprite
 		// else // for controller inputs
 
 		bubble = new Bubble(X, Y);
+		beam = new Beam(X, Y);
 
 		width = 10;
 		height = 13;
@@ -462,6 +464,8 @@ class Player extends FlxExtendedSprite
 		super.kill();
 		deathTimer = 1;
 		FlxG.sound.play("Uki");
+		FlxG.sound.play("Bananabomb");
+		beam.reset(x + width/2, y);
 	}
 
 }
