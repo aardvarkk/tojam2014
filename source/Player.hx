@@ -323,7 +323,7 @@ class Player extends FlxExtendedSprite
 			// Immediately set vertical velocity
 			if (!diving && isPressing(FlxObject.DOWN))
 			{
-				FlxG.sound.play("Divebomb", 4);
+				FlxG.sound.play("Divebomb", 0.25);
 				diving = true;
 				velocity.x += diveBombBoostX;
 				velocity.y = diveBombSetVelY;

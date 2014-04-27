@@ -40,6 +40,7 @@ class ShowWinnerState extends FlxState
 		_buildingsNear = new FlxBackdrop(Reg.BUILDINGSNEAR,0.4,0,true,false); 
 		_mist2 = new FlxBackdrop(Reg.MIST2,1.15,0,true,false);
 		_foreground = new FlxBackdrop(Reg.JUNGLEFOLIAGE,1.3,0,true,false);
+		_foreground2 = new FlxBackdrop(Reg.JUNGLEFOLIAGE2,1.3,0,true,false);
 		
 		_mountainsFar.y = FlxG.height - 180;
 		_buildingsMid.y = FlxG.height - 128;

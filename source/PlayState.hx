@@ -31,6 +31,8 @@ import flixel.input.gamepad.PS3ButtonID;
 import flixel.input.gamepad.XboxButtonID;
 import flixel.input.gamepad.FlxGamepadManager;
 
+import flixel.util.FlxRandom;
+
 /**
  * A FlxState which can be used for the actual gameplay.
  */
@@ -516,7 +518,10 @@ class PlayState extends FlxState
 		P.velocity.y += R.velocity.y * 2;
 		explosions.recycle(Explosion,[],true,false).boom(R, R.velocity.x/4, R.velocity.y/4);
 		R.kill();
-		FlxG.sound.play("Megascreech1", 0.15);
+		if (FlxRandom.intRanged(0,4) == 0)
+		{
+			FlxG.sound.play("Megascreech1", 0.15);
+		}
 	}
 
 	public function splatOnPlayer(P:Player, R:FlxSprite):Void
@@ -525,7 +530,10 @@ class PlayState extends FlxState
 		P.velocity.y += R.velocity.y * 2;
 		bananapops.recycle(Bananapop,[],true,false).boom(R, R.velocity.x/4, R.velocity.y/4);
 		R.kill();
-		FlxG.sound.play("Screech1", 0.15);
+		if (FlxRandom.intRanged(0,4) == 0)
+		{
+			FlxG.sound.play("Screech1", 0.15);
+		}
 	}
 
 	public function stankOnPlayer(P:Player, R:FlxSprite):Void
@@ -534,7 +542,10 @@ class PlayState extends FlxState
 		P.velocity.y += R.velocity.y * 2;
 		stinkbombs.recycle(Stinkbomb,[],true,false).boom(R, R.velocity.x/4, R.velocity.y/4);
 		R.kill();
-		FlxG.sound.play("Megascreech2", 0.15);
+		if (FlxRandom.intRanged(0,4) == 0)
+		{
+			FlxG.sound.play("Megascreech2", 0.15);
+		}
 	}
 
 	public function endRoundTimer(Timer:FlxTimer)
