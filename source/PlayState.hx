@@ -147,11 +147,11 @@ class PlayState extends FlxState
 
 		_weatherEmitter = new FlxEmitter(-240,0,200);
 		_weatherEmitter.setSize(720,FlxG.height);
-		_weatherEmitter.makeParticles(Reg.PARTICLE,100,0,true,0);
-		_weatherEmitter.setXSpeed(-80,-350); // 10-100 looks good - try it in ruins?
-		_weatherEmitter.setYSpeed(50,-200);
-		_weatherEmitter.setAlpha(1,1,0,0.5);
-		_weatherEmitter.setRotation(-50,50);
+		_weatherEmitter.makeParticles(Reg.PARTICLE,200,0,true,0);
+		_weatherEmitter.setXSpeed(-150,-50); // 10-100 looks good - try it in ruins?
+		_weatherEmitter.setYSpeed(-150,-50);
+		_weatherEmitter.setAlpha(0,1,0,1);
+		_weatherEmitter.setRotation(-100,100);
 		_weatherEmitter.start(false,10,0.007125);
 
 		explosions = new FlxTypedGroup();
