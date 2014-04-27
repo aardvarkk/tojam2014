@@ -51,20 +51,7 @@ class Player extends FlxExtendedSprite
 	public var beam:Beam;
 
 	private var _jumpStrings = ["Jump1", "Jump2", "Jump3", "Jump4"];
-
-	//#if (!FLX_NO_GAMEPAD && (cpp || neko || js))
-	private var gamepad(get, never):FlxGamepad;
-	private function get_gamepad():FlxGamepad 
-	{
-		var gamepad:FlxGamepad = FlxG.gamepads.lastActive;
-		if (gamepad == null)
-		{
-			// Make sure we don't get a crash on neko when no gamepad is active
-			gamepad = FlxG.gamepads.getByID(0);
-		}
-		return gamepad;
-	}
-	//#end
+	private var _gamepad:FlxGamepad;
 
 	public function new(X:Int, Y:Int, Number:Int, Bombs:FlxTypedGroup<Bomb>)
 	{
@@ -72,6 +59,14 @@ class Player extends FlxExtendedSprite
 
 		number = Number;
 		_bombs = Bombs; // ref to the bomb group
+		
+		_gamepad = FlxG.gamepads.getByID(Number); // grab our gamepad
+
+		if (_gamepad != null) 
+		{
+			FlxG.log.add('Player $number using gamepad ${_gamepad.id}');
+		}
+
 		FlxG.watch.add(this,"bombs","Bombs");
 
 		if (number == 1)
@@ -238,7 +233,7 @@ class Player extends FlxExtendedSprite
 		
 		// Just hit jump
 		// It's either going to trigger a jump or a dive bomb, depending upon whether or not down key is held
-		if (FlxG.keys.anyJustPressed([Reg.keyset[controlSet][4]]))
+		if (isJustPressing(Reg.JUMP))
 		{
 			// if not selected in multi mode exit
 			if (Reg.SingleControllerMode == true && selected == false) return;
@@ -246,7 +241,7 @@ class Player extends FlxExtendedSprite
 			// Starting dive bomb
 			// If not already diving and BOTH trying to start a jump and holding down, start the divebomb
 			// Immediately set vertical velocity
-			if (!diving && FlxG.keys.anyPressed([Reg.keyset[controlSet][1]]))
+			if (!diving && isPressing(FlxObject.DOWN))
 			{
 				FlxG.sound.play("Divebomb", 4);
 				diving = true;
@@ -283,7 +278,7 @@ class Player extends FlxExtendedSprite
 			jumpTimer = -1;
 		}
 		
-		if(jumpTimer > 0)
+		if (jumpTimer > 0)
 		{
 			jump();
 		}
@@ -296,59 +291,130 @@ class Player extends FlxExtendedSprite
 
 		if (Direction == FlxObject.UP)
 		{
-			if (Reg.UseGamepad)
-				return gamepad.dpadUp;
+			if (_gamepad != null)
+			{
+				return _gamepad.dpadUp;
+			}
 			else
 				return (FlxG.keys.anyPressed([Reg.keyset[controlSet][0]]));
 		}
 		else if (Direction == FlxObject.DOWN)
 		{
-			if (Reg.UseGamepad)
-				return gamepad.dpadDown;
+			if (_gamepad != null)
+				return _gamepad.dpadDown;
 			else
 				return (FlxG.keys.anyPressed([Reg.keyset[controlSet][1]]));
 		}
 		else if (Direction == FlxObject.LEFT)
 		{
-			if (Reg.UseGamepad)
-				return gamepad.dpadLeft;
+			if (_gamepad != null)
+				return _gamepad.dpadLeft;
 			else
 				return (FlxG.keys.anyPressed([Reg.keyset[controlSet][2]]));
 		}
 		else if (Direction == FlxObject.RIGHT)
 		{
-			if (Reg.UseGamepad)
-				return gamepad.dpadRight;
+			if (_gamepad != null)
+				return _gamepad.dpadRight;
 			else
 				return (FlxG.keys.anyPressed([Reg.keyset[controlSet][3]]));
 		}
 		else if (Direction == Reg.JUMP)
 		{
-			if (Reg.UseGamepad)
-				return gamepad.justPressed(XboxButtonID.A);
+			if (_gamepad != null)
+				return _gamepad.pressed(XboxButtonID.A);
 			else
 				return (FlxG.keys.anyPressed([Reg.keyset[controlSet][4]]));
 		}
 		else if (Direction == Reg.KEY1)
 		{
-			if (Reg.UseGamepad)
-				return gamepad.justPressed(XboxButtonID.X);
+			if (_gamepad != null)
+				return _gamepad.pressed(XboxButtonID.X);
 			else
 				return (FlxG.keys.anyPressed([Reg.keyset[controlSet][5]]));
 		}
 		else if (Direction == Reg.KEY2)
 		{
-			if (Reg.UseGamepad)
-				return gamepad.justPressed(XboxButtonID.Y);
+			if (_gamepad != null)
+				return _gamepad.pressed(XboxButtonID.Y);
 			else
 				return (FlxG.keys.anyPressed([Reg.keyset[controlSet][6]]));
 		}
 		else if (Direction == Reg.KEY3)
 		{
-			if (Reg.UseGamepad)
-				return gamepad.justPressed(XboxButtonID.B);
+			if (_gamepad != null)
+				return _gamepad.pressed(XboxButtonID.B);
 			else
 				return (FlxG.keys.anyPressed([Reg.keyset[controlSet][7]]));
+		}
+		else
+		{
+			return false;
+		}
+	}
+
+	private function isJustPressing(Direction:Int):Bool
+	{
+		if (Reg.SingleControllerMode == true && selected == false)
+			return false;
+
+		if (Direction == FlxObject.UP)
+		{
+			if (_gamepad != null)
+			{
+				return _gamepad.dpadUp;
+			}
+			else
+				return (FlxG.keys.anyJustPressed([Reg.keyset[controlSet][0]]));
+		}
+		else if (Direction == FlxObject.DOWN)
+		{
+			if (_gamepad != null)
+				return _gamepad.dpadDown;
+			else
+				return (FlxG.keys.anyJustPressed([Reg.keyset[controlSet][1]]));
+		}
+		else if (Direction == FlxObject.LEFT)
+		{
+			if (_gamepad != null)
+				return _gamepad.dpadLeft;
+			else
+				return (FlxG.keys.anyJustPressed([Reg.keyset[controlSet][2]]));
+		}
+		else if (Direction == FlxObject.RIGHT)
+		{
+			if (_gamepad != null)
+				return _gamepad.dpadRight;
+			else
+				return (FlxG.keys.anyJustPressed([Reg.keyset[controlSet][3]]));
+		}
+		else if (Direction == Reg.JUMP)
+		{
+			if (_gamepad != null)
+				return _gamepad.justPressed(XboxButtonID.A);
+			else
+				return (FlxG.keys.anyJustPressed([Reg.keyset[controlSet][4]]));
+		}
+		else if (Direction == Reg.KEY1)
+		{
+			if (_gamepad != null)
+				return _gamepad.justPressed(XboxButtonID.X);
+			else
+				return (FlxG.keys.anyJustPressed([Reg.keyset[controlSet][5]]));
+		}
+		else if (Direction == Reg.KEY2)
+		{
+			if (_gamepad != null)
+				return _gamepad.justPressed(XboxButtonID.Y);
+			else
+				return (FlxG.keys.anyJustPressed([Reg.keyset[controlSet][6]]));
+		}
+		else if (Direction == Reg.KEY3)
+		{
+			if (_gamepad != null)
+				return _gamepad.justPressed(XboxButtonID.B);
+			else
+				return (FlxG.keys.anyJustPressed([Reg.keyset[controlSet][7]]));
 		}
 		else
 		{
@@ -478,7 +544,7 @@ class Player extends FlxExtendedSprite
 		deathTimer = 1;
 		FlxG.sound.play("Uki");
 		// FlxG.sound.play("Bananabomb");
-		beam.reset(x + width/2, y);
+		// beam.reset(x + width/2, y);
 	}
 
 }

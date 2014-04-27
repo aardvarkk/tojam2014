@@ -29,6 +29,7 @@ import flixel.input.mouse.FlxMouse;
 import flixel.input.gamepad.FlxGamepad;
 import flixel.input.gamepad.PS3ButtonID;
 import flixel.input.gamepad.XboxButtonID;
+import flixel.input.gamepad.FlxGamepadManager;
 
 /**
  * A FlxState which can be used for the actual gameplay.
@@ -89,8 +90,8 @@ class PlayState extends FlxState
 
 	public function startRound(Round:Int)
 	{
-		FlxG.log.add('Starting game round $_round with $_numPlayers players');
 		_round = Round;
+		FlxG.log.add('Starting game round $_round with $_numPlayers players');
 
 		if (_round == 0) 
 		{
@@ -151,7 +152,6 @@ class PlayState extends FlxState
 		_weatherEmitter.setAlpha(1,1,0,0.5);
 		_weatherEmitter.setRotation(-50,50);
 		_weatherEmitter.start(false,10,0.007125);
-
 
 		_bombs = new FlxTypedGroup();
 		_players = new FlxTypedGroup();
@@ -284,6 +284,9 @@ class PlayState extends FlxState
 	 */
 	override public function update():Void
 	{
+		// trace(FlxG.gamepads.getActiveGamepadIDs());
+		// trace(FlxG.gamepads.anyButton());
+
 		// Game actively playing
 		if (!_roundOver) 
 		{
