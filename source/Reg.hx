@@ -133,7 +133,7 @@ class Reg
 	 /*
 	 * Map tiles
 	 */
-	 public static inline var LEVELTILES:String = "images/tiles_ruins.png";
+	 public static inline var LEVELTILES:String = "images/tiles.png";
 
 	 public static inline var RACERWIDTH:Int = 48;
 	 public static inline var RACERHEIGHT:Int = 16;
