@@ -550,6 +550,7 @@ class Player extends FlxExtendedSprite
 		velocity.y = 0;
 		facing = FlxObject.LEFT;
 		flipX = true;
+		solid = false;
 	}
 
 	public function dismount():Void
@@ -558,6 +559,7 @@ class Player extends FlxExtendedSprite
 		_vehicle = null;
 		_crosshair = null;
 		acceleration.y = gravity;
+		solid = true;
 		x = 0;
 		y = 0;
 		kill();
