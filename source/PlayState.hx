@@ -61,6 +61,7 @@ class PlayState extends FlxState
 	private var _rider:Player;
 	//private var _bombs:FlxTypedGroup<Bomb>;
 	private var _roundOver:Bool = false;
+	private var _cartScoreTimer:FlxTimer;
 
 	public function new(NumPlayers:Int = 2, ?Round:Int = 0)
 	{
@@ -68,6 +69,13 @@ class PlayState extends FlxState
 		_numPlayers = NumPlayers;
 
 		startRound(Round);
+	}
+
+	public function accumulateCartScore(Timer:FlxTimer) {
+		trace('accumulateCartScore');
+		if (!_roundOver) {
+			Reg.scores[_rider.number] += 25;
+		}
 	}
 
 	public function startRound(Round:Int)
@@ -223,6 +231,9 @@ class PlayState extends FlxState
 		FlxG.watch.add(_p2, "ridingVehicle", "P2 Riding");
 		FlxG.watch.add(_p3, "ridingVehicle", "P3 Riding");
 		FlxG.watch.add(_p4, "ridingVehicle", "P4 Riding");
+
+		// Keep track of scores for players
+		_cartScoreTimer = new FlxTimer(1, accumulateCartScore, 0);
 
 		// Super
 		super.create();
