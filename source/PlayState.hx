@@ -355,7 +355,7 @@ class PlayState extends FlxState
 		var lineAdd = 11;
 		for (i in 0..._numPlayers)
 		{
-			trace('$i to $X ${Y + (i * lineAdd)}');
+			// trace('$i to $X ${Y + (i * lineAdd)}');
 			_monkeyScoreSprites[i].x = X;
 			_monkeyScoreSprites[i].y = Y + (i * lineAdd);
 			_monkeyScoreSprites[i].visible = true;

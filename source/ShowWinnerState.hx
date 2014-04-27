@@ -108,7 +108,7 @@ class ShowWinnerState extends FlxState
         // add(title);
         // title.scrollFactor.x = 0;
 
-        trace(Reg.scores);
+        // trace(Reg.scores);
 	}
 
 	override public function update()
