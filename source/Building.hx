@@ -15,7 +15,7 @@ class Building extends FlxSprite
 		immovable = true;
 
 		// Choose whether we're tileset green or yellow (0 or 1)
-		var tileset = FlxRandom.intRanged(0, 1);
+		var tileset = FlxRandom.intRanged(0, 4);
 
 		// FlxG.log.add('Building at $X,$Y,$Width,$Height');
 		var sprite:FlxSprite = new FlxSprite().loadGraphic(Reg.LEVELTILES, true, Reg.blockSize, Reg.blockSize);
@@ -29,7 +29,7 @@ class Building extends FlxSprite
 			for (c in 0...Width) {
 
 				// Choose a random tile from the tileset
-				sprite.animation.frameIndex = tileset * 4 + FlxRandom.intRanged(0, 3);
+				sprite.animation.frameIndex = tileset * 16 + FlxRandom.intRanged(0, 15);
 				sprite.drawFrame();
 
 				stamp(sprite, c * Reg.blockSize, r * Reg.blockSize);
