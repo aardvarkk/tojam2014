@@ -323,6 +323,10 @@ class PlayState extends FlxState
 				{
 					FlxG.collide(p, _buildings);
 				}
+				if (p != _rider)
+				{
+					FlxG.overlap(p, _bombs, damagePlayer);
+				}
 			}
 
 			// Check for round over
@@ -378,6 +382,14 @@ class PlayState extends FlxState
 		P.mount(R);
 		Reg.scores[P.number] += 500;
 	}	
+
+	public function damagePlayer(P:Player, R:FlxSprite):Void
+	{
+		P.velocity.x += R.velocity.x * 2;
+		P.velocity.y += R.velocity.y * 2;
+		R.kill();
+		//add particle effects for explosion
+	}
 
 	public function endRoundTimer(Timer:FlxTimer)
 	{
