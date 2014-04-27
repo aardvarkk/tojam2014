@@ -30,16 +30,13 @@ class RandomBuildings extends FlxGroup
 		var buildingW = 16;
 		var buildingH = 4;
 		var prvBuildingH = 0;
-		var tileIndexAdd = 0;
 		while (curX + buildingW < SizeX) {
 
 			var X = curX;
 			var Y = FlxG.height - buildingH * Reg.blockSize;
 			// FlxG.log.add('Add building @ $X, $Y of block size $buildingW x $buildingH');
 
-			//add(new Building(X, Y, buildingW, buildingH, 8 * 15 + 9 + tileIndexAdd));
-			add(new Building(X, Y, buildingW, buildingH, 8 * 15 + 8 + tileIndexAdd));
-			tileIndexAdd = tileIndexAdd == 0 ? 1 : 0;
+			add(new Building(X, Y, buildingW, buildingH));
 
 			var shiftX = FlxRandom.intRanged(MinDX, buildingW + MaxDX);
 			curX += shiftX * Reg.blockSize;
