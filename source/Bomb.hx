@@ -13,6 +13,10 @@ class Bomb extends FlxSprite
 	{
 		super(0, 0);
 		loadGraphic(Reg.BANANA, true, 16, 16);
+		width = 12;
+		height = 12;
+		offset.x = 2;
+		offset.y = 2;
 		kill();
 	}
 
