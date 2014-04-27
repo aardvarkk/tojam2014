@@ -31,6 +31,7 @@ class Player extends FlxExtendedSprite
 	private var diveBombSetVelY = 100; // Instant set to velocity in Y
 	private var jumped:Bool = false;
 	private var landed:Bool = false;
+	public var climbing:Bool = false;
 
 	public var attacking:Bool = false;
 	public var attackTimer:Float = -1;
@@ -206,7 +207,14 @@ class Player extends FlxExtendedSprite
 			jumpTimer = 0;
 			
 		}
-		else if (!isTouching(FlxObject.FLOOR))
+		else if (isTouching(FlxObject.WALL))
+		{
+			climbing = true;
+			velocity.y = 0;
+			landed = true;
+			jumpTimer = 0;
+		}
+		else if (!isTouching(FlxObject.FLOOR) && !isTouching(FlxObject.WALL))
 		{
 			landed = false;
 		}
@@ -391,9 +399,7 @@ class Player extends FlxExtendedSprite
 
 	public function playLandingSound():Void
 	{
-		// Override within the characters themselves
-		// FlxG.log.add("playLandingSound()");
-		FlxG.sound.play("Landing", 1.0);
+		FlxG.sound.play("Landing");
 	}
 
 	override public function reset(X:Float, Y:Float):Void
