@@ -38,7 +38,7 @@ class MenuState extends FlxState
 	private var _p3:Player;
 	private var _p4:Player;
 	private var _replay:FlxReplay;
-	public static var choosePlayers:FlxText;
+	private var choosePlayers:FlxText;
 
 	private static var recording:Bool = false;
 	private static var replaying:Bool = false;
@@ -205,7 +205,7 @@ class MenuState extends FlxState
 		super.destroy();
 	}
 
-	public static function pressedStart():Void
+	public function pressedStart():Void
 	{
 		choosePlayers.text = "Number of Players";
 	}

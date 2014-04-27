@@ -148,6 +148,8 @@ class Player extends FlxExtendedSprite
 		{
 			acceleration.x = 0;
 			acceleration.x += (runAccel * 0.75);
+			facing = FlxObject.RIGHT;
+			flipX = false;
 			if (isTouching(FlxObject.WALL))
 				{
 					jumpStrength = 300;

@@ -14,7 +14,7 @@ class TitleState extends FlxState
 	{
 		super.create();
 
-		FlxG.vcr.loadReplay(Assets.getText("data/demo1.txt"), new MenuState(), ["ANY"], 45, MenuState.pressedStart);
+		//FlxG.vcr.loadReplay(Assets.getText("data/demo1.txt"), new MenuState(), ["ANY"], 45, MenuState.pressedStart);
 	}
 
 }
