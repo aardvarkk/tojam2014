@@ -120,8 +120,6 @@ class MenuState extends FlxState
 
 		//FlxG.vcr.loadReplay(Assets.getText("data/demo1.fgr"));
 		//FlxG.vcr.startRecording();
-
-		super.create();
 	}
 	
 	/**
