@@ -3,16 +3,17 @@ package;
 import flixel.FlxG;
 import flixel.FlxSprite;
 
-class Bomb extends FlxSprite
+class Explosion extends FlxSprite
 {
-
-	private var speed:Float = 200;
-	private var timer:Float = 0;
 
 	public function new()
 	{
 		super(0, 0);
-		loadGraphic(Reg.BANANA, true, 16, 16);
+		loadGraphic(Reg.BANANAPOP, true, 47, 47);
+
+		//animation.add("boom",[0,1,2,3,4,5,6,7,8],30, false);
+		animation.add("boom",[0,1,2,3,4,5,6,7],24, false);
+
 		kill();
 	}
 
@@ -25,30 +26,27 @@ class Bomb extends FlxSprite
 		super.update();
 	}
 
-	public function shoot(P:FlxSprite, Angle:Float):Void
+	public function boom(P:FlxSprite, ?Vx:Float = 0, ?Vy:Float = 0):Void
 	{
-		reset(P.x, P.y + P.height / 2);
-		acceleration.y = 200; // gravity
-		angularVelocity = -200;
-		velocity.x = Math.cos(Angle * Math.PI/180) * speed;
-		velocity.y = Math.sin(Angle * Math.PI/180) * speed;
+		reset(P.x + P.width / 2 - (width / 2), P.y + P.height / 2 - (width / 2));
+		velocity.x = Vx;
+		velocity.y = Vy;
+		animation.play("boom");
+		FlxG.sound.play("Explosion");
 	}
 
 	override public function reset(X:Float, Y:Float):Void
 	{
 		super.reset(X, Y);
 		visible = true;
-		solid = true;
 	}
 
 	override public function kill():Void
 	{
 		visible = false;
-		solid = false;
 		alive = false;
 		velocity.x = 0;
 		velocity.y = 0;
-		acceleration.y = 0;
 		super.kill();
 	}
 }

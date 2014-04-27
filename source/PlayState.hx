@@ -50,6 +50,7 @@ class PlayState extends FlxState
 	private var _players:FlxTypedGroup<Player>;
 	private var _bubbles:FlxTypedGroup<Bubble>;
 	private var _beams:FlxTypedGroup<Beam>;
+	public var explosions:FlxTypedGroup<Explosion>;
 	public var _bombs:FlxTypedGroup<Bomb>;
 	private var _p1:Player;
 	private var _p2:Player;
@@ -152,7 +153,7 @@ class PlayState extends FlxState
 		_weatherEmitter.setRotation(-50,50);
 		_weatherEmitter.start(false,10,0.007125);
 
-
+		explosions = new FlxTypedGroup();
 		_bombs = new FlxTypedGroup();
 		_players = new FlxTypedGroup();
 		_p1 = new Player(150,100,0, _bombs);
@@ -165,9 +166,13 @@ class PlayState extends FlxState
 		_bubbles = new FlxTypedGroup();
 		_beams = new FlxTypedGroup();
 		
-		for (b in 0...10)
+		for (b in 0...5)
 		{
 			_bombs.add(new Bomb());
+		}
+		for (e in 0...10)
+		{
+			explosions.add(new Explosion());
 		}
 
 		_infoText = new FlxText(10,10, FlxG.width - 20, null);
@@ -236,6 +241,7 @@ class PlayState extends FlxState
 		add(_bubbles);
 		add(_beams);
 		add(_bombs);
+		add(explosions);
 
 		add(_weatherEmitter);
 
@@ -387,8 +393,8 @@ class PlayState extends FlxState
 	{
 		P.velocity.x += R.velocity.x * 2;
 		P.velocity.y += R.velocity.y * 2;
+		explosions.recycle(Explosion,[],true,false).boom(R, R.velocity.x, R.velocity.y);
 		R.kill();
-		//add particle effects for explosion
 	}
 
 	public function endRoundTimer(Timer:FlxTimer)

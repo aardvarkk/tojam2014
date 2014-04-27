@@ -36,7 +36,7 @@ class Player extends FlxExtendedSprite
 	public var _bombs:FlxTypedGroup<Bomb>;
 
 	public var attacking:Bool = false;
-	public var attackTimer:Float = -1;
+	public var attackTimer:Float = 0;
 	public var diving:Bool = false;
 
 	public var invulnerable:Bool = false;
@@ -129,6 +129,8 @@ class Player extends FlxExtendedSprite
 			x = _vehicle.x + 24; // +20 good for 48x16
 			y = _vehicle.y - 12; // and -16
 			ridingControls();
+			if (attackTimer > 0)
+				attackTimer -= FlxG.elapsed;
 		}
 		else
 		{
@@ -182,11 +184,14 @@ class Player extends FlxExtendedSprite
 			_vehicle.acceleration.y = 0;
 			_vehicle.y = FlxG.height - 40;
 		}
-
-		if (isPressing(Reg.KEY1))
+		if (attackTimer <= 0)
 		{
-			FlxG.log.add("Shot a bomb!");
-			_bombs.recycle(Bomb,[],true,false).shoot(this, 210);
+			if (isPressing(Reg.KEY1))
+			{
+				FlxG.log.add("Shot a bomb!");
+				_bombs.recycle(Bomb,[],true,false).shoot(this, 210);
+				attackTimer = 0.25;
+			}
 		}
 	}
 
