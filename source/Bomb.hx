@@ -27,7 +27,6 @@ class Bomb extends FlxSprite
 		acceleration.y = 300; // gravity
 		velocity.x = Math.cos(Angle * Math.PI/180) * speed;
 		velocity.y = Math.sin(Angle * Math.PI/180) * speed;
-
 	}
 
 	override public function reset(X:Float, Y:Float):Void
