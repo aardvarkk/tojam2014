@@ -33,10 +33,12 @@ class Player extends FlxExtendedSprite
 	private var jumped:Bool = false;
 	private var landed:Bool = false;
 	public var climbing:Bool = false;
-	public var _bombs:FlxTypedGroup<Bomb>;
+	private var _bombs:FlxTypedGroup<Bomb>;
+	private var _boomerangs:FlxTypedGroup<Boomerang>;
 
 	public var attacking:Bool = false;
 	public var attackTimer:Float = 0;
+	public var ATTACKDELAY:Float = 0.5;
 	public var diving:Bool = false;
 
 	public var invulnerable:Bool = false;
@@ -56,12 +58,13 @@ class Player extends FlxExtendedSprite
 	private var _jumpStrings = ["Jump1", "Jump2", "Jump3", "Jump4"];
 	private var _gamepad:FlxGamepad;
 
-	public function new(X:Int, Y:Int, Number:Int, Bombs:FlxTypedGroup<Bomb>)
+	public function new(X:Int, Y:Int, Number:Int, Bombs:FlxTypedGroup<Bomb>, Boomerangs:FlxTypedGroup<Boomerang>)
 	{
 		super(X, Y);
 
 		number = Number;
 		_bombs = Bombs; // ref to the bomb group
+		_boomerangs = Boomerangs;
 		_gamepad = FlxG.gamepads.getByID(Number); // grab our gamepad
 
 		if (_gamepad != null) 
@@ -196,7 +199,13 @@ class Player extends FlxExtendedSprite
 			{
 				FlxG.log.add("Shot a bomb!");
 				_bombs.recycle(Bomb,[],true,false).shoot(this, _aim);
-				attackTimer = 0.25;
+				attackTimer = ATTACKDELAY;
+			}
+			else if (isPressing(Reg.KEY2))
+			{
+				FlxG.log.add("Shot a boomerang!");
+				_boomerangs.recycle(Boomerang,[],true,false).shoot(this, _aim);
+				attackTimer = ATTACKDELAY;
 			}
 		}
 	}

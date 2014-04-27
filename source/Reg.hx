@@ -119,6 +119,7 @@ class Reg
 	 */
 	 public static inline var PARTICLE:String = "images/leaves02.png";
 	 public static inline var BANANA:String = "images/banana.png";
+	 public static inline var BOMB:String = "images/bomb.png";
 	 public static inline var EXPLOSION:String = "images/explosion1.png";
 	 public static inline var BANANAPOP:String = "images/bananapop.png";
 	 /*

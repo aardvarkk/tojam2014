@@ -52,7 +52,9 @@ class PlayState extends FlxState
 	private var _bubbles:FlxTypedGroup<Bubble>;
 	private var _beams:FlxTypedGroup<Beam>;
 	public var explosions:FlxTypedGroup<Explosion>;
+	public var bananapops:FlxTypedGroup<Bananapop>;
 	public var _bombs:FlxTypedGroup<Bomb>;
+	public var _boomerangs:FlxTypedGroup<Boomerang>;
 	private var _p1:Player;
 	private var _p2:Player;
 	private var _p3:Player;
@@ -156,27 +158,28 @@ class PlayState extends FlxState
 		_weatherEmitter.start(false,10,0.007125);
 
 		explosions = new FlxTypedGroup();
+		bananapops = new FlxTypedGroup();
 		_bombs = new FlxTypedGroup();
+		_boomerangs = new FlxTypedGroup();
 		_players = new FlxTypedGroup();
-		_p1 = new Player(150,100,0, _bombs);
+		_p1 = new Player(150,100,0, _bombs, _boomerangs);
 		if (_numPlayers >= 2)
-			_p2 = new Player(150,100,1, _bombs);
+			_p2 = new Player(150,100,1, _bombs, _boomerangs);
 		if (_numPlayers >= 3)
-			_p3 = new Player(150,100,2, _bombs);
+			_p3 = new Player(150,100,2, _bombs, _boomerangs);
 		if (_numPlayers == 4)
-			_p4 = new Player(150,100,3, _bombs);
+			_p4 = new Player(150,100,3, _bombs, _boomerangs);
 		_bubbles = new FlxTypedGroup();
 		_beams = new FlxTypedGroup();
 
 		_crosshair = new Crosshair();
 		
-		for (b in 0...5)
+		for (a in 0...5)
 		{
 			_bombs.add(new Bomb());
-		}
-		for (e in 0...10)
-		{
+			_boomerangs.add(new Boomerang());
 			explosions.add(new Explosion());
+			bananapops.add(new Bananapop());
 		}
 
 		_infoText = new FlxText(10,10, FlxG.width - 20, null);
@@ -245,6 +248,8 @@ class PlayState extends FlxState
 		add(_bubbles);
 		add(_beams);
 		add(_bombs);
+		add(_boomerangs);
+		add(bananapops);
 		add(explosions);
 
 		add(_crosshair);
@@ -340,7 +345,8 @@ class PlayState extends FlxState
 				}
 				if (p != _rider)
 				{
-					FlxG.overlap(p, _bombs, damagePlayer);
+					FlxG.overlap(p, _bombs, explodeOnPlayer);
+					FlxG.overlap(p, _boomerangs, splatOnPlayer);
 				}
 			}
 
@@ -397,11 +403,19 @@ class PlayState extends FlxState
 		Reg.scores[P.number] += 500;
 	}	
 
-	public function damagePlayer(P:Player, R:FlxSprite):Void
+	public function explodeOnPlayer(P:Player, R:FlxSprite):Void
 	{
 		P.velocity.x += R.velocity.x * 2;
 		P.velocity.y += R.velocity.y * 2;
 		explosions.recycle(Explosion,[],true,false).boom(R, R.velocity.x, R.velocity.y);
+		R.kill();
+	}
+
+	public function splatOnPlayer(P:Player, R:FlxSprite):Void
+	{
+		P.velocity.x += R.velocity.x * 2;
+		P.velocity.y += R.velocity.y * 2;
+		bananapops.recycle(Bananapop,[],true,false).boom(R, R.velocity.x, R.velocity.y);
 		R.kill();
 	}
 
