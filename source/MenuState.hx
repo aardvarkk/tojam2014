@@ -12,6 +12,8 @@ import flixel.util.FlxPoint;
 import flixel.addons.display.FlxBackdrop;
 import flixel.effects.particles.FlxEmitter;
 import openfl.Assets;
+import flixel.FlxObject;
+import flixel.input.gamepad.PS4ButtonID;
 
 /**
  * A FlxState which can be used for the game's menu.
@@ -32,6 +34,17 @@ class MenuState extends FlxState
 	private var _buildings:RandomBuildings;
 	private var _p:Player;
 
+	private var _numPlayers = 2;
+	private var _twoPlayers:FlxText;
+	private var _threePlayers:FlxText;
+	private var _fourPlayers:FlxText;
+
+	// Hack to get dpad working for selections
+	private var _prvDpadLefts:Bool  = false;
+	private var _curDpadLefts:Bool  = false;
+	private var _prvDpadRights:Bool = false;
+	private var _curDpadRights:Bool = false;
+
 	/**
 	 * Function that is called up when to state is created to set it up. 
 	 */
@@ -43,7 +56,6 @@ class MenuState extends FlxState
 
 		// Set a background color
 		FlxG.cameras.bgColor = 0xff4a9294;
-
 
 		_cloudsFar = new FlxBackdrop(Reg.CLOUDSFAR,0.125,0,true,false);
 		_cloudsMid = new FlxBackdrop(Reg.CLOUDSMID,0.25,0,true,false);
@@ -107,11 +119,32 @@ class MenuState extends FlxState
         add(title);
         title.scrollFactor.x = 0;
 
-        var choosePlayers = new FlxText(0, FlxG.height/2 + 50, FlxG.width, "Choose Number of Players (2-4)");
+        var choosePlayers = new FlxText(0, FlxG.height/2, FlxG.width, "Choose Number of Players");
         choosePlayers.alignment = "center";
         choosePlayers.color = 0xff111112;
         add(choosePlayers);
         choosePlayers.scrollFactor.x = 0;
+
+        // Three is centered -- other two are spread
+        var textSpread = 40;
+
+        _threePlayers = new FlxText(0, FlxG.height/2 + 10, FlxG.width, "3");
+        _threePlayers.color = _numPlayers == 3 ? 0xffffffff : 0xff111112;
+        _threePlayers.size = 32;
+        _threePlayers.alignment = "center";
+        add(_threePlayers);
+
+        _twoPlayers = new FlxText(-textSpread, FlxG.height/2 + 10, FlxG.width, "2");
+        _twoPlayers.color = _numPlayers == 2 ? 0xffffffff : 0xff111112;
+        _twoPlayers.size = 32;
+        _twoPlayers.alignment = "center";
+        add(_twoPlayers);
+
+        _fourPlayers = new FlxText(textSpread, FlxG.height/2 + 10, FlxG.width, "4");
+        _fourPlayers.color = _numPlayers == 4 ? 0xffffffff : 0xff111112;
+        _fourPlayers.size = 32;
+        _fourPlayers.alignment = "center";
+        add(_fourPlayers);
 
         FlxG.camera.flash(0xff111112,2.5);
 
@@ -140,20 +173,89 @@ class MenuState extends FlxState
 
 		super.update();
 
-		if (FlxG.keys.anyJustPressed(["TWO", "THREE", "FOUR"]))
+		_curDpadLefts  = isDpadPressed(FlxObject.LEFT);
+		_curDpadRights = isDpadPressed(FlxObject.RIGHT);
+
+		var dpadLeftJustPressed = _curDpadLefts && !_prvDpadLefts;
+		var dpadRightJustPressed = _curDpadRights  && !_prvDpadRights;
+
+		if (isJustPressing(FlxObject.LEFT) || dpadLeftJustPressed) 
 		{
-			if (FlxG.keys.anyJustPressed(["TWO"])) {
-				FlxG.switchState(new PlayState(2));	
-			}
-			else if (FlxG.keys.anyJustPressed(["THREE"])) {
-				FlxG.switchState(new PlayState(3));	
-			}
-			else if (FlxG.keys.anyJustPressed(["FOUR"])) {
-				FlxG.switchState(new PlayState(4));	
-			}			
+			_numPlayers = _numPlayers > 2 ? _numPlayers - 1 : 4;
+		}
+		else if (isJustPressing(FlxObject.RIGHT) || dpadRightJustPressed) 
+		{
+			_numPlayers = _numPlayers < 4 ? _numPlayers + 1 : 2;
+		}
+
+        _twoPlayers.color   = _numPlayers == 2 ? 0xffffffff : 0xff111112;
+        _threePlayers.color = _numPlayers == 3 ? 0xffffffff : 0xff111112;
+        _fourPlayers.color  = _numPlayers == 4 ? 0xffffffff : 0xff111112;
+
+        // START THE GAME!
+		if (isJustPressing(Reg.JUMP) || isJustPressing(Reg.KEY1) || isJustPressing(Reg.KEY2) || isJustPressing(Reg.KEY3))
+		{
+			FlxG.switchState(new PlayState(_numPlayers));	
 		}
 
 		FlxG.collide(_p, _buildings);
 
+		_prvDpadLefts  = _curDpadLefts;
+		_prvDpadRights = _curDpadRights;
 	}	
+
+	private function isDpadPressed(Direction:Int):Bool
+	{
+		if (Direction == FlxObject.LEFT)
+		{
+			for (gp in FlxG.gamepads.getActiveGamepads())
+			{
+				if (gp.dpadLeft)
+				{
+					return true;
+				}
+			}			
+		}
+		else if (Direction == FlxObject.RIGHT)
+		{
+			for (gp in FlxG.gamepads.getActiveGamepads())
+			{
+				if (gp.dpadRight)
+				{
+					return true;
+				}
+			}
+			if (FlxG.keys.anyJustPressed(["RIGHT"]))
+			{
+				return true;
+			}
+		}
+		return false;
+	}
+
+	private function isJustPressing(Direction:Int):Bool
+	{
+		if (Direction == FlxObject.LEFT)
+		{
+			return FlxG.keys.anyJustPressed(["LEFT"]);
+		}
+		else if (Direction == FlxObject.RIGHT)
+		{
+			return FlxG.keys.anyJustPressed(["RIGHT"]);
+		}
+		else if (Direction == Reg.JUMP || Direction == Reg.KEY1 || Direction == Reg.KEY2 || Direction == Reg.KEY3)
+		{
+			if (FlxG.gamepads.anyJustPressed(PS4ButtonID.X_BUTTON) 
+				|| FlxG.gamepads.anyJustPressed(PS4ButtonID.SQUARE_BUTTON)
+				|| FlxG.gamepads.anyJustPressed(PS4ButtonID.TRIANGLE_BUTTON)
+				|| FlxG.gamepads.anyJustPressed(PS4ButtonID.CIRCLE_BUTTON))
+			{
+				return true;
+			}
+
+			return FlxG.keys.anyJustPressed(["SPACE", "ENTER"]);	
+		}
+
+		return false;
+	}
 }
