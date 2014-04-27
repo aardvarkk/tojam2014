@@ -99,6 +99,7 @@ class PlayState extends FlxState
 
 		if (_round == 0) 
 		{
+			Reg.scores = new Array<Int>();
 			for (i in 0..._numPlayers)
 			{
 				Reg.scores[i] = 0;
@@ -378,7 +379,7 @@ class PlayState extends FlxState
 		// Game controls
 		if (FlxG.keys.justPressed.ESCAPE)
 		{
-			FlxG.resetState();
+			FlxG.switchState(new MenuState());
 		}
 		if (FlxG.keys.justPressed.SPACE)
 		{
