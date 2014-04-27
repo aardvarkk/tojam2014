@@ -100,6 +100,9 @@ class Reg
 	 * Game sprites
 	 */
 	 public static inline var MONKEY1:String = "images/monkey.png";
+	 public static inline var MONKEY2:String = "images/monkey2.png";
+	 public static inline var MONKEY3:String = "images/monkey3.png";
+	 public static inline var MONKEY4:String = "images/monkey4.png";
 	 public static inline var CORGI1:String = "images/corgi1.png";
 	 public static inline var CORGI2:String = "images/corgi2.png";
 	 public static inline var CORGI3:String = "images/corgi3.png";
