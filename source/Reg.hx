@@ -64,6 +64,12 @@ class Reg
 	 * Especially useful for setting up multiple save slots.
 	 */
 	static public var saves:Array<FlxSave> = [];
+
+	// This is important!
+	// null means we'll use a gamepad, so players 0 and 1 will use gamepads in this case
+	// the next number indicates which index in the keyset to use
+	public static var KeyboardControlSet = [null, null, 0, 1];
+
 	/**
 	* Keyboard input sets
 	*/

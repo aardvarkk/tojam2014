@@ -65,12 +65,7 @@ class Player extends FlxExtendedSprite
 		number = Number;
 		_bombs = Bombs; // ref to the bomb group
 		_boomerangs = Boomerangs;
-		_gamepad = FlxG.gamepads.getByID(Number); // grab our gamepad
 
-		if (_gamepad != null) 
-		{
-			FlxG.log.add('Player $number using gamepad ${_gamepad.id}');
-		}
 		if (number == 1)
 		{
 			loadGraphic(Reg.MONKEY1, true, 16, 16);
@@ -89,15 +84,20 @@ class Player extends FlxExtendedSprite
 			loadGraphic(Reg.MONKEY4, true, 16, 16);
 		}
 
-		if (Reg.UseGamepad == false)
+		if (Reg.KeyboardControlSet[number] != null)
 		{
-			controlSet = number;
+			controlSet = Reg.KeyboardControlSet[number];
+			FlxG.log.add('Player $number using keyboard control set $controlSet');
 
 			// override if Single controller mode
 			if (Reg.SingleControllerMode)
 				controlSet = 0;
 		}
-		// else // for controller inputs
+		else
+		{
+			_gamepad = FlxG.gamepads.getByID(Number); // grab our gamepad
+			FlxG.log.add('Player $number using gamepad ${_gamepad.id}');
+		}
 
 		bubble = new Bubble(X, Y);
 		beam = new Beam(X, Y);
@@ -316,59 +316,57 @@ class Player extends FlxExtendedSprite
 
 		if (Direction == FlxObject.UP)
 		{
-			if (Reg.UseGamepad && _gamepad != null)
-			{
+			if (Reg.KeyboardControlSet[number] == null)
 				return _gamepad.dpadUp;
-			}
 			else
 				return (FlxG.keys.anyPressed([Reg.keyset[controlSet][0]]));
 		}
 		else if (Direction == FlxObject.DOWN)
 		{
-			if (Reg.UseGamepad && _gamepad != null)
+			if (Reg.KeyboardControlSet[number] == null)
 				return _gamepad.dpadDown;
 			else
 				return (FlxG.keys.anyPressed([Reg.keyset[controlSet][1]]));
 		}
 		else if (Direction == FlxObject.LEFT)
 		{
-			if (Reg.UseGamepad && _gamepad != null)
+			if (Reg.KeyboardControlSet[number] == null)
 				return _gamepad.dpadLeft;
 			else
 				return (FlxG.keys.anyPressed([Reg.keyset[controlSet][2]]));
 		}
 		else if (Direction == FlxObject.RIGHT)
 		{
-			if (Reg.UseGamepad && _gamepad != null)
+			if (Reg.KeyboardControlSet[number] == null)
 				return _gamepad.dpadRight;
 			else
 				return (FlxG.keys.anyPressed([Reg.keyset[controlSet][3]]));
 		}
 		else if (Direction == Reg.JUMP)
 		{
-			if (Reg.UseGamepad && _gamepad != null)
-				return _gamepad.pressed(XboxButtonID.A);
+			if (Reg.KeyboardControlSet[number] == null)
+				return _gamepad.pressed(PS4ButtonID.X_BUTTON);
 			else
 				return (FlxG.keys.anyPressed([Reg.keyset[controlSet][4]]));
 		}
 		else if (Direction == Reg.KEY1)
 		{
-			if (Reg.UseGamepad && _gamepad != null)
-				return _gamepad.pressed(XboxButtonID.X);
+			if (Reg.KeyboardControlSet[number] == null)
+				return _gamepad.pressed(PS4ButtonID.SQUARE_BUTTON);
 			else
 				return (FlxG.keys.anyPressed([Reg.keyset[controlSet][5]]));
 		}
 		else if (Direction == Reg.KEY2)
 		{
-			if (Reg.UseGamepad && _gamepad != null)
-				return _gamepad.pressed(XboxButtonID.Y);
+			if (Reg.KeyboardControlSet[number] == null)
+				return _gamepad.pressed(PS4ButtonID.TRIANGLE_BUTTON);
 			else
 				return (FlxG.keys.anyPressed([Reg.keyset[controlSet][6]]));
 		}
 		else if (Direction == Reg.KEY3)
 		{
-			if (Reg.UseGamepad && _gamepad != null)
-				return _gamepad.pressed(XboxButtonID.B);
+			if (Reg.KeyboardControlSet[number] == null)
+				return _gamepad.pressed(PS4ButtonID.CIRCLE_BUTTON);
 			else
 				return (FlxG.keys.anyPressed([Reg.keyset[controlSet][7]]));
 		}
@@ -385,59 +383,57 @@ class Player extends FlxExtendedSprite
 
 		if (Direction == FlxObject.UP)
 		{
-			if (Reg.UseGamepad && _gamepad != null)
-			{
+			if (Reg.KeyboardControlSet[number] == null)
 				return _gamepad.dpadUp;
-			}
 			else
 				return (FlxG.keys.anyJustPressed([Reg.keyset[controlSet][0]]));
 		}
 		else if (Direction == FlxObject.DOWN)
 		{
-			if (Reg.UseGamepad && _gamepad != null)
+			if (Reg.KeyboardControlSet[number] == null)
 				return _gamepad.dpadDown;
 			else
 				return (FlxG.keys.anyJustPressed([Reg.keyset[controlSet][1]]));
 		}
 		else if (Direction == FlxObject.LEFT)
 		{
-			if (Reg.UseGamepad && _gamepad != null)
+			if (Reg.KeyboardControlSet[number] == null)
 				return _gamepad.dpadLeft;
 			else
 				return (FlxG.keys.anyJustPressed([Reg.keyset[controlSet][2]]));
 		}
 		else if (Direction == FlxObject.RIGHT)
 		{
-			if (Reg.UseGamepad && _gamepad != null)
+			if (Reg.KeyboardControlSet[number] == null)
 				return _gamepad.dpadRight;
 			else
 				return (FlxG.keys.anyJustPressed([Reg.keyset[controlSet][3]]));
 		}
 		else if (Direction == Reg.JUMP)
 		{
-			if (Reg.UseGamepad && _gamepad != null)
-				return _gamepad.justPressed(XboxButtonID.A);
+			if (Reg.KeyboardControlSet[number] == null)
+				return _gamepad.justPressed(PS4ButtonID.X_BUTTON);
 			else
 				return (FlxG.keys.anyJustPressed([Reg.keyset[controlSet][4]]));
 		}
 		else if (Direction == Reg.KEY1)
 		{
-			if (Reg.UseGamepad && _gamepad != null)
-				return _gamepad.justPressed(XboxButtonID.X);
+			if (Reg.KeyboardControlSet[number] == null)
+				return _gamepad.justPressed(PS4ButtonID.SQUARE_BUTTON);
 			else
 				return (FlxG.keys.anyJustPressed([Reg.keyset[controlSet][5]]));
 		}
 		else if (Direction == Reg.KEY2)
 		{
-			if (Reg.UseGamepad && _gamepad != null)
-				return _gamepad.justPressed(XboxButtonID.Y);
+			if (Reg.KeyboardControlSet[number] == null)
+				return _gamepad.justPressed(PS4ButtonID.TRIANGLE_BUTTON);
 			else
 				return (FlxG.keys.anyJustPressed([Reg.keyset[controlSet][6]]));
 		}
 		else if (Direction == Reg.KEY3)
 		{
-			if (Reg.UseGamepad && _gamepad != null)
-				return _gamepad.justPressed(XboxButtonID.B);
+			if (Reg.KeyboardControlSet[number] == null)
+				return _gamepad.justPressed(PS4ButtonID.CIRCLE_BUTTON);
 			else
 				return (FlxG.keys.anyJustPressed([Reg.keyset[controlSet][7]]));
 		}
