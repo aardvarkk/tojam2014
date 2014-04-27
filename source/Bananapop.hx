@@ -31,7 +31,7 @@ class Bananapop extends FlxSprite
 		velocity.x = Vx;
 		velocity.y = Vy;
 		animation.play("boom");
-		FlxG.sound.play("Explosion");
+		FlxG.sound.play("Explosion", 0.3);
 	}
 
 	override public function reset(X:Float, Y:Float):Void

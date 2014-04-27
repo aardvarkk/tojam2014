@@ -209,7 +209,7 @@ class PlayState extends FlxState
 
 		// Create the random buildings
 		_buildings = new RandomBuildings(
-			0,
+			null,
 			Reg.LEVELLENGTH, 
 			FlxG.height, 
 			2,
@@ -432,7 +432,7 @@ class PlayState extends FlxState
 			FlxG.log.add("Bomb hit wall");
 			B.velocity.x = -50;
 		}
-		FlxG.sound.play("BombBounce");
+		FlxG.sound.play("BombBounce", 0.4);
 	}
 
 	public function swap(P:Player, R:FlxSprite):Void
@@ -458,7 +458,7 @@ class PlayState extends FlxState
 		P.velocity.y += R.velocity.y * 2;
 		explosions.recycle(Explosion,[],true,false).boom(R, R.velocity.x/4, R.velocity.y/4);
 		R.kill();
-		FlxG.sound.play("Megascreech1");
+		FlxG.sound.play("Megascreech1", 0.3);
 	}
 
 	public function splatOnPlayer(P:Player, R:FlxSprite):Void
@@ -467,7 +467,7 @@ class PlayState extends FlxState
 		P.velocity.y += R.velocity.y * 2;
 		bananapops.recycle(Bananapop,[],true,false).boom(R, R.velocity.x/4, R.velocity.y/4);
 		R.kill();
-		FlxG.sound.play("Screech1");
+		FlxG.sound.play("Screech1", 0.3);
 	}
 
 	public function stankOnPlayer(P:Player, R:FlxSprite):Void
@@ -476,7 +476,7 @@ class PlayState extends FlxState
 		P.velocity.y += R.velocity.y * 2;
 		stinkbombs.recycle(Stinkbomb,[],true,false).boom(R, R.velocity.x/4, R.velocity.y/4);
 		R.kill();
-		FlxG.sound.play("Megascreech2");
+		FlxG.sound.play("Megascreech2", 0.3);
 	}
 
 	public function endRoundTimer(Timer:FlxTimer)

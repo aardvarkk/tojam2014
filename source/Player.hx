@@ -523,7 +523,7 @@ class Player extends FlxExtendedSprite
 
 	public function playLandingSound():Void
 	{
-		FlxG.sound.play("Landing", 0.5);
+		FlxG.sound.play("Landing", 0);
 	}
 
 	override public function reset(X:Float, Y:Float):Void
@@ -577,7 +577,7 @@ class Player extends FlxExtendedSprite
 	{
 		super.kill();
 		deathTimer = 1;
-		FlxG.sound.play(_deathStrings[FlxRandom.intRanged(0, _deathStrings.length-1)]);
+		FlxG.sound.play(_deathStrings[FlxRandom.intRanged(0, _deathStrings.length-1)], 0.25);
 		// FlxG.sound.play("Bananabomb");
 		// beam.reset(x + width/2, y);
 	}

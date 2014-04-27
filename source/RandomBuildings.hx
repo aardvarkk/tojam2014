@@ -19,7 +19,11 @@ class RandomBuildings extends FlxGroup
 	{
 		super();
 
-		//FlxRandom.globalSeed = Seed;
+		// If they want a seed, use it
+		if (Seed != null)
+		{
+			FlxRandom.globalSeed = Seed;			
+		}
 		
 		var maxH = Math.floor(FlxG.height / Reg.blockSize - 1);
 		var curX = 0;
