@@ -12,7 +12,7 @@ class Beam extends FlxSprite
 	{
 		super(X, Y);
 
-		loadGraphic(Reg.BEAM, true, 80, 592);
+		//loadGraphic(Reg.BEAM, true, 80, 592);
 		animation.add("fire", [6,5,4,3,2,1,0,7], 40, false);
 		solid = false;
 		kill();

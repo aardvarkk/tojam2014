@@ -79,7 +79,7 @@ class Reg
 	/**
 	* Keyboard input sets
 	*/
-	public static var SingleControllerMode:Bool = false; // turn off for multiplayer
+	public static var SingleControllerMode:Bool = true; // turn off for multiplayer
 	public static var JUMP:Int = 10;
 	public static var KEY1:Int = 20;
 	public static var KEY2:Int = 40;
@@ -116,13 +116,8 @@ class Reg
 	 public static inline var MONKEY2:String = "images/monkey2.png";
 	 public static inline var MONKEY3:String = "images/monkey3.png";
 	 public static inline var MONKEY4:String = "images/monkey4.png";
-	 public static inline var CORGI1:String = "images/corgi1.png";
-	 public static inline var CORGI2:String = "images/corgi2.png";
-	 public static inline var CORGI3:String = "images/corgi3.png";
-	 public static inline var CORGI4:String = "images/corgi4.png";
 
 	 public static inline var BUBBLE:String = "images/bubble.png";
-	 public static inline var BEAM:String = "images/beam.png";
 
 	 public static inline var UFO:String = "images/hand.png";
 
