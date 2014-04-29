@@ -104,6 +104,9 @@ class Player extends FlxExtendedSprite
 		{
 			_gamepad = FlxG.gamepads.getByID(Number); // grab our gamepad
 			FlxG.log.add('Player $number using gamepad ${_gamepad.id}');
+			// For the sufami controllers, ABXY is the same as PS4 placement
+			// but the dpad is AxisX(0) for left (-1) and right (1)
+			// and AxisX(1) for up (-1) and down (1) where 0 is no input
 		}
 
 		bubble = new Bubble(X, Y);
@@ -372,28 +375,48 @@ class Player extends FlxExtendedSprite
 		if (Direction == FlxObject.UP)
 		{
 			if (Reg.KeyboardControlSet[number] == null)
-				return _gamepad.dpadUp;
+			{
+				if (_gamepad.getXAxis(1) == -1)
+					return true;
+				else
+					return _gamepad.dpadUp;
+			}
 			else
 				return (FlxG.keys.anyPressed([Reg.keyset[controlSet][0]]));
 		}
 		else if (Direction == FlxObject.DOWN)
 		{
 			if (Reg.KeyboardControlSet[number] == null)
-				return _gamepad.dpadDown;
+			{
+				if (_gamepad.getXAxis(1) == 1)
+					return true;
+				else
+					return _gamepad.dpadDown;
+			}
 			else
 				return (FlxG.keys.anyPressed([Reg.keyset[controlSet][1]]));
 		}
 		else if (Direction == FlxObject.LEFT)
 		{
 			if (Reg.KeyboardControlSet[number] == null)
-				return _gamepad.dpadLeft;
+			{
+				if (_gamepad.getXAxis(0) == -1)
+					return true;
+				else
+					return _gamepad.dpadLeft;
+			}
 			else
 				return (FlxG.keys.anyPressed([Reg.keyset[controlSet][2]]));
 		}
 		else if (Direction == FlxObject.RIGHT)
 		{
 			if (Reg.KeyboardControlSet[number] == null)
-				return _gamepad.dpadRight;
+			{
+				if (_gamepad.getXAxis(0) == 1)
+					return true;
+				else
+					return _gamepad.dpadRight;
+			}
 			else
 				return (FlxG.keys.anyPressed([Reg.keyset[controlSet][3]]));
 		}
