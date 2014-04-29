@@ -94,23 +94,25 @@ class Reg
 		["I","K","J","L","O","P","SEMICOLON","QUOTE"]
 	];
 
-	/**
-	 * Title screen images
-	 */
-	 
-	 /**
-	 * Background images
-	 */
-	 public static inline var CLOUDSFAR:String = "images/cloudsFar.png";
-	 public static inline var CLOUDSMID:String = "images/cloudsMid.png";
-	 public static inline var CLOUDSNEAR:String = "images/cloudsNear.png";
-	 public static inline var MOUNTAINSFAR:String = "images/mountainsFar.png";
-	 public static inline var BUILDINGSMID:String = "images/buildingsMid.png";
-	 public static inline var BUILDINGSNEAR:String = "images/buildingsNear.png";
-	 public static inline var JUNGLEFOLIAGE:String = "images/jungleforeground.png";
-	 public static inline var JUNGLEFOLIAGE2:String = "images/jungleforegroundbot.png";
-	 public static inline var MIST:String = "images/mist.png";
-	 public static inline var MIST2:String = "images/mist2.png";
+	public static var BACKDROPSFAR:Array<Dynamic> = [
+		["images/cloudsFar.png", 0.125, null],
+		["images/cloudsMid.png", 0.25, null],
+		["images/cloudsNear.png", 0.5, null],
+		["images/mountainsFar.png", 0.1, 180],
+		["images/buildingsMid.png", 0.2, 128],
+		["images/buildingsNear.png", 0.4, 80],
+		["images/mist.png", 0.45, 138] // actually 128 though
+	];
+
+	public static var BACKDROPSMID:Array<Dynamic> = [
+		["images/mist2.png", 1.15, 98]
+	];
+
+	public static var BACKDROPSNEAR:Array<Dynamic> = [
+		["images/jungleforeground.png", 1.3, null],
+		["images/jungleforegroundbot.png", 1.3, 48]
+	];
+
 	 /**
 	 * Game sprites
 	 */
