@@ -1,17 +1,13 @@
 package;
 
 import flixel.FlxG;
-import flixel.FlxSprite;
 import flixel.FlxState;
 import flixel.FlxCamera;
+import flixel.input.gamepad.PS4ButtonID;
 import flixel.system.replay.FlxReplay;
 import flixel.text.FlxText;
-import flixel.ui.FlxButton;
-import flixel.util.FlxMath;
 import flixel.util.FlxPoint;
-import openfl.Assets;
-import flixel.FlxObject;
-import flixel.input.gamepad.PS4ButtonID;
+import flixel.util.FlxRandom;
 
 /**
  * A FlxState which can be used for the game's menu.
@@ -21,20 +17,16 @@ class MenuState extends FlxState
 	private var _backdropsFar:Backdrops;
 	private var _backdropsMid:Backdrops;
 	private var _backdropsNear:Backdrops;
-	private var _buildings:RandomBuildings;
+	private var _buildings:RandomBuildings = new RandomBuildings();
 	private var _leafEmitter:LeafEmitter = new LeafEmitter();
-	private var _p:Player;
-	private var _p2:Player;
-	private var _p3:Player;
-	private var _p4:Player;
+	private var _players:Array<Player> = new Array();
 	private var _replay:FlxReplay;
 	private var choosePlayers:FlxText;
 	private var names:FlxText;
 
-	private static var recording:Bool = false;
-	private static var replaying:Bool = false;
-	private static var playbackOnly:Bool = true; // this is for when you don't wanna record at all
-
+	private static var recording = false;
+	private static var replaying = false;
+	private static var playbackOnly = true; // this is for when you don't wanna record at all
 
 	private var _numPlayers = 2;
 	private var _twoPlayers:FlxText;
@@ -42,13 +34,13 @@ class MenuState extends FlxState
 	private var _fourPlayers:FlxText;
 
 	// Hack to get dpad working for selections
-	private var _prvDpadLefts:Bool  = false;
-	private var _curDpadLefts:Bool  = false;
-	private var _prvDpadRights:Bool = false;
-	private var _curDpadRights:Bool = false;
+	private var _prvDpadLefts  = false;
+	private var _curDpadLefts  = false;
+	private var _prvDpadRights = false;
+	private var _curDpadRights = false;
 
-	private var _timer:Float = 0;
-	private var _timeLimit:Int = 90;
+	private var _timer = 0.0;
+	private var _timeLimit = 90;
 
 	/**
 	 * Function that is called up when to state is created to set it up. 
@@ -65,21 +57,26 @@ class MenuState extends FlxState
 		_backdropsFar = new Backdrops(this, Reg.BACKDROPSFAR);
 
 		// Create the random buildings
-		_buildings = new RandomBuildings(-1, Reg.LEVELLENGTH * 2);
+		_buildings.init(-1, Reg.LEVELLENGTH * 2);
 		add(_buildings);
 
-		_p = new Player(240,60,0,null,null,null);
-		_p.autoscrollMonkey = true;
-		_p2 = new Player(140,-50,1,null,null,null);
-		_p2.autoscrollMonkey = true;
-		_p3 = new Player(100,-100,2,null,null,null);
-		_p3.autoscrollMonkey = true;
-		_p4 = new Player(80,20,3,null,null,null);
-		_p4.autoscrollMonkey = true;
-		add(_p4);
-		add(_p3);
-		add(_p2);
-		add(_p);
+		var startX = Math.round(FlxG.width/2);
+		var startY = 0;
+		for (i in 0...Reg.MAX_PLAYERS) {
+			var p = new Player(startX, startY, i);
+			p.autoscrollMonkey = true;
+			_players.push(p);
+
+			// Adjust up and left for next monkey
+			startX -= FlxRandom.intRanged(0, Math.round(FlxG.width/8));
+			startY -= FlxRandom.intRanged(0, Math.round(FlxG.width/8));
+		}
+
+		// Add to the scene in reverse order
+		var i = Reg.MAX_PLAYERS;
+		while (--i >= 0) {
+			add(_players[i]);
+		}
 
 		_backdropsMid = new Backdrops(this, Reg.BACKDROPSMID);
 
@@ -122,17 +119,17 @@ class MenuState extends FlxState
         _fourPlayers.alignment = "center";
         add(_fourPlayers);
 
-        names = new FlxText(0,FlxG.height - 16,FlxG.width,"Ian Clarkson   +   Steven Circuiton   +   Colin Marjoram");
+        names = new FlxText(0, FlxG.height - 16, FlxG.width,"Ian Clarkson   +   Steven Circuiton   +   Colin Marjoram");
         names.color = 0xffffffff;
         names.size = 8;
         names.scrollFactor.x = 0;
         names.alignment = "center";
         add(names);
 
-        FlxG.camera.flash(0xff111112,2.5);
-
-		FlxG.camera.setBounds(0,0, Reg.LEVELLENGTH * 2, FlxG.height);
-		FlxG.camera.follow(_p,FlxCamera.STYLE_PLATFORMER,new FlxPoint(50,0),4);
+        // Make sure setBounds comes before follow, otherwise follow doesn't work!
+        FlxG.camera.flash(0xff111112, 2.5);
+		FlxG.camera.setBounds(0, 0, Reg.LEVELLENGTH * 2, FlxG.height);
+		FlxG.camera.follow(_players[0], FlxCamera.STYLE_PLATFORMER, new FlxPoint(50, 0), 4);
 
 		if (!playbackOnly)
 		{
@@ -164,8 +161,6 @@ class MenuState extends FlxState
 			resetState();
 		}
 
-		FlxG.camera.scroll.x += 3;
-
 		_curDpadLefts  = isDpadPressed(Input.LEFT);
 		_curDpadRights = isDpadPressed(Input.RIGHT);
 
@@ -191,10 +186,9 @@ class MenuState extends FlxState
 			onSelectionMade();	
 		}
 
-		FlxG.collide(_p, _buildings);
-		FlxG.collide(_p2, _buildings);
-		FlxG.collide(_p3, _buildings);
-		FlxG.collide(_p4, _buildings);
+		for (p in _players) {
+			FlxG.collide(p, _buildings);
+		}
 
 		_prvDpadLefts  = _curDpadLefts;
 		_prvDpadRights = _curDpadRights;

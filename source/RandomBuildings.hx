@@ -15,7 +15,7 @@ class RandomBuildings extends FlxGroup
 	// MinDX: Minimum distance between left sides of buildings in blocks
 	// MaxDX: Maximum distance between buildings in blocks
 	// MaxDY: Maximum upward distance between buildings in blocks (maximum downward is just SizeY/BlockSize)
-	public function new(
+	public function init(
 		Seed:Int, 
 		SizeX:Int, 
 		?SizeY:Int = null,
@@ -26,8 +26,6 @@ class RandomBuildings extends FlxGroup
 		?MaxDY:Int = 3
 		)
 	{
-		super();
-
 		// If they want a seed, use it
 		if (Seed >= 0) {
 			FlxRandom.globalSeed = Seed;			

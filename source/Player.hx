@@ -46,7 +46,14 @@ class Player extends FlxExtendedSprite
 	private var _autoJumpTimer = 0.0;
 	private var _autoJumpDelay = 0.1;
 
-	public function new(X:Int, Y:Int, Number:Int, Bombs:FlxTypedGroup<Bomb>, Boomerangs:FlxTypedGroup<Boomerang>, Missiles:FlxTypedGroup<Missile>)
+	public function new(
+		X:Int, 
+		Y:Int, 
+		Number:Int, 
+		?Bombs:FlxTypedGroup<Bomb>, 
+		?Boomerangs:FlxTypedGroup<Boomerang>, 
+		?Missiles:FlxTypedGroup<Missile>
+		)
 	{
 		super(X, Y);
 
