@@ -76,12 +76,12 @@ class Reg
 	// This is important!
 	// null means we'll use a gamepad, so players 0 and 1 will use gamepads in this case
 	// the next number indicates which index in the keyset to use
-	public static var KeyboardControlSet = [null, null, 0, 1];
+	public static var KeyboardControlSet = [null, null, null, null];
+	public static var SinglePlayerDebug = true; // used to control all players with 1 gamepad / key set by switching between them
 
 	/**
 	* Keyboard input sets
 	*/
-	public static var SingleControllerMode:Bool = true; // turn off for multiplayer
 	public static var JUMP:Int = 10;
 	public static var KEY1:Int = 20;
 	public static var KEY2:Int = 40;

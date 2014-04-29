@@ -80,15 +80,21 @@ class Player extends FlxExtendedSprite
 		{
 			controlSet = Reg.KeyboardControlSet[number];
 			FlxG.log.add('Player $number using keyboard control set $controlSet');
-
-			// override if Single controller mode
-			if (Reg.SingleControllerMode)
-				controlSet = 0;
 		}
 		else
 		{
-			_gamepad = FlxG.gamepads.getByID(Number); // grab our gamepad
+			if (!Reg.SinglePlayerDebug)
+				_gamepad = FlxG.gamepads.getByID(Number); // grab our gamepad
+			else
+				_gamepad = FlxG.gamepads.getByID(0); // grab the 1st gamepad
 			FlxG.log.add('Player $number using gamepad ${_gamepad.id}');
+			// For the sufami controllers, ABXY is the same as PS4 placement
+			// but the dpad is AxisX(0) for left (-1) and right (1)
+			// and AxisX(1) for up (-1) and down (1) where 0 is no input
+			// Forgot to commit two things separately so added this so I could make a new commit
+			// Added support for the USB controllers I have
+			// which use AxisX(0) for dpad X
+			// and AxisX(1) for dpad Y
 		}
 
 		bubble = new Bubble(X, Y);
@@ -112,7 +118,6 @@ class Player extends FlxExtendedSprite
 
 	override public function update():Void
 	{
-		// Need to add global pause features later, but skip for now
 		if (ridingVehicle)
 		{
 			x = _vehicle.x + 12; // +20 good for 48x16
@@ -120,13 +125,16 @@ class Player extends FlxExtendedSprite
 			_crosshair.angle = _aim;
 			_crosshair.x = x + width / 2;
 			_crosshair.y = y + height / 2;
-			ridingControls();
 			if (attackTimer > 0)
 				attackTimer -= FlxG.elapsed;
+
+			if (PlayState.currentlySelectedPlayer == number)
+				ridingControls();
 		}
 		else
 		{
-			movingControls();
+			if (PlayState.currentlySelectedPlayer == number)
+				movingControls();
 		}
 
 		if (autoscrollMonkey)
@@ -300,9 +308,6 @@ class Player extends FlxExtendedSprite
 		// It's either going to trigger a jump or a dive bomb, depending upon whether or not down key is held
 		if (isJustPressing(Reg.JUMP))
 		{
-			// if not selected in multi mode exit
-			if (Reg.SingleControllerMode == true && selected == false) return;
-
 			// Starting dive bomb
 			// If not already diving and BOTH trying to start a jump and holding down, start the divebomb
 			// Immediately set vertical velocity
@@ -351,34 +356,51 @@ class Player extends FlxExtendedSprite
 
 	private function isPressing(Direction:Int):Bool
 	{
-		if (Reg.SingleControllerMode == true && selected == false)
-			return false;
-
 		if (Direction == FlxObject.UP)
 		{
 			if (Reg.KeyboardControlSet[number] == null)
-				return _gamepad.dpadUp;
+			{
+				if (_gamepad.getXAxis(1) == -1)
+					return true;
+				else
+					return _gamepad.dpadUp;
+			}
 			else
 				return (FlxG.keys.anyPressed([Reg.keyset[controlSet][0]]));
 		}
 		else if (Direction == FlxObject.DOWN)
 		{
 			if (Reg.KeyboardControlSet[number] == null)
-				return _gamepad.dpadDown;
+			{
+				if (_gamepad.getXAxis(1) == 1)
+					return true;
+				else
+					return _gamepad.dpadDown;
+			}
 			else
 				return (FlxG.keys.anyPressed([Reg.keyset[controlSet][1]]));
 		}
 		else if (Direction == FlxObject.LEFT)
 		{
 			if (Reg.KeyboardControlSet[number] == null)
-				return _gamepad.dpadLeft;
+			{
+				if (_gamepad.getXAxis(0) == -1)
+					return true;
+				else
+					return _gamepad.dpadLeft;
+			}
 			else
 				return (FlxG.keys.anyPressed([Reg.keyset[controlSet][2]]));
 		}
 		else if (Direction == FlxObject.RIGHT)
 		{
 			if (Reg.KeyboardControlSet[number] == null)
-				return _gamepad.dpadRight;
+			{
+				if (_gamepad.getXAxis(0) == 1)
+					return true;
+				else
+					return _gamepad.dpadRight;
+			}
 			else
 				return (FlxG.keys.anyPressed([Reg.keyset[controlSet][3]]));
 		}
@@ -418,9 +440,6 @@ class Player extends FlxExtendedSprite
 
 	private function isJustPressing(Direction:Int):Bool
 	{
-		if (Reg.SingleControllerMode == true && selected == false)
-			return false;
-
 		if (Direction == FlxObject.UP)
 		{
 			if (Reg.KeyboardControlSet[number] == null)

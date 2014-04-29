@@ -44,6 +44,7 @@ class PlayState extends FlxState
 	public var _bombs:FlxTypedGroup<Bomb>;
 	public var _boomerangs:FlxTypedGroup<Boomerang>;
 	public var _missiles:FlxTypedGroup<Missile>;
+	public static var currentlySelectedPlayer:Int;
 
 	private var _cloudsFar:FlxBackdrop;
 	private var _cloudsMid:FlxBackdrop;
@@ -76,6 +77,11 @@ class PlayState extends FlxState
 	public function new(NumPlayers:Int = 2, ?Round:Int = 0)
 	{
 		super();
+		
+		// Start as the selected player
+		if (Reg.SinglePlayerDebug) {
+			currentlySelectedPlayer = Round; 
+		}
 
 		_numPlayers = NumPlayers;
 		startRound(Round);
@@ -376,21 +382,18 @@ class PlayState extends FlxState
 		{
 			FlxG.switchState(new MenuState());
 		}
-		if (FlxG.keys.justPressed.SPACE)
+		if (Reg.SinglePlayerDebug && FlxG.keys.justPressed.SPACE)
 		{
-			_selectedPlayer += 1;
-			if (_selectedPlayer > _numPlayers - 1) _selectedPlayer = 0;
-
-			for (p in _players)
-			{
-				if (p.number == _selectedPlayer)
-					p.selected = true;
-				else
-					p.selected = false;
-			}
+			selectNextPlayer();
 		}
 		// Super
 		super.update();
+	}
+
+	public function selectNextPlayer():Void
+	{
+		currentlySelectedPlayer = currentlySelectedPlayer < _numPlayers - 1 ? currentlySelectedPlayer + 1 : 0;
+		FlxG.log.add('Player $currentlySelectedPlayer is currently selected');
 	}
 
 	public function bombBounce(B:Bomb, R:Building):Void
