@@ -3,53 +3,48 @@ package;
 import flixel.FlxG;
 import flixel.FlxObject;
 import flixel.FlxSprite;
-import flixel.util.FlxPoint;
-import flixel.util.FlxSpriteUtil;
-import flixel.util.FlxTimer;
 import flixel.util.FlxRandom;
-import flixel.effects.particles.FlxEmitterExt;
 import flixel.addons.display.FlxExtendedSprite;
 import flixel.group.FlxTypedGroup;
-import flixel.util.FlxRandom;
 
 class Player extends FlxExtendedSprite
 {
-	public var attacking:Bool = false;
-	public var attackTimer:Float = 0;
-	public var ATTACKDELAY:Float = 0.5;
-	public var autoscrollMonkey:Bool = false;
+	public var attacking = false;
+	public var attackTimer = 0.0;
+	public var ATTACKDELAY = 0.5;
+	public var autoscrollMonkey = false;
 	public var bubble:Bubble;
-	public var climbing:Bool = false;
-	public var controlSet:Int = 0;
-	public var deathTimer:Float = 0;
-	public var diving:Bool = false;
-	public var gravity:Float = 450;
-	public var invulnerable:Bool = false;
-	public var number:Int;
-	public var ridingVehicle:Bool = false;
-	public var selected:Bool = false;
+	public var climbing = false;
+	public var controlSet = 0;
+	public var deathTimer = 0.0;
+	public var diving = false;
+	public var gravity = 450.0;
+	public var invulnerable = false;
+	public var number = -1;
+	public var ridingVehicle = false;
+	public var selected = false;
 
 	private var _vehicle:FlxSprite;
-	private var jumpTimer:Float;
-	private var jumpStrength:Float = 100;
-	private var runAccel = 900;
-	private var diveBombMaxVelocityMult = 3; // Multiplier to max velocity
-	private var diveBombBoostX = 300; // Instant boost to velocity in X
-	private var diveBombSetVelY = 100; // Instant set to velocity in Y
-	private var jumped:Bool = false;
-	private var landed:Bool = false;
+	private var _jumpTimer = 0.0;
+	private var _jumpStrength = 100.0;
+	private var _runAccel = 900;
+	private var _diveBombMaxVelocityMult = 3; // Multiplier to max velocity
+	private var _diveBombBoostX = 300; // Instant boost to velocity in X
+	private var _diveBombSetVelY = 100; // Instant set to velocity in Y
+	private var _jumped = false;
+	private var _landed = false;
 	private var _bombs:FlxTypedGroup<Bomb>;
 	private var _boomerangs:FlxTypedGroup<Boomerang>;
 	private var _missiles:FlxTypedGroup<Missile>;
-	private var invTimer:Float = 0.8;
-	private var invDuration:Float = 0.8;
-	private var respawnTimer:Float = 0;
-	private var _aim:Float = 180;
+	private var _invTimer = 0.8;
+	private var _invDuration = 0.8;
+	private var _respawnTimer = 0.0;
+	private var _aim = 180.0;
 	private var _crosshair:Crosshair;
 	private var _jumpStrings = ["LightOoh", "TinyOoh1", "TinyOoh2", "TinyOoh3", "TinyOoh4", "TinyOoh5", "TinyOoh6", "TinyOoh7", "TinyOoh8", "TinyOoh9"];
 	private var _deathStrings = ["Megascreech1", "Megascreech2", "Megascreech3", "Squak"];
-	private var autoJumpTimer:Float = 0;
-	private var autoJumpDelay:Float = 0.1;
+	private var _autoJumpTimer = 0.0;
+	private var _autoJumpDelay = 0.1;
 
 	public function new(X:Int, Y:Int, Number:Int, Bombs:FlxTypedGroup<Bomb>, Boomerangs:FlxTypedGroup<Boomerang>, Missiles:FlxTypedGroup<Missile>)
 	{
@@ -82,45 +77,45 @@ class Player extends FlxExtendedSprite
 
 	override public function update():Void
 	{
-		if (ridingVehicle)
-		{
+		if (ridingVehicle) {
 			x = _vehicle.x + 12; // +20 good for 48x16
 			y = _vehicle.y; // and -16
 			_crosshair.angle = _aim;
 			_crosshair.x = x + width / 2;
 			_crosshair.y = y + height / 2;
-			if (attackTimer > 0)
+			
+			if (attackTimer > 0) {
 				attackTimer -= FlxG.elapsed;
+			}
 
-			if (selected)
+			if (selected) {
 				ridingControls();
-			else if (autoscrollMonkey)
+			} else if (autoscrollMonkey) {
 				cpuMonkeyDefend();
-		}
-		else
-		{
-			if (selected)
+			}
+		} else {
+			if (selected) {
 				movingControls();
-			else if (autoscrollMonkey)
+			} else if (autoscrollMonkey) {
 				cpuMonkeyAssault();
+			}
 		}
 
 		animate();
 
 		// Respawn stuff
-		if (respawnTimer > 0) // when it was >= 0 there were bugs
-		{
-			respawnTimer -= FlxG.elapsed;
+		// when it was >= 0 there were bugs
+		if (_respawnTimer > 0) {
+			_respawnTimer -= FlxG.elapsed;
 			velocity.y = 0;
 			bubble.x = x - 10;
 			bubble.y = y - 12;
 
-			if (Input.isPressing(Input.JUMP, number) || x > FlxG.camera.scroll.x + 100 || respawnTimer <= 0)
-			{
-				jumped = true;
-				landed = false;
-				jumpTimer = -1;
-				respawnTimer = -1;
+			if (Input.isPressing(Input.JUMP, number) || x > FlxG.camera.scroll.x + 100 || _respawnTimer <= 0) {
+				_jumped = true;
+				_landed = false;
+				_jumpTimer = -1;
+				_respawnTimer = -1;
 				bubble.die();
 			}
 		}
@@ -131,39 +126,36 @@ class Player extends FlxExtendedSprite
 	public function cpuMonkeyAssault():Void
 	{
 		acceleration.x = 0;
-		acceleration.x += (runAccel * 0.75);
+		acceleration.x += (_runAccel * 0.75);
 		facing = FlxObject.RIGHT;
 		flipX = false;
 
-		if (isTouching(FlxObject.WALL))
-			{
-				jumpStrength = 200;
-				if (autoJumpTimer < 0)
-				{
-					jump();
-					velocity.x -= 100;
-					velocity.y -= 20;
-					autoJumpTimer = autoJumpDelay;
-				}
-			}
-		autoJumpTimer -= FlxG.elapsed;
-		if (autoJumpTimer < 0 && isTouching(FlxObject.FLOOR))
-		{
-			var j = FlxRandom.intRanged(0,9);
-			if (j == 9)
-			{
+		if (isTouching(FlxObject.WALL)) {
+			_jumpStrength = 200;
+			if (_autoJumpTimer < 0) {
 				jump();
-				autoJumpTimer = autoJumpDelay;
+				velocity.x -= 100;
+				velocity.y -= 20;
+				_autoJumpTimer = _autoJumpDelay;
 			}
 		}
-		if (y > FlxG.height)
-		{
+
+		_autoJumpTimer -= FlxG.elapsed;
+
+		if (_autoJumpTimer < 0 && isTouching(FlxObject.FLOOR)) {
+			if (FlxRandom.intRanged(0,9) == 9) {
+				jump();
+				_autoJumpTimer = _autoJumpDelay;
+			}
+		}
+
+		if (y > FlxG.height) {
 			y = -50;
 			x -= 50;
 			FlxG.sound.play("LightOoh");
 		}
-		if (x > FlxG.camera.scroll.x + FlxG.width || x < FlxG.camera.scroll.x)
-		{
+
+		if (x > FlxG.camera.scroll.x + FlxG.width || x < FlxG.camera.scroll.x) {
 			y = -50;
 			x = FlxG.camera.scroll.x + 50;
 		}
@@ -177,12 +169,13 @@ class Player extends FlxExtendedSprite
 			
 			var r = FlxRandom.intRanged(0,2);
 
-			if (r == 0)
+			if (r == 0) {
 				_bombs.recycle(Bomb,[],true,false).shoot(this, _aim);
-			else if (r == 1)
+			} else if (r == 1) {
 				_boomerangs.recycle(Boomerang,[],true,false).shoot(this, _aim);
-			else
+			} else {
 				_missiles.recycle(Missile,[],true,false).shoot(this, _aim);
+			}
 
 			attackTimer = ATTACKDELAY;
 		}
@@ -190,60 +183,45 @@ class Player extends FlxExtendedSprite
 
 	public function ridingControls():Void
 	{
-		var controlNumber = Reg.SinglePlayerMode ? 0 : number;
+		var controlNumber = (Reg.SinglePlayerMode) ? 0 : number;
 		if (Reg.SinglePlayerMode && !selected) {
 			return;
 		}
 
 		_vehicle.acceleration.y = 0;
 
-		if (Input.isPressing(Input.UP, controlNumber) && (_vehicle.y + _vehicle.height/2 > FlxG.height/2))
-		{
-			_vehicle.acceleration.y -= runAccel * .25;
-		}
-		else if (Input.isPressing(Input.DOWN, controlNumber) && (_vehicle.y + _vehicle.height < FlxG.height))
-		{
-			_vehicle.acceleration.y += runAccel * .25;
+		if (Input.isPressing(Input.UP, controlNumber) && (_vehicle.y + _vehicle.height/2 > FlxG.height/2)) {
+			_vehicle.acceleration.y -= _runAccel * .25;
+		} else if (Input.isPressing(Input.DOWN, controlNumber) && (_vehicle.y + _vehicle.height < FlxG.height)) {
+			_vehicle.acceleration.y += _runAccel * .25;
 		}
 
-		if (Input.isPressing(Input.LEFT, controlNumber))
-		{
+		if (Input.isPressing(Input.LEFT, controlNumber)) {
 			_aim -= 4;
-		}
-		else if (Input.isPressing(Input.RIGHT, controlNumber))
-		{
+		} else if (Input.isPressing(Input.RIGHT, controlNumber)) {
 			_aim += 4;
 		}
 
-		if (_vehicle.y + _vehicle.height/2 < FlxG.height/2)
-		{
+		if (_vehicle.y + _vehicle.height/2 < FlxG.height/2) {
 			_vehicle.velocity.y = 0;
 			_vehicle.acceleration.y = 0;
 			_vehicle.y = FlxG.height/2 - _vehicle.height/2;
-		}
-		else if (_vehicle.y + _vehicle.height > FlxG.height)
-		{
+		} else if (_vehicle.y + _vehicle.height > FlxG.height) {
 			_vehicle.velocity.y = 0;
 			_vehicle.acceleration.y = 0;
 			_vehicle.y = FlxG.height - _vehicle.height;
 		}
 
-		if (attackTimer <= 0)
-		{
-			if (Input.isPressing(Input.ACTION1, controlNumber))
-			{
+		if (attackTimer <= 0) {
+			if (Input.isPressing(Input.ACTION1, controlNumber)) {
 				FlxG.log.add("Shot a bomb!");
 				_bombs.recycle(Bomb,[],true,false).shoot(this, _aim);
 				attackTimer = ATTACKDELAY;
-			}
-			else if (Input.isPressing(Input.ACTION2, controlNumber))
-			{
+			} else if (Input.isPressing(Input.ACTION2, controlNumber)) {
 				FlxG.log.add("Shot a boomerang!");
 				_boomerangs.recycle(Boomerang,[],true,false).shoot(this, _aim);
 				attackTimer = ATTACKDELAY;
-			}
-			else if (Input.isPressing(Input.ACTION3, controlNumber))
-			{
+			} else if (Input.isPressing(Input.ACTION3, controlNumber)) {
 				FlxG.log.add("Shot a missile!");
 				_missiles.recycle(Missile,[],true,false).shoot(this, _aim);
 				attackTimer = ATTACKDELAY;
@@ -253,7 +231,7 @@ class Player extends FlxExtendedSprite
 
 	public function movingControls():Void
 	{
-		var controlNumber = Reg.SinglePlayerMode ? 0 : number;
+		var controlNumber = (Reg.SinglePlayerMode) ? 0 : number;
 		if (Reg.SinglePlayerMode && !selected) {
 			return;
 		}
@@ -261,93 +239,74 @@ class Player extends FlxExtendedSprite
 		acceleration.x = 0;
 
 		// Move Left
-		if (Input.isPressing(Input.LEFT, controlNumber))
-		{
+		if (Input.isPressing(Input.LEFT, controlNumber)) {
 			flipX = true;
 			facing = Input.LEFT;
-			acceleration.x -= runAccel;
+			acceleration.x -= _runAccel;
 		}
 		
 		// Move Right
-		if (Input.isPressing(Input.RIGHT, controlNumber))
-		{
+		if (Input.isPressing(Input.RIGHT, controlNumber)) {
 			flipX = false;
 			facing = Input.RIGHT;
-			acceleration.x += runAccel;
+			acceleration.x += _runAccel;
 		}
 		
 		// Jump Reset
-		if (isTouching(FlxObject.FLOOR))
-		{
-			if (landed == false)
-			{
-				playLandingSound();
-				landed = true;
+		if (isTouching(FlxObject.FLOOR)) {
+			if (_landed == false) {
+				FlxG.sound.play("Landing", 0);
+				_landed = true;
 			}
 			
-			jumped = false; // reset jump press
-			jumpTimer = 0;
-		}
-		else if (isTouching(FlxObject.WALL))
-		{
+			_jumped = false; // reset jump press
+			_jumpTimer = 0;
+		} else if (isTouching(FlxObject.WALL)) {
 			// WALL JUMP
 			climbing = true;
 			velocity.y = 30;
-			landed = true;
-			jumpTimer = 0;
-		}
-		else if (!isTouching(FlxObject.FLOOR) && !isTouching(FlxObject.WALL))
-		{
-			landed = false;
+			_landed = true;
+			_jumpTimer = 0;
+		} else if (!isTouching(FlxObject.FLOOR) && !isTouching(FlxObject.WALL)) {
+			_landed = false;
 		}
 		
 		// Just hit jump
 		// It's either going to trigger a jump or a dive bomb, depending upon whether or not down key is held
-		if (Input.isJustPressing(Input.JUMP, controlNumber))
-		{
+		if (Input.isJustPressing(Input.JUMP, controlNumber)) {
 			// Starting dive bomb
 			// If not already diving and BOTH trying to start a jump and holding down, start the divebomb
 			// Immediately set vertical velocity
-			if (!diving && Input.isPressing(Input.DOWN, controlNumber))
-			{
+			if (!diving && Input.isPressing(Input.DOWN, controlNumber)) {
 				FlxG.sound.play("Divebomb", 0.25);
 				diving = true;
-				velocity.x += diveBombBoostX;
-				velocity.y = diveBombSetVelY;
-				maxVelocity.x *= diveBombMaxVelocityMult;
-				maxVelocity.y *= diveBombMaxVelocityMult;
-			}
-			// Starting a normal jump
-			else
-			{
-				jumped = true;
+				velocity.x += _diveBombBoostX;
+				velocity.y = _diveBombSetVelY;
+				maxVelocity.x *= _diveBombMaxVelocityMult;
+				maxVelocity.y *= _diveBombMaxVelocityMult;
+			} else {
+				// Starting a normal jump
+				_jumped = true;
 			}
 		}
 		
 		// Variable Jump Control
-		trace('$jumpTimer');
-		if ((jumpTimer >= 0) && Input.isPressing(Input.JUMP, controlNumber) && jumped)
-		{
-			jumpTimer += FlxG.elapsed;
+		if ((_jumpTimer >= 0) && Input.isPressing(Input.JUMP, controlNumber) && _jumped) {
+			_jumpTimer += FlxG.elapsed;
 			
-			if (isTouching(FlxObject.CEILING))
-			{
-				jumpTimer += FlxG.elapsed; // double penalty. only half max jump if you hit your head.
+			if (isTouching(FlxObject.CEILING)) {
+				_jumpTimer += FlxG.elapsed; // double penalty. only half max jump if you hit your head.
 				// this was done so you can still recover from a head bonk and push blocks, but your jumping ability is greatly diminished.
 			}
 			
-			if (jumpTimer > .26)
-			{
-				jumpTimer = -1; // -1 means jump isn't allowed
+			if (_jumpTimer > .26) {
+				_jumpTimer = -1; // -1 means jump isn't allowed
 			}
-		}
-		else
-		{
-			jumpTimer = -1;
+		} else {
+			_jumpTimer = -1;
 		}
 		
-		if (jumpTimer > 0)
-		{
+		if (_jumpTimer > 0) {
 			jump();
 		}
 	}
@@ -355,74 +314,43 @@ class Player extends FlxExtendedSprite
 	public function jump():Void
 	{
 		// Jump sound
-		if (jumpTimer < 0.02)
+		if (_jumpTimer < 0.02)
 		{
-			landed = false;
+			_landed = false;
 			FlxG.sound.play(_jumpStrings[FlxRandom.intRanged(0, _jumpStrings.length-1)]);
 
 			// WALL JUMP KICKBACK
-			if (climbing && !isTouching(FlxObject.FLOOR))
-			{
-				if (facing == FlxObject.LEFT)
-					velocity.x = 100;
-				else
-					velocity.x = -100;
+			if (climbing && !isTouching(FlxObject.FLOOR)) {
+				velocity.x = (facing == FlxObject.LEFT) ? 100 : -100;
 			}
 		}
 		
 		//Jump
-		if (jumpTimer < 0.075)
-		{
-			velocity.y = -jumpStrength * 0.7;
-		}
-		else if (jumpTimer < 0.15)
-		{
-			velocity.y = -jumpStrength * 1;
-		}
-		else if (jumpTimer < 0.24)
-		{
-			velocity.y = -jumpStrength * 1.1;
-		}
-		else
-		{
-			velocity.y = -jumpStrength * 1;
+		if (_jumpTimer < 0.075) {
+			velocity.y = -_jumpStrength * 0.7;
+		} else if (_jumpTimer < 0.15) {
+			velocity.y = -_jumpStrength * 1;
+		} else if (_jumpTimer < 0.24) {
+			velocity.y = -_jumpStrength * 1.1;
+		} else {
+			velocity.y = -_jumpStrength * 1;
 		}
 	}
 
 	public function animate():Void
 	{
-		if (!ridingVehicle)
-		{
-			if (velocity.y > 0)
-			{
+		if (!ridingVehicle)	{
+			if (velocity.y > 0)	{
 				animation.play("fall");
-				
 			}
-			else if (velocity.y < 0)
-			{
+			else if (velocity.y < 0) {
 				animation.play("jump");
+			} else {
+				animation.play(velocity.x != 0 ? "walk" : "idle");
 			}
-			else
-			{
-				if (velocity.x != 0)
-				{
-					animation.play("walk");
-				}
-				else
-				{
-					animation.play("idle");
-				}
-			}
-		}
-		else // riding
-		{
+		} else {
 			animation.play("idle");
 		}
-	}
-
-	public function playLandingSound():Void
-	{
-		FlxG.sound.play("Landing", 0);
 	}
 
 	override public function reset(X:Float, Y:Float):Void
@@ -433,24 +361,23 @@ class Player extends FlxExtendedSprite
 		diving = false;
 		drag.x = gravity; // Ground friction
 		health = 1;
-		jumped = false;
-		jumpStrength = 136;
 		maxVelocity.x = Reg.RACERSPEED * 2.25;
 		maxVelocity.y = 2 * gravity; 
 		solid = true;
+		_jumped = false;
+		_jumpStrength = 136;
 	}
 
 	public function respawn(X:Float, Y:Float):Void
 	{
 		reset(X, Y);
-		respawnTimer = 2;
+
 		bubble.reset(x - 10, y - 12);
+		_respawnTimer = 2;
 	}
 
 	public function mount(Vehicle:FlxSprite, Aimer:Crosshair):Void
 	{
-		_crosshair = Aimer;
-		_vehicle = Vehicle;
 		ridingVehicle = true;
 		acceleration.y = 0;
 		velocity.x = 0;
@@ -458,17 +385,20 @@ class Player extends FlxExtendedSprite
 		facing = FlxObject.LEFT;
 		flipX = true;
 		solid = false;
+		_crosshair = Aimer;
+		_vehicle = Vehicle;
 	}
 
 	public function dismount():Void
 	{
 		ridingVehicle = false;
-		_vehicle = null;
-		_crosshair = null;
 		acceleration.y = gravity;
 		solid = true;
 		x = 0;
 		y = 0;
+		_vehicle = null;
+		_crosshair = null;
+
 		kill();
 	}
 
