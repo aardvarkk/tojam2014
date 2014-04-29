@@ -13,9 +13,8 @@
 	<!--------------------------------WINDOW SETTINGS------------------------------->
 	
 	<!--These window settings apply to all targets-->
-	<window width="1920" height="1080" fps="60" background="#111112" hardware="true" vsync="true" />
-	<!--<window width="480" height="270" fps="60" background="#111112" hardware="true" vsync="true" />-->
-	<!--<window width="1920" height="1080" fps="60" background="#111112" hardware="true" vsync="true" />-->
+	<!-- <window width="1920" height="1080" fps="60" background="#111112" hardware="true" vsync="true" /> -->
+	<window width="480" height="270" fps="60" background="#111112" hardware="true" vsync="true" />
 	
 	<!--Web-specific-->
 	<window if="web"		orientation="portrait"  />
@@ -48,8 +47,8 @@
 		<music path="monkey_jump2.wav" id="Jump2" />
 		<music path="monkey_jump3.wav" id="Jump3" />
 		<music path="monkey_jump4.wav" id="Jump4" />
-		<music path="monkey_bananabomb.wav" id="Bananabomb" />
-		<music path="explosion.wav" id="Explosion" />
+		<music path="monkey_bananabomb.wav" id="BananaBlast" />
+		<music path="explosion.wav" id="BombBlast" />
 		<music path="monkey_megascreech1.wav" id="Megascreech1" />
 		<music path="monkey_megascreech2.wav" id="Megascreech2" />
 		<music path="monkey_megascreech3.wav" id="Megascreech3" />
