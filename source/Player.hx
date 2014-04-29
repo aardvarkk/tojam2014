@@ -140,6 +140,18 @@ class Player extends FlxExtendedSprite
 				y = -50;
 				x = FlxG.camera.scroll.x + 50;
 			}
+
+			if (_selected)
+				ridingControls();
+			else if (autoscrollMonkey)
+				cpuMonkeyDefend();
+		}
+		else
+		{
+			if (_selected)
+				movingControls();
+			else if (autoscrollMonkey)
+				cpuMonkeyAssault();
 		}
 
 
@@ -164,6 +176,66 @@ class Player extends FlxExtendedSprite
 		}
 
 		super.update();
+	}
+
+	public function cpuMonkeyAssault():Void
+	{
+		acceleration.x = 0;
+		acceleration.x += (runAccel * 0.75);
+		facing = FlxObject.RIGHT;
+		flipX = false;
+
+		if (isTouching(FlxObject.WALL))
+			{
+				jumpStrength = 200;
+				if (autoJumpTimer < 0)
+				{
+					jump();
+					velocity.x -= 100;
+					velocity.y -= 20;
+					autoJumpTimer = autoJumpDelay;
+				}
+			}
+		autoJumpTimer -= FlxG.elapsed;
+		if (autoJumpTimer < 0 && isTouching(FlxObject.FLOOR))
+		{
+			var j = FlxRandom.intRanged(0,9);
+			if (j == 9)
+			{
+				jump();
+				autoJumpTimer = autoJumpDelay;
+			}
+		}
+		if (y > FlxG.height)
+		{
+			y = -50;
+			x -= 50;
+			FlxG.sound.play("LightOoh");
+		}
+		if (x > FlxG.camera.scroll.x + FlxG.width || x < FlxG.camera.scroll.x)
+		{
+			y = -50;
+			x = FlxG.camera.scroll.x + 50;
+		}
+	}
+
+	public function cpuMonkeyDefend():Void
+	{
+		if (attackTimer <= 0)
+		{
+			_aim = FlxRandom.intRanged(150,220);
+			
+			var r = FlxRandom.intRanged(0,2);
+
+			if (r == 0)
+				_bombs.recycle(Bomb,[],true,false).shoot(this, _aim);
+			else if (r == 1)
+				_boomerangs.recycle(Boomerang,[],true,false).shoot(this, _aim);
+			else
+				_missiles.recycle(Missile,[],true,false).shoot(this, _aim);
+
+			attackTimer = ATTACKDELAY;
+		}
 	}
 
 	public function ridingControls():Void

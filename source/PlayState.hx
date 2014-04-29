@@ -381,7 +381,27 @@ class PlayState extends FlxState
 		}
 		if (Reg.SinglePlayerMode && FlxG.keys.justPressed.SPACE)
 		{
-			selectNextPlayer();
+			if (FlxG.keys.justPressed.SPACE)
+			{
+				selectNextPlayer();
+			}
+			if (FlxG.keys.justPressed.O)
+			{
+				for (p in _players)
+				{
+					if (p.number != currentlySelectedPlayer)
+					{
+						p.autoscrollMonkey = true;
+					}
+				}
+			}
+			if (FlxG.keys.justPressed.P)
+			{
+				for (p in _players)
+				{
+					p.autoscrollMonkey = false;
+				}
+			}
 		}
 	}
 
