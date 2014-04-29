@@ -9,8 +9,6 @@ import flixel.text.FlxText;
 import flixel.ui.FlxButton;
 import flixel.util.FlxMath;
 import flixel.util.FlxPoint;
-import flixel.addons.display.FlxBackdrop;
-import flixel.effects.particles.FlxEmitter;
 import openfl.Assets;
 import flixel.FlxObject;
 import flixel.input.gamepad.PS4ButtonID;
@@ -24,7 +22,7 @@ class MenuState extends FlxState
 	private var _backdropsMid:Backdrops;
 	private var _backdropsNear:Backdrops;
 	private var _buildings:RandomBuildings;
-	private var _weatherEmitter:FlxEmitter;
+	private var _leafEmitter:LeafEmitter = new LeafEmitter();
 	private var _p:Player;
 	private var _p2:Player;
 	private var _p3:Player;
@@ -85,15 +83,8 @@ class MenuState extends FlxState
 
 		_backdropsMid = new Backdrops(this, Reg.BACKDROPSMID);
 
-		_weatherEmitter = new FlxEmitter(-240,0,200);
-		_weatherEmitter.setSize(720,FlxG.height);
-		_weatherEmitter.makeParticles(Reg.PARTICLE,200,0,true,0);
-		_weatherEmitter.setXSpeed(-80,-10); // 10-100 looks good - try it in ruins?
-		_weatherEmitter.setYSpeed(-150,-50);
-		_weatherEmitter.setAlpha(0,1,0,1);
-		_weatherEmitter.setRotation(-100,100);
-		_weatherEmitter.start(false,10,0.007125);
-		add(_weatherEmitter);
+		_leafEmitter.init();
+		add(_leafEmitter);
 		
 		_backdropsNear = new Backdrops(this, Reg.BACKDROPSNEAR);
 
@@ -174,8 +165,6 @@ class MenuState extends FlxState
 		}
 
 		FlxG.camera.scroll.x += 3;
-
-		_weatherEmitter.x = FlxG.camera.scroll.x;
 
 		_curDpadLefts  = isDpadPressed(Input.LEFT);
 		_curDpadRights = isDpadPressed(Input.RIGHT);
