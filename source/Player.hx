@@ -143,14 +143,15 @@ class Player extends FlxExtendedSprite
 			acceleration.x += (runAccel * 0.75);
 			facing = FlxObject.RIGHT;
 			flipX = false;
+
 			if (isTouching(FlxObject.WALL))
 				{
-					jumpStrength = 300;
+					jumpStrength = 200;
 					if (autoJumpTimer < 0)
 					{
 						jump();
-						//velocity.x -= 50;
-						//velocity.y -= 20;
+						velocity.x -= 100;
+						velocity.y -= 20;
 						autoJumpTimer = autoJumpDelay;
 					}
 				}
