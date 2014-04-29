@@ -79,23 +79,7 @@ class ShowWinnerState extends FlxState
         add(title);
 
         _winnerGraphic = new FlxSprite();
-        if (winner == 0)
-        {
-        	_winnerGraphic.loadGraphic(Reg.MONKEY1, true, 16, 16);
-        }
-        else if (winner == 1)
-        {
-        	_winnerGraphic.loadGraphic(Reg.MONKEY2, true, 16, 16);
-        }
-        else if (winner == 2)
-        {
-        	_winnerGraphic.loadGraphic(Reg.MONKEY3, true, 16, 16);
-        }
-        else
-        {
-        	_winnerGraphic.loadGraphic(Reg.MONKEY4, true, 16, 16);
-        }
-
+        _winnerGraphic.loadGraphic(Reg.MONKEYS[winner], true, 16, 16);
         _winnerGraphic.x = FlxG.width/2 - _winnerGraphic.width/2;
         _winnerGraphic.y = FlxG.height/2 - _winnerGraphic.height/2 + 30;
    		_winnerGraphic.animation.add("idle", [0, 1, 2, 3], 6, true);

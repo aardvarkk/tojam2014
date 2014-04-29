@@ -10,6 +10,8 @@ import flixel.group.FlxTypedGroup;
  */
 class Reg
 {
+	static public inline var MAX_PLAYERS = 4;
+
 	/**
 	 * Generic levels Array that can be used for cross-state stuff.
 	 * Example usage: Storing the levels of a platformer.
@@ -112,10 +114,12 @@ class Reg
 	 /**
 	 * Game sprites
 	 */
-	 public static inline var MONKEY1:String = "images/monkey.png";
-	 public static inline var MONKEY2:String = "images/monkey2.png";
-	 public static inline var MONKEY3:String = "images/monkey3.png";
-	 public static inline var MONKEY4:String = "images/monkey4.png";
+	 public static var MONKEYS:Array<String> = [
+	 	"images/monkey.png",
+		"images/monkey2.png",
+		"images/monkey3.png",
+		"images/monkey4.png"
+	 ];
 
 	 public static inline var BUBBLE:String = "images/bubble.png";
 

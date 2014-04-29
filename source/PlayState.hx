@@ -38,8 +38,13 @@ import flixel.util.FlxRandom;
  */
 class PlayState extends FlxState
 {
-	// Variables live here
-	//private var _background:FlxBackdrop;
+	public var explosions:FlxTypedGroup<Explosion>;
+	public var bananapops:FlxTypedGroup<Bananapop>;
+	public var stinkbombs:FlxTypedGroup<Stinkbomb>;
+	public var _bombs:FlxTypedGroup<Bomb>;
+	public var _boomerangs:FlxTypedGroup<Boomerang>;
+	public var _missiles:FlxTypedGroup<Missile>;
+
 	private var _cloudsFar:FlxBackdrop;
 	private var _cloudsMid:FlxBackdrop;
 	private var _cloudsNear:FlxBackdrop;
@@ -52,19 +57,9 @@ class PlayState extends FlxState
 	private var _mist2:FlxBackdrop;
 	private var _weatherEmitter:FlxEmitter;
 	private var _infoText:FlxText;
-	private var _players:FlxTypedGroup<Player>;
+	private var _players:FlxTypedGroup<Player> = new FlxTypedGroup<Player>();
 	private var _bubbles:FlxTypedGroup<Bubble>;
 	private var _beams:FlxTypedGroup<Beam>;
-	public var explosions:FlxTypedGroup<Explosion>;
-	public var bananapops:FlxTypedGroup<Bananapop>;
-	public var stinkbombs:FlxTypedGroup<Stinkbomb>;
-	public var _bombs:FlxTypedGroup<Bomb>;
-	public var _boomerangs:FlxTypedGroup<Boomerang>;
-	public var _missiles:FlxTypedGroup<Missile>;
-	private var _p1:Player;
-	private var _p2:Player;
-	private var _p3:Player;
-	private var _p4:Player;
 	private var _buildings:RandomBuildings;
 	private var _racer:Racer;
 	private var _camera:FlxCamera;
@@ -72,19 +67,17 @@ class PlayState extends FlxState
 	private var _round:Int;
 	private var _selectedPlayer:Int = 0;
 	private var _rider:Player;
-	//private var _bombs:FlxTypedGroup<Bomb>;
 	private var _roundOver:Bool = false;
 	private var _cartScoreTimer:FlxTimer;
 	private var _respawnPlayerTimer:FlxTimer;
 	private var _crosshair:Crosshair;
-
-	private var _monkeyScoreSprites:Array<FlxSprite> = new Array<FlxSprite>();
+	private var _scoreSprites:Array<FlxSprite> = new Array<FlxSprite>();
 
 	public function new(NumPlayers:Int = 2, ?Round:Int = 0)
 	{
 		super();
-		_numPlayers = NumPlayers;
 
+		_numPlayers = NumPlayers;
 		startRound(Round);
 	}
 
@@ -120,6 +113,8 @@ class PlayState extends FlxState
 	 */
 	override public function create():Void
 	{
+		super.create();
+
 		#if debug
 		FlxG.game.debugger.stats.visible = true;
 		#end
@@ -130,11 +125,6 @@ class PlayState extends FlxState
 		FlxG.camera.setBounds(0,0, Reg.LEVELLENGTH, FlxG.height);
 
 		FlxG.cameras.bgColor = 0xff4a9294;
-
-		if (FlxG.sound.music != null)
-		{
-			//FlxG.sound.music.stop();
-		}
 
 		// WHERE I LEFT OFF - For autoscrolling backgrounds, for now, the best solution
 		// is probably to just make an animated thing manually
@@ -176,40 +166,6 @@ class PlayState extends FlxState
 		_bombs = new FlxTypedGroup();
 		_missiles = new FlxTypedGroup();
 		_boomerangs = new FlxTypedGroup();
-		_players = new FlxTypedGroup();
-
-		_p1 = new Player(150,100,0, _bombs, _boomerangs, _missiles);
-
-		var scoreP1 = new FlxSprite();
-		scoreP1.loadGraphic(Reg.MONKEY1, true, 16, 16);
-		scoreP1.scrollFactor.x = 0;
-		_monkeyScoreSprites.push(scoreP1);
-
-		_p2 = new Player(150,100,1, _bombs, _boomerangs, _missiles);
-		var scoreP2 = new FlxSprite();
-		scoreP2.loadGraphic(Reg.MONKEY2, true, 16, 16);
-		scoreP2.scrollFactor.x = 0;
-		_monkeyScoreSprites.push(scoreP2);
-		
-		if (_numPlayers >= 3)
-		{
-			_p3 = new Player(150,100,2, _bombs, _boomerangs, _missiles);
-			var scoreP3 = new FlxSprite();
-			scoreP3.loadGraphic(Reg.MONKEY3, true, 16, 16);
-			scoreP3.scrollFactor.x = 0;
-			scoreP3.visible = false;
-			_monkeyScoreSprites.push(scoreP3);
-		}
-
-		if (_numPlayers == 4)
-		{
-			_p4 = new Player(150,100,3, _bombs, _boomerangs, _missiles);
-			var scoreP4 = new FlxSprite();
-			scoreP4.loadGraphic(Reg.MONKEY4, true, 16, 16);
-			scoreP4.scrollFactor.x = 0;
-			scoreP4.visible = false;
-			_monkeyScoreSprites.push(scoreP4);
-		}
 
 		_bubbles = new FlxTypedGroup();
 		_beams = new FlxTypedGroup();
@@ -254,42 +210,24 @@ class PlayState extends FlxState
 			);
 		add(_buildings);
 
-		// Add players in reverse order!
-		if (_numPlayers == 4)
-		{
-			_players.add(_p4);
-			_bubbles.add(_p4.bubble);
-			_beams.add(_p4.beam);
-		}
-		if (_numPlayers >= 3)
-		{
-			_players.add(_p3);
-			_bubbles.add(_p3.bubble);
-			_beams.add(_p3.beam);
-		}
-		if (_numPlayers >= 2)
-		{
-			_players.add(_p2);
-			_bubbles.add(_p2.bubble);
-			_beams.add(_p2.beam);
-		}
-		_players.add(_p1);
-		_bubbles.add(_p1.bubble);
-		_beams.add(_p1.beam);
+		add(_racer);
 
-		// mount the player whose turn it is?
-		for (p in _players)
-		{
-			if (p.number == _round)
-			{
-				p.mount(_racer, _crosshair);
-				_rider = p;
+		// Add players in reverse order so 0th shows on top
+		// And mount the player whose turn it is
+		var p = _numPlayers;
+		while (--p >= 0) {
+			var player = new Player(150, 100, p, _bombs, _boomerangs, _missiles);
+			_players.add(player);
+			_bubbles.add(player.bubble);
+			_beams.add(player.beam);
+
+			if (p == _round) {
+				player.mount(_racer, _crosshair);
+				_rider = player;
 			}
 		}
-
-		add(_racer);
-		
 		add(_players);
+		
 		add(_bubbles);
 		add(_beams);
 		add(_bombs);
@@ -309,58 +247,38 @@ class PlayState extends FlxState
 		add(_foreground);
 		add(_foreground2);
 
-		for (ms in _monkeyScoreSprites) 
-		{
-			add(ms);
-		}
-
+		// Info text and score sprites
 		add(_infoText);
 		_infoText.scrollFactor.x = 0;
 		_infoText.scrollFactor.y = 0;
 		_infoText.color = 0xffffffff;
 
-		// The last stuff
-		//FlxG.sound.play("");
+		for (i in 0..._numPlayers) {
+			_scoreSprites.push(new FlxSprite());
+			_scoreSprites[i].loadGraphic(Reg.MONKEYS[i], true, 16, 16);
+			_scoreSprites[i].scrollFactor.x = 0;
+			_scoreSprites[i].visible = false;
+			add(_scoreSprites[i]);
+		}
+
 		FlxG.camera.flash(0xffffffff,0.25);
-
 		FlxG.camera.setBounds(0,0, Reg.LEVELLENGTH, FlxG.height);
-
-		// Watchlist
-		// FlxG.watch.add(this, "_numPlayers", "Players");
-		// FlxG.watch.add(this, "_round", "Round");
-		// FlxG.watch.add(_p1, "ridingVehicle", "P1 Riding");
-		// FlxG.watch.add(_p2, "ridingVehicle", "P2 Riding");
-		// FlxG.watch.add(_p3, "ridingVehicle", "P3 Riding");
-		// FlxG.watch.add(_p4, "ridingVehicle", "P4 Riding");
 
 		// Keep track of scores for players
 		_cartScoreTimer = new FlxTimer(1, accumulateCartScore, 0);
 
         FlxG.sound.play("Ambient Jungle", 0.4, true);
-
-
-		// Super
-		super.create();
 	}
 	
-	/**
-	 * Function that is called when this state is destroyed - you might want to 
-	 * consider setting all objects this state uses to null to help garbage collection.
-	 */
-	override public function destroy():Void
-	{
-		super.destroy();
-	}
-
 	public function drawScores(X:Int, Y:Int)
 	{
 		var lineAdd = 11;
 		for (i in 0..._numPlayers)
 		{
 			// trace('$i to $X ${Y + (i * lineAdd)}');
-			_monkeyScoreSprites[i].x = X;
-			_monkeyScoreSprites[i].y = Y + (i * lineAdd);
-			_monkeyScoreSprites[i].visible = true;
+			_scoreSprites[i].x = X;
+			_scoreSprites[i].y = Y + (i * lineAdd);
+			_scoreSprites[i].visible = true;
 		}
 	}
 

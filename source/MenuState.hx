@@ -156,21 +156,18 @@ class MenuState extends FlxState
         var textSpread = 40;
 
         _threePlayers = new FlxText(0, FlxG.height/2 + 10, FlxG.width, "3");
-        _threePlayers.color = _numPlayers == 3 ? 0xffffffff : 0xff111112;
         _threePlayers.size = 32;
         _threePlayers.alignment = "center";
         _threePlayers.scrollFactor.x = 0;
         add(_threePlayers);
 
         _twoPlayers = new FlxText(-textSpread, FlxG.height/2 + 10, FlxG.width, "2");
-        _twoPlayers.color = _numPlayers == 2 ? 0xffffffff : 0xff111112;
         _twoPlayers.size = 32;
         _twoPlayers.scrollFactor.x = 0;
         _twoPlayers.alignment = "center";
         add(_twoPlayers);
 
         _fourPlayers = new FlxText(textSpread, FlxG.height/2 + 10, FlxG.width, "4");
-        _fourPlayers.color = _numPlayers == 4 ? 0xffffffff : 0xff111112;
         _fourPlayers.size = 32;
         _fourPlayers.scrollFactor.x = 0;
         _fourPlayers.alignment = "center";
@@ -244,11 +241,11 @@ class MenuState extends FlxState
 
 		if (isJustPressing(FlxObject.LEFT) || dpadLeftJustPressed) 
 		{
-			_numPlayers = _numPlayers > 2 ? _numPlayers - 1 : 4;
+			_numPlayers = _numPlayers > 2 ? _numPlayers - 1 : Reg.MAX_PLAYERS;
 		}
 		else if (isJustPressing(FlxObject.RIGHT) || dpadRightJustPressed) 
 		{
-			_numPlayers = _numPlayers < 4 ? _numPlayers + 1 : 2;
+			_numPlayers = _numPlayers < MAX_PLAYERS ? _numPlayers + 1 : 2;
 		}
 
         _twoPlayers.color   = _numPlayers == 2 ? 0xffffffff : 0xff111112;
