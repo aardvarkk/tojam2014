@@ -382,9 +382,22 @@ class PlayState extends FlxState
 		{
 			FlxG.switchState(new MenuState());
 		}
-		if (Reg.SinglePlayerDebug && FlxG.keys.justPressed.SPACE)
+		if (Reg.SinglePlayerDebug) // SinglePlayerDebug controls
 		{
-			selectNextPlayer();
+			if (FlxG.keys.justPressed.SPACE)
+			{
+				selectNextPlayer();
+			}
+			if (FlxG.keys.justPressed.Q)
+			{
+				for (p in _players)
+				{
+					if (p != _players.members[currentlySelectedPlayer])
+					{
+						p.autoscrollMonkey = true;
+					}
+				}
+			}
 		}
 		// Super
 		super.update();
