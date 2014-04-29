@@ -94,53 +94,6 @@ class Player extends FlxExtendedSprite
 			if (attackTimer > 0)
 				attackTimer -= FlxG.elapsed;
 
-			ridingControls();
-		}
-		else
-		{
-			movingControls();
-		}
-
-
-		if (autoscrollMonkey)
-		{
-			acceleration.x = 0;
-			acceleration.x += (runAccel * 0.75);
-			facing = FlxObject.RIGHT;
-			flipX = false;
-			if (isTouching(FlxObject.WALL))
-				{
-					jumpStrength = 300;
-					if (autoJumpTimer < 0)
-					{
-						jump();
-						//velocity.x -= 50;
-						//velocity.y -= 20;
-						autoJumpTimer = autoJumpDelay;
-					}
-				}
-			autoJumpTimer -= FlxG.elapsed;
-			if (autoJumpTimer < 0 && isTouching(FlxObject.FLOOR))
-			{
-				var j = FlxRandom.intRanged(0,9);
-				if (j == 9)
-				{
-					jump();
-					autoJumpTimer = autoJumpDelay;
-				}
-			}
-			if (y > FlxG.height)
-			{
-				y = -50;
-				x -= 50;
-				FlxG.sound.play("LightOoh");
-			}
-			if (x > FlxG.camera.scroll.x + FlxG.width || x < FlxG.camera.scroll.x)
-			{
-				y = -50;
-				x = FlxG.camera.scroll.x + 50;
-			}
-
 			if (selected)
 				ridingControls();
 			else if (autoscrollMonkey)
@@ -153,7 +106,6 @@ class Player extends FlxExtendedSprite
 			else if (autoscrollMonkey)
 				cpuMonkeyAssault();
 		}
-
 
 		animate();
 

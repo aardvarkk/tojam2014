@@ -81,8 +81,8 @@ class Reg
 	[
 		Gamepad,
 		Gamepad,
-		Keyboard,
-		Keyboard
+		Gamepad,
+		Gamepad
 	];
 
 	// null means we'll use a gamepad for this player slot, otherwise we'll use the given keyboard controls

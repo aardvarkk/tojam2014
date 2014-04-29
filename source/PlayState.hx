@@ -5,33 +5,24 @@ import flixel.FlxObject;
 import flixel.FlxSprite;
 import flixel.FlxState;
 import flixel.FlxCamera;
-import flixel.util.FlxRect;
-
-import flixel.text.FlxText;
-
-import flixel.ui.FlxButton;
-
-import flixel.util.FlxMath;
-import flixel.util.FlxTimer;
-import flixel.util.FlxSpriteUtil;
-import flixel.util.FlxPoint;
-
+import flixel.addons.display.FlxBackdrop;
+import flixel.effects.particles.FlxEmitter;
 import flixel.group.FlxGroup;
 import flixel.group.FlxTypedGroup;
-
-import flixel.tile.FlxTileblock;
-
-import flixel.addons.display.FlxBackdrop;
-
-import flixel.effects.particles.FlxEmitter;
-
-import flixel.input.mouse.FlxMouse;
 import flixel.input.gamepad.FlxGamepad;
 import flixel.input.gamepad.PS3ButtonID;
 import flixel.input.gamepad.XboxButtonID;
 import flixel.input.gamepad.FlxGamepadManager;
-
+import flixel.input.mouse.FlxMouse;
+import flixel.text.FlxText;
+import flixel.tile.FlxTileblock;
+import flixel.ui.FlxButton;
+import flixel.util.FlxRect;
 import flixel.util.FlxRandom;
+import flixel.util.FlxMath;
+import flixel.util.FlxTimer;
+import flixel.util.FlxSpriteUtil;
+import flixel.util.FlxPoint;
 
 /**
  * A FlxState which can be used for the actual gameplay.
@@ -381,26 +372,23 @@ class PlayState extends FlxState
 		}
 		if (Reg.SinglePlayerMode && FlxG.keys.justPressed.SPACE)
 		{
-			if (FlxG.keys.justPressed.SPACE)
+			selectNextPlayer();
+		}
+		if (Reg.SinglePlayerMode && FlxG.keys.justPressed.O)
+		{
+			for (p in _players)
 			{
-				selectNextPlayer();
-			}
-			if (FlxG.keys.justPressed.O)
-			{
-				for (p in _players)
+				if (!p.selected)
 				{
-					if (!p.selected)
-					{
-						p.autoscrollMonkey = true;
-					}
+					p.autoscrollMonkey = true;
 				}
 			}
-			if (FlxG.keys.justPressed.P)
+		}
+		if (Reg.SinglePlayerMode && FlxG.keys.justPressed.P)
+		{
+			for (p in _players)
 			{
-				for (p in _players)
-				{
-					p.autoscrollMonkey = false;
-				}
+				p.autoscrollMonkey = false;
 			}
 		}
 	}
@@ -418,17 +406,14 @@ class PlayState extends FlxState
 	{
 		if (B.isTouching(FlxObject.FLOOR))
 		{
-			FlxG.log.add("Bomb hit floor");
 			B.velocity.y = -75;
 		}
 		else if (B.isTouching(FlxObject.LEFT))
 		{
-			FlxG.log.add("Bomb hit wall");
 			B.velocity.x = 50;
 		}
 		else if (B.isTouching(FlxObject.RIGHT))
 		{
-			FlxG.log.add("Bomb hit wall");
 			B.velocity.x = -50;
 		}
 		FlxG.sound.play("BombBounce", 0.25);
