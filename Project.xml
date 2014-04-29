@@ -34,7 +34,7 @@
 	<!--You can use rename="newName" to shorten the paths to individual subdirectories!-->
 	<assets path="assets/images" rename="images" />
 	<assets path="assets/data" rename="data" />
-	<assets path="assets/levels" rename="levels" />
+	<!-- <assets path="assets/levels" rename="levels" /> -->
 
 	<!--Flash requires .ogg - if="flash"-->
 	<assets path="assets/sounds">
