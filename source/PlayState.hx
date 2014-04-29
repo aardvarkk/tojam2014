@@ -78,12 +78,17 @@ class PlayState extends FlxState
 	private var _respawnPlayerTimer:FlxTimer;
 	private var _crosshair:Crosshair;
 
+	public static var currentlySelectedPlayer:Int;
+
 	private var _monkeyScoreSprites:Array<FlxSprite> = new Array<FlxSprite>();
 
 	public function new(NumPlayers:Int = 2, ?Round:Int = 0)
 	{
 		super();
 		_numPlayers = NumPlayers;
+		
+		if (Reg.SinglePlayerDebug)
+			currentlySelectedPlayer = Round; // start as the selected player
 
 		startRound(Round);
 	}
@@ -458,21 +463,18 @@ class PlayState extends FlxState
 		{
 			FlxG.switchState(new MenuState());
 		}
-		if (FlxG.keys.justPressed.SPACE)
+		if (Reg.SinglePlayerDebug && FlxG.keys.justPressed.SPACE)
 		{
-			_selectedPlayer += 1;
-			if (_selectedPlayer > _numPlayers - 1) _selectedPlayer = 0;
-
-			for (p in _players)
-			{
-				if (p.number == _selectedPlayer)
-					p.selected = true;
-				else
-					p.selected = false;
-			}
+			selectNextPlayer();
 		}
 		// Super
 		super.update();
+	}
+
+	public function selectNextPlayer():Void
+	{
+		currentlySelectedPlayer = currentlySelectedPlayer < _numPlayers - 1 ? currentlySelectedPlayer + 1 : 0;
+		FlxG.log.add('Player $currentlySelectedPlayer is currently selected');
 	}
 
 	public function bombBounce(B:Bomb, R:Building):Void

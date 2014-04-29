@@ -98,7 +98,10 @@ class Player extends FlxExtendedSprite
 		}
 		else
 		{
-			_gamepad = FlxG.gamepads.getByID(Number); // grab our gamepad
+			if (!Reg.SinglePlayerDebug)
+				_gamepad = FlxG.gamepads.getByID(Number); // grab our gamepad
+			else
+				_gamepad = FlxG.gamepads.getByID(0); // grab the 1st gamepad
 			FlxG.log.add('Player $number using gamepad ${_gamepad.id}');
 			// For the sufami controllers, ABXY is the same as PS4 placement
 			// but the dpad is AxisX(0) for left (-1) and right (1)
@@ -130,7 +133,6 @@ class Player extends FlxExtendedSprite
 
 	override public function update():Void
 	{
-		// Need to add global pause features later, but skip for now
 		if (ridingVehicle)
 		{
 			x = _vehicle.x + 12; // +20 good for 48x16
@@ -138,13 +140,16 @@ class Player extends FlxExtendedSprite
 			_crosshair.angle = _aim;
 			_crosshair.x = x + width / 2;
 			_crosshair.y = y + height / 2;
-			ridingControls();
 			if (attackTimer > 0)
 				attackTimer -= FlxG.elapsed;
+
+			if (PlayState.currentlySelectedPlayer == number)
+				ridingControls();
 		}
 		else
 		{
-			movingControls();
+			if (PlayState.currentlySelectedPlayer == number)
+				movingControls();
 		}
 
 		if (autoscrollMonkey)
