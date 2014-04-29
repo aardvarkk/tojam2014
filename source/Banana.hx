@@ -3,7 +3,7 @@ package;
 import flixel.FlxG;
 import flixel.FlxSprite;
 
-class Boomerang extends FlxSprite
+class Banana extends FlxSprite
 {
 
 	private var speed:Float = 200;

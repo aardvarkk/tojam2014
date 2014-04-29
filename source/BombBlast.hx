@@ -3,15 +3,15 @@ package;
 import flixel.FlxG;
 import flixel.FlxSprite;
 
-class Stinkbomb extends FlxSprite
+class BombBlast extends FlxSprite
 {
 
 	public function new()
 	{
 		super(0, 0);
-		loadGraphic(Reg.STINKBOMB, true, 57, 57);
+		loadGraphic(Reg.BOMB_BLAST, true, 48, 48);
 
-		animation.add("boom",[0,1,2,3,4,5,6,7,8,9,10],24, false);
+		animation.add("boom",[0,1,2,3,4,5,6,7,8],30, false);
 
 		kill();
 	}
@@ -31,7 +31,7 @@ class Stinkbomb extends FlxSprite
 		velocity.x = Vx;
 		velocity.y = Vy;
 		animation.play("boom");
-		FlxG.sound.play("Explosion", 0.3);
+		FlxG.sound.play("BombBlast", 0.3);
 	}
 
 	override public function reset(X:Float, Y:Float):Void

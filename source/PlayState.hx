@@ -224,9 +224,9 @@ class PlayState extends FlxState
 
 				if (p != _rider)
 				{
-					FlxG.overlap(p, _bombs, explodeOnPlayer);
-					FlxG.overlap(p, _bananas, splatOnPlayer);
-					FlxG.overlap(p, _missiles, stankOnPlayer);
+					FlxG.overlap(p, _bombs, bombOnPlayer);
+					FlxG.overlap(p, _bananas, bananaOnPlayer);
+					FlxG.overlap(p, _missiles, missileOnPlayer);
 				}
 			}
 
@@ -303,7 +303,7 @@ class PlayState extends FlxState
 		Reg.scores[P.number] += 500;
 	}	
 
-	public function explodeOnPlayer(P:Player, R:FlxSprite):Void
+	public function bombOnPlayer(P:Player, R:FlxSprite):Void
 	{
 		P.velocity.x += R.velocity.x * 2;
 		P.velocity.y += R.velocity.y * 2;
@@ -314,7 +314,7 @@ class PlayState extends FlxState
 		}
 	}
 
-	public function splatOnPlayer(P:Player, R:FlxSprite):Void
+	public function bananaOnPlayer(P:Player, R:FlxSprite):Void
 	{
 		P.velocity.x += R.velocity.x * 2;
 		P.velocity.y += R.velocity.y * 2;
@@ -326,7 +326,7 @@ class PlayState extends FlxState
 		}
 	}
 
-	public function stankOnPlayer(P:Player, R:FlxSprite):Void
+	public function missileOnPlayer(P:Player, R:FlxSprite):Void
 	{
 		P.velocity.x += R.velocity.x * 2;
 		P.velocity.y += R.velocity.y * 2;

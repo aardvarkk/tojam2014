@@ -3,13 +3,13 @@ package;
 import flixel.FlxG;
 import flixel.FlxSprite;
 
-class Bananapop extends FlxSprite
+class BananaBlast extends FlxSprite
 {
 
 	public function new()
 	{
 		super(0, 0);
-		loadGraphic(Reg.BANANAPOP, true, 47, 47);
+		loadGraphic(Reg.BANANA_BLAST, true, 47, 47);
 
 		animation.add("boom",[0,1,2,3,4,5,6,7],24, false);
 
@@ -31,7 +31,7 @@ class Bananapop extends FlxSprite
 		velocity.x = Vx;
 		velocity.y = Vy;
 		animation.play("boom");
-		FlxG.sound.play("Explosion", 0.3);
+		FlxG.sound.play("BombBlast", 0.3);
 	}
 
 	override public function reset(X:Float, Y:Float):Void
