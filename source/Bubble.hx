@@ -33,17 +33,6 @@ class Bubble extends FlxSprite
 		super.update();
 	}
 
-	public function appear():Void
-	{
-		animation.play("bub");
-	}
-
-	public function die():Void
-	{
-		animation.play("pop");
-		timer = 0.25;
-	}
-
 	override public function reset(X:Float, Y:Float):Void
 	{
 		super.reset(X, Y);
@@ -56,5 +45,16 @@ class Bubble extends FlxSprite
 	{
 		visible = false;
 		super.kill();
+	}
+
+	public function appear():Void
+	{
+		animation.play("bub");
+	}
+
+	public function die():Void
+	{
+		animation.play("pop");
+		timer = 0.25;
 	}
 }
