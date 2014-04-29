@@ -141,14 +141,14 @@ class Player extends FlxExtendedSprite
 				x = FlxG.camera.scroll.x + 50;
 			}
 
-			if (_selected)
+			if (selected)
 				ridingControls();
 			else if (autoscrollMonkey)
 				cpuMonkeyDefend();
 		}
 		else
 		{
-			if (_selected)
+			if (selected)
 				movingControls();
 			else if (autoscrollMonkey)
 				cpuMonkeyAssault();

@@ -389,7 +389,7 @@ class PlayState extends FlxState
 			{
 				for (p in _players)
 				{
-					if (p.number != currentlySelectedPlayer)
+					if (!p.selected)
 					{
 						p.autoscrollMonkey = true;
 					}
