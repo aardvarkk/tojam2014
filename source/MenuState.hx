@@ -194,7 +194,6 @@ class MenuState extends FlxState
 			
 			if (recording) 
 			{
-				_p.selected = true;
 				choosePlayers.text = "RECORDING";
 			}
 		}
@@ -233,17 +232,17 @@ class MenuState extends FlxState
 
 		FlxG.camera.scroll.x += 3;
 
-		_curDpadLefts  = isDpadPressed(FlxObject.LEFT);
-		_curDpadRights = isDpadPressed(FlxObject.RIGHT);
+		_curDpadLefts  = isDpadPressed(Input.LEFT);
+		_curDpadRights = isDpadPressed(Input.RIGHT);
 
 		var dpadLeftJustPressed = _curDpadLefts && !_prvDpadLefts;
 		var dpadRightJustPressed = _curDpadRights  && !_prvDpadRights;
 
-		if (isJustPressing(FlxObject.LEFT) || dpadLeftJustPressed) 
+		if (isJustPressing(Input.LEFT) || dpadLeftJustPressed) 
 		{
 			_numPlayers = _numPlayers > 2 ? _numPlayers - 1 : Reg.MAX_PLAYERS;
 		}
-		else if (isJustPressing(FlxObject.RIGHT) || dpadRightJustPressed) 
+		else if (isJustPressing(Input.RIGHT) || dpadRightJustPressed) 
 		{
 			_numPlayers = _numPlayers < Reg.MAX_PLAYERS ? _numPlayers + 1 : 2;
 		}
@@ -253,7 +252,7 @@ class MenuState extends FlxState
         _fourPlayers.color  = _numPlayers == 4 ? 0xffffffff : 0xff111112;
 
         // START THE GAME!
-		if (isJustPressing(Reg.JUMP) || isJustPressing(Reg.KEY1) || isJustPressing(Reg.KEY2) || isJustPressing(Reg.KEY3))
+		if (isJustPressing(Input.JUMP) || isJustPressing(Input.ACTION1) || isJustPressing(Input.ACTION2) || isJustPressing(Input.ACTION3))
 		{
 			onSelectionMade();	
 		}
@@ -318,9 +317,9 @@ class MenuState extends FlxState
 		FlxG.vcr.loadReplay(save, new MenuState(), ["ANY", "MOUSE"], 0, startRecord);
 	}
 
-	private function isDpadPressed(Direction:Int):Bool
+	private function isDpadPressed(Action:Int):Bool
 	{
-		if (Direction == FlxObject.LEFT)
+		if (Action == Input.LEFT)
 		{
 			for (gp in FlxG.gamepads.getActiveGamepads())
 			{
@@ -329,8 +328,12 @@ class MenuState extends FlxState
 					return true;
 				}
 			}			
+			if (FlxG.keys.anyJustPressed(["LEFT"]))
+			{
+				return true;
+			}
 		}
-		else if (Direction == FlxObject.RIGHT)
+		else if (Action == Input.RIGHT)
 		{
 			for (gp in FlxG.gamepads.getActiveGamepads())
 			{
@@ -347,17 +350,17 @@ class MenuState extends FlxState
 		return false;
 	}
 
-	private function isJustPressing(Direction:Int):Bool
+	private function isJustPressing(Action:Int):Bool
 	{
-		if (Direction == FlxObject.LEFT)
+		if (Action == Input.LEFT)
 		{
 			return FlxG.keys.anyJustPressed(["LEFT"]);
 		}
-		else if (Direction == FlxObject.RIGHT)
+		else if (Action == Input.RIGHT)
 		{
 			return FlxG.keys.anyJustPressed(["RIGHT"]);
 		}
-		else if (Direction == Reg.JUMP || Direction == Reg.KEY1 || Direction == Reg.KEY2 || Direction == Reg.KEY3)
+		else if (Action == Input.JUMP || Action == Input.ACTION1 || Action == Input.ACTION2 || Action == Input.ACTION3)
 		{
 			if (FlxG.gamepads.anyJustPressed(PS4ButtonID.X_BUTTON) 
 				|| FlxG.gamepads.anyJustPressed(PS4ButtonID.SQUARE_BUTTON)

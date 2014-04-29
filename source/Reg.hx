@@ -73,27 +73,27 @@ class Reg
 	 */
 	static public var saves:Array<FlxSave> = [];
 
-	// This is important!
-	// null means we'll use a gamepad, so players 0 and 1 will use gamepads in this case
-	// the next number indicates which index in the keyset to use
-	public static var KeyboardControlSet = [null, null, null, null];
-	public static var SinglePlayerDebug = true; // used to control all players with 1 gamepad / key set by switching between them
+	// Used to control all players with 1 gamepad / key set by switching between them
+	public static var SinglePlayerMode = true; 
 
-	/**
-	* Keyboard input sets
-	*/
-	public static var JUMP:Int = 10;
-	public static var KEY1:Int = 20;
-	public static var KEY2:Int = 40;
-	public static var KEY3:Int = 80;
-	public static var keyset:Array<Dynamic> =
+	// Controls used for each player
+	public static var ControlStyles:Array<ControlStyle> =
+	[
+		Gamepad,
+		Gamepad,
+		Keyboard,
+		Keyboard
+	];
+
+	// null means we'll use a gamepad for this player slot, otherwise we'll use the given keyboard controls
+	public static var KeyboardControls:Array<Dynamic> =
 	[
 		["UP", "DOWN", "LEFT", "RIGHT", "Z", "X", "C", "V"],
-		["NUMPADFIVE", "NUMPADTWO", "NUMPADONE", "NUMPADTHREE", "R", "T", "Y", "U"],
-		//["NUMPADFIVE","NUMPADTWO","NUMPADONE","NUMPADTHREE","NUMPADSEVEN","NUMPADEIGHT","NUMPADNINE","NUMPADMINUS"],
+		["NUMPADFIVE","NUMPADTWO","NUMPADONE","NUMPADTHREE","NUMPADSEVEN","NUMPADEIGHT","NUMPADNINE","NUMPADMINUS"],
 		["W", "S", "A", "D", "R", "T", "Y", "U"],
 		["I","K","J","L","O","P","SEMICOLON","QUOTE"]
 	];
+
 	/**
 	 * Title screen images
 	 */

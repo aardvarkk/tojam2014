@@ -44,7 +44,6 @@ class PlayState extends FlxState
 	public var _bombs:FlxTypedGroup<Bomb>;
 	public var _boomerangs:FlxTypedGroup<Boomerang>;
 	public var _missiles:FlxTypedGroup<Missile>;
-	public static var currentlySelectedPlayer:Int;
 
 	private var _cloudsFar:FlxBackdrop;
 	private var _cloudsMid:FlxBackdrop;
@@ -66,23 +65,18 @@ class PlayState extends FlxState
 	private var _camera:FlxCamera;
 	private var _numPlayers:Int;
 	private var _round:Int;
-	private var _selectedPlayer:Int = 0;
 	private var _rider:Player;
 	private var _roundOver:Bool = false;
 	private var _cartScoreTimer:FlxTimer;
 	private var _respawnPlayerTimer:FlxTimer;
 	private var _crosshair:Crosshair;
 	private var _scoreSprites:Array<FlxSprite> = new Array<FlxSprite>();
+	private var _selectedPlayer:Int = -1;
 
 	public function new(NumPlayers:Int = 2, ?Round:Int = 0)
 	{
 		super();
 		
-		// Start as the selected player
-		if (Reg.SinglePlayerDebug) {
-			currentlySelectedPlayer = Round; 
-		}
-
 		_numPlayers = NumPlayers;
 		startRound(Round);
 	}
@@ -232,6 +226,7 @@ class PlayState extends FlxState
 				_rider = player;
 			}
 		}
+		selectNextPlayer();
 		add(_players);
 		
 		add(_bubbles);
@@ -293,6 +288,8 @@ class PlayState extends FlxState
 	 */
 	override public function update():Void
 	{
+		super.update();
+
 		// trace(FlxG.gamepads.getActiveGamepadIDs());
 		// trace(FlxG.gamepads.anyButton());
 		// for (gp in FlxG.gamepads.getActiveGamepads()) {
@@ -382,18 +379,19 @@ class PlayState extends FlxState
 		{
 			FlxG.switchState(new MenuState());
 		}
-		if (Reg.SinglePlayerDebug && FlxG.keys.justPressed.SPACE)
+		if (Reg.SinglePlayerMode && FlxG.keys.justPressed.SPACE)
 		{
 			selectNextPlayer();
 		}
-		// Super
-		super.update();
 	}
 
 	public function selectNextPlayer():Void
 	{
-		currentlySelectedPlayer = currentlySelectedPlayer < _numPlayers - 1 ? currentlySelectedPlayer + 1 : 0;
-		FlxG.log.add('Player $currentlySelectedPlayer is currently selected');
+		_selectedPlayer = _selectedPlayer < _numPlayers - 1 ? _selectedPlayer + 1 : 0;
+		for (p in _players) {
+			p.selected = p.number == _selectedPlayer;
+		}
+		FlxG.log.add('Player ${_selectedPlayer} is currently selected');
 	}
 
 	public function bombBounce(B:Bomb, R:Building):Void

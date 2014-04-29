@@ -10,21 +10,27 @@ import flixel.util.FlxRandom;
 import flixel.effects.particles.FlxEmitterExt;
 import flixel.addons.display.FlxExtendedSprite;
 import flixel.group.FlxTypedGroup;
-import flixel.input.gamepad.FlxGamepad;
-import flixel.input.gamepad.XboxButtonID;
-import flixel.input.gamepad.PS4ButtonID;
 import flixel.util.FlxRandom;
 
 class Player extends FlxExtendedSprite
 {
-	public var number:Int;
+	public var attacking:Bool = false;
+	public var attackTimer:Float = 0;
+	public var ATTACKDELAY:Float = 0.5;
+	public var autoscrollMonkey:Bool = false;
+	public var bubble:Bubble;
+	public var beam:Beam;
+	public var climbing:Bool = false;
 	public var controlSet:Int = 0;
+	public var deathTimer:Float = 0;
+	public var diving:Bool = false;
+	public var gravity:Float = 450;
+	public var invulnerable:Bool = false;
+	public var number:Int;
+	public var ridingVehicle:Bool = false;
 	public var selected:Bool = false;
 
-	public var ridingVehicle:Bool = false;
 	private var _vehicle:FlxSprite;
-
-	public var gravity:Float = 450;
 	private var jumpTimer:Float;
 	private var jumpStrength:Float = 100;
 	private var runAccel = 900;
@@ -33,34 +39,16 @@ class Player extends FlxExtendedSprite
 	private var diveBombSetVelY = 100; // Instant set to velocity in Y
 	private var jumped:Bool = false;
 	private var landed:Bool = false;
-	public var climbing:Bool = false;
 	private var _bombs:FlxTypedGroup<Bomb>;
 	private var _boomerangs:FlxTypedGroup<Boomerang>;
 	private var _missiles:FlxTypedGroup<Missile>;
-
-	public var attacking:Bool = false;
-	public var attackTimer:Float = 0;
-	public var ATTACKDELAY:Float = 0.5;
-	public var diving:Bool = false;
-
-	public var invulnerable:Bool = false;
 	private var invTimer:Float = 0.8;
 	private var invDuration:Float = 0.8;
-
-	public var deathTimer:Float = 0;
-
 	private var respawnTimer:Float = 0;
-
-	public var bubble:Bubble;
-	public var beam:Beam;
-
 	private var _aim:Float = 180;
 	private var _crosshair:Crosshair;
-
 	private var _jumpStrings = ["LightOoh", "TinyOoh1", "TinyOoh2", "TinyOoh3", "TinyOoh4", "TinyOoh5", "TinyOoh6", "TinyOoh7", "TinyOoh8", "TinyOoh9"];
 	private var _deathStrings = ["Megascreech1", "Megascreech2", "Megascreech3", "Squak"];
-	private var _gamepad:FlxGamepad;
-	public var autoscrollMonkey:Bool = false;
 	private var autoJumpTimer:Float = 0;
 	private var autoJumpDelay:Float = 0.1;
 
@@ -73,29 +61,7 @@ class Player extends FlxExtendedSprite
 		_boomerangs = Boomerangs;
 		_missiles = Missiles;
 
-		selected = number == 0;
 		loadGraphic(Reg.MONKEYS[number], true, 16, 16);
-
-		if (Reg.KeyboardControlSet[number] != null)
-		{
-			controlSet = Reg.KeyboardControlSet[number];
-			FlxG.log.add('Player $number using keyboard control set $controlSet');
-		}
-		else
-		{
-			if (!Reg.SinglePlayerDebug)
-				_gamepad = FlxG.gamepads.getByID(Number); // grab our gamepad
-			else
-				_gamepad = FlxG.gamepads.getByID(0); // grab the 1st gamepad
-			FlxG.log.add('Player $number using gamepad ${_gamepad.id}');
-			// For the sufami controllers, ABXY is the same as PS4 placement
-			// but the dpad is AxisX(0) for left (-1) and right (1)
-			// and AxisX(1) for up (-1) and down (1) where 0 is no input
-			// Forgot to commit two things separately so added this so I could make a new commit
-			// Added support for the USB controllers I have
-			// which use AxisX(0) for dpad X
-			// and AxisX(1) for dpad Y
-		}
 
 		bubble = new Bubble(X, Y);
 		beam = new Beam(X, Y);
@@ -128,14 +94,13 @@ class Player extends FlxExtendedSprite
 			if (attackTimer > 0)
 				attackTimer -= FlxG.elapsed;
 
-			if (PlayState.currentlySelectedPlayer == number)
-				ridingControls();
+			ridingControls();
 		}
 		else
 		{
-			if (PlayState.currentlySelectedPlayer == number)
-				movingControls();
+			movingControls();
 		}
+
 
 		if (autoscrollMonkey)
 		{
@@ -177,6 +142,7 @@ class Player extends FlxExtendedSprite
 			}
 		}
 
+
 		animate();
 
 		// Respawn stuff
@@ -187,7 +153,7 @@ class Player extends FlxExtendedSprite
 			bubble.x = x - 10;
 			bubble.y = y - 12;
 
-			if (isPressing(Reg.JUMP) || x > FlxG.camera.scroll.x + 100 || respawnTimer <= 0)
+			if (Input.isPressing(Input.JUMP, number) || x > FlxG.camera.scroll.x + 100 || respawnTimer <= 0)
 			{
 				jumped = true;
 				landed = false;
@@ -202,22 +168,27 @@ class Player extends FlxExtendedSprite
 
 	public function ridingControls():Void
 	{
+		var controlNumber = Reg.SinglePlayerMode ? 0 : number;
+		if (Reg.SinglePlayerMode && !selected) {
+			return;
+		}
+
 		_vehicle.acceleration.y = 0;
 
-		if (isPressing(FlxObject.UP) && (_vehicle.y + _vehicle.height/2 > FlxG.height/2))
+		if (Input.isPressing(Input.UP, controlNumber) && (_vehicle.y + _vehicle.height/2 > FlxG.height/2))
 		{
 			_vehicle.acceleration.y -= runAccel * .25;
 		}
-		else if (isPressing(FlxObject.DOWN) && (_vehicle.y + _vehicle.height < FlxG.height))
+		else if (Input.isPressing(Input.DOWN, controlNumber) && (_vehicle.y + _vehicle.height < FlxG.height))
 		{
 			_vehicle.acceleration.y += runAccel * .25;
 		}
 
-		if (isPressing(FlxObject.LEFT))
+		if (Input.isPressing(Input.LEFT, controlNumber))
 		{
 			_aim -= 4;
 		}
-		else if (isPressing(FlxObject.RIGHT))
+		else if (Input.isPressing(Input.RIGHT, controlNumber))
 		{
 			_aim += 4;
 		}
@@ -237,19 +208,19 @@ class Player extends FlxExtendedSprite
 
 		if (attackTimer <= 0)
 		{
-			if (isPressing(Reg.KEY1))
+			if (Input.isPressing(Input.ACTION1, controlNumber))
 			{
 				FlxG.log.add("Shot a bomb!");
 				_bombs.recycle(Bomb,[],true,false).shoot(this, _aim);
 				attackTimer = ATTACKDELAY;
 			}
-			else if (isPressing(Reg.KEY2))
+			else if (Input.isPressing(Input.ACTION2, controlNumber))
 			{
 				FlxG.log.add("Shot a boomerang!");
 				_boomerangs.recycle(Boomerang,[],true,false).shoot(this, _aim);
 				attackTimer = ATTACKDELAY;
 			}
-			else if (isPressing(Reg.KEY3))
+			else if (Input.isPressing(Input.ACTION3, controlNumber))
 			{
 				FlxG.log.add("Shot a missile!");
 				_missiles.recycle(Missile,[],true,false).shoot(this, _aim);
@@ -260,21 +231,26 @@ class Player extends FlxExtendedSprite
 
 	public function movingControls():Void
 	{
+		var controlNumber = Reg.SinglePlayerMode ? 0 : number;
+		if (Reg.SinglePlayerMode && !selected) {
+			return;
+		}
+
 		acceleration.x = 0;
 
 		// Move Left
-		if (isPressing(FlxObject.LEFT))
+		if (Input.isPressing(Input.LEFT, controlNumber))
 		{
 			flipX = true;
-			facing = FlxObject.LEFT;
+			facing = Input.LEFT;
 			acceleration.x -= runAccel;
 		}
 		
 		// Move Right
-		if (isPressing(FlxObject.RIGHT))
+		if (Input.isPressing(Input.RIGHT, controlNumber))
 		{
 			flipX = false;
-			facing = FlxObject.RIGHT;
+			facing = Input.RIGHT;
 			acceleration.x += runAccel;
 		}
 		
@@ -289,7 +265,6 @@ class Player extends FlxExtendedSprite
 			
 			jumped = false; // reset jump press
 			jumpTimer = 0;
-			
 		}
 		else if (isTouching(FlxObject.WALL))
 		{
@@ -306,12 +281,12 @@ class Player extends FlxExtendedSprite
 		
 		// Just hit jump
 		// It's either going to trigger a jump or a dive bomb, depending upon whether or not down key is held
-		if (isJustPressing(Reg.JUMP))
+		if (Input.isJustPressing(Input.JUMP, controlNumber))
 		{
 			// Starting dive bomb
 			// If not already diving and BOTH trying to start a jump and holding down, start the divebomb
 			// Immediately set vertical velocity
-			if (!diving && isPressing(FlxObject.DOWN))
+			if (!diving && Input.isPressing(Input.DOWN, controlNumber))
 			{
 				FlxG.sound.play("Divebomb", 0.25);
 				diving = true;
@@ -328,7 +303,8 @@ class Player extends FlxExtendedSprite
 		}
 		
 		// Variable Jump Control
-		if ((jumpTimer >= 0) && isPressing(Reg.JUMP) && jumped)
+		trace('$jumpTimer');
+		if ((jumpTimer >= 0) && Input.isPressing(Input.JUMP, controlNumber) && jumped)
 		{
 			jumpTimer += FlxG.elapsed;
 			
@@ -351,154 +327,6 @@ class Player extends FlxExtendedSprite
 		if (jumpTimer > 0)
 		{
 			jump();
-		}
-	}
-
-	private function isPressing(Direction:Int):Bool
-	{
-		if (Direction == FlxObject.UP)
-		{
-			if (Reg.KeyboardControlSet[number] == null)
-			{
-				if (_gamepad.getXAxis(1) == -1)
-					return true;
-				else
-					return _gamepad.dpadUp;
-			}
-			else
-				return (FlxG.keys.anyPressed([Reg.keyset[controlSet][0]]));
-		}
-		else if (Direction == FlxObject.DOWN)
-		{
-			if (Reg.KeyboardControlSet[number] == null)
-			{
-				if (_gamepad.getXAxis(1) == 1)
-					return true;
-				else
-					return _gamepad.dpadDown;
-			}
-			else
-				return (FlxG.keys.anyPressed([Reg.keyset[controlSet][1]]));
-		}
-		else if (Direction == FlxObject.LEFT)
-		{
-			if (Reg.KeyboardControlSet[number] == null)
-			{
-				if (_gamepad.getXAxis(0) == -1)
-					return true;
-				else
-					return _gamepad.dpadLeft;
-			}
-			else
-				return (FlxG.keys.anyPressed([Reg.keyset[controlSet][2]]));
-		}
-		else if (Direction == FlxObject.RIGHT)
-		{
-			if (Reg.KeyboardControlSet[number] == null)
-			{
-				if (_gamepad.getXAxis(0) == 1)
-					return true;
-				else
-					return _gamepad.dpadRight;
-			}
-			else
-				return (FlxG.keys.anyPressed([Reg.keyset[controlSet][3]]));
-		}
-		else if (Direction == Reg.JUMP)
-		{
-			if (Reg.KeyboardControlSet[number] == null)
-				return _gamepad.pressed(PS4ButtonID.X_BUTTON);
-			else
-				return (FlxG.keys.anyPressed([Reg.keyset[controlSet][4]]));
-		}
-		else if (Direction == Reg.KEY1)
-		{
-			if (Reg.KeyboardControlSet[number] == null)
-				return _gamepad.pressed(PS4ButtonID.SQUARE_BUTTON);
-			else
-				return (FlxG.keys.anyPressed([Reg.keyset[controlSet][5]]));
-		}
-		else if (Direction == Reg.KEY2)
-		{
-			if (Reg.KeyboardControlSet[number] == null)
-				return _gamepad.pressed(PS4ButtonID.TRIANGLE_BUTTON);
-			else
-				return (FlxG.keys.anyPressed([Reg.keyset[controlSet][6]]));
-		}
-		else if (Direction == Reg.KEY3)
-		{
-			if (Reg.KeyboardControlSet[number] == null)
-				return _gamepad.pressed(PS4ButtonID.CIRCLE_BUTTON);
-			else
-				return (FlxG.keys.anyPressed([Reg.keyset[controlSet][7]]));
-		}
-		else
-		{
-			return false;
-		}
-	}
-
-	private function isJustPressing(Direction:Int):Bool
-	{
-		if (Direction == FlxObject.UP)
-		{
-			if (Reg.KeyboardControlSet[number] == null)
-				return _gamepad.dpadUp;
-			else
-				return (FlxG.keys.anyJustPressed([Reg.keyset[controlSet][0]]));
-		}
-		else if (Direction == FlxObject.DOWN)
-		{
-			if (Reg.KeyboardControlSet[number] == null)
-				return _gamepad.dpadDown;
-			else
-				return (FlxG.keys.anyJustPressed([Reg.keyset[controlSet][1]]));
-		}
-		else if (Direction == FlxObject.LEFT)
-		{
-			if (Reg.KeyboardControlSet[number] == null)
-				return _gamepad.dpadLeft;
-			else
-				return (FlxG.keys.anyJustPressed([Reg.keyset[controlSet][2]]));
-		}
-		else if (Direction == FlxObject.RIGHT)
-		{
-			if (Reg.KeyboardControlSet[number] == null)
-				return _gamepad.dpadRight;
-			else
-				return (FlxG.keys.anyJustPressed([Reg.keyset[controlSet][3]]));
-		}
-		else if (Direction == Reg.JUMP)
-		{
-			if (Reg.KeyboardControlSet[number] == null)
-				return _gamepad.justPressed(PS4ButtonID.X_BUTTON);
-			else
-				return (FlxG.keys.anyJustPressed([Reg.keyset[controlSet][4]]));
-		}
-		else if (Direction == Reg.KEY1)
-		{
-			if (Reg.KeyboardControlSet[number] == null)
-				return _gamepad.justPressed(PS4ButtonID.SQUARE_BUTTON);
-			else
-				return (FlxG.keys.anyJustPressed([Reg.keyset[controlSet][5]]));
-		}
-		else if (Direction == Reg.KEY2)
-		{
-			if (Reg.KeyboardControlSet[number] == null)
-				return _gamepad.justPressed(PS4ButtonID.TRIANGLE_BUTTON);
-			else
-				return (FlxG.keys.anyJustPressed([Reg.keyset[controlSet][6]]));
-		}
-		else if (Direction == Reg.KEY3)
-		{
-			if (Reg.KeyboardControlSet[number] == null)
-				return _gamepad.justPressed(PS4ButtonID.CIRCLE_BUTTON);
-			else
-				return (FlxG.keys.anyJustPressed([Reg.keyset[controlSet][7]]));
-		}
-		else
-		{
-			return false;
 		}
 	}
 
