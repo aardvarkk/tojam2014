@@ -17,6 +17,9 @@ class Reg
 	public static inline var RACERWIDTH  = 48;
 	public static inline var RACERHEIGHT = 16;
 	public static inline var RACERSPEED  = 75;
+
+	public static inline var START_X     = 256;
+	public static inline var START_Y     = 128;
 	
 	public static inline var DEMOSEED    = 635918;
 

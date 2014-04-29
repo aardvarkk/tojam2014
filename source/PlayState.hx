@@ -51,9 +51,6 @@ class PlayState extends FlxState
     startRound(Round);
   }
 
-  /**
-   * Function that is called up when to state is created to set it up. 
-   */
   override public function create():Void
   {
     super.create();
@@ -84,7 +81,15 @@ class PlayState extends FlxState
     // And mount the player whose turn it is
     var p = _numPlayers;
     while (--p >= 0) {
-      var player = new Player(150, 100, p, _bombs, _bananas, _missiles);
+      // Stagger players horizontally so they can see themselves
+      var player = new Player(
+        Reg.START_X - p * 2 * Reg.BLOCKSIZE, 
+        Reg.START_Y, 
+        p, 
+        _bombs, 
+        _bananas,
+        _missiles
+      );
       _players.add(player);
       _bubbles.add(player.bubble);
 
@@ -132,48 +137,10 @@ class PlayState extends FlxState
 
     // Keep track of scores for players
     _cartScoreTimer = new FlxTimer(1, accumulateCartScore, 0);
-
-        FlxG.sound.play("Ambient Jungle", 0.4, true);
+    
+    FlxG.sound.play("Ambient Jungle", 0.4, true);
   }
   
-  public function accumulateCartScore(Timer:FlxTimer)
-  {
-    if (!_roundOver) {
-      Reg.scores[_rider.number] += 25;
-    }
-  }
-
-  public function respawnPlayer(P:Player):Void
-  {
-    P.respawn(FlxG.camera.scroll.x + 48, 48);
-  }
-
-  public function startRound(Round:Int)
-  {
-    _round = Round;
-    FlxG.log.add('Starting game round $_round with $_numPlayers players');
-
-    if (_round == 0) {
-      Reg.resetScores();
-      for (i in 0..._numPlayers) {
-        Reg.scores[i] = 0;
-      }
-    }
-  }
-
-  public function drawScores(X:Int, Y:Int)
-  {
-    var lineAdd = 11;
-    for (i in 0..._numPlayers) {
-      _scoreSprites[i].x = X;
-      _scoreSprites[i].y = Y + (i * lineAdd);
-      _scoreSprites[i].visible = true;
-    }
-  }
-
-  /**
-   * Function that is called once every frame.
-   */
   override public function update():Void
   {
     super.update();
@@ -258,6 +225,41 @@ class PlayState extends FlxState
       for (p in _players) {
         p.autoscrollMonkey = false;
       }
+    }
+  }
+
+  public function accumulateCartScore(Timer:FlxTimer)
+  {
+    if (!_roundOver) {
+      Reg.scores[_rider.number] += 25;
+    }
+  }
+
+  public function respawnPlayer(P:Player):Void
+  {
+    P.respawn(FlxG.camera.scroll.x + 48, 48);
+  }
+
+  public function startRound(Round:Int)
+  {
+    _round = Round;
+    FlxG.log.add('Starting game round $_round with $_numPlayers players');
+
+    if (_round == 0) {
+      Reg.resetScores();
+      for (i in 0..._numPlayers) {
+        Reg.scores[i] = 0;
+      }
+    }
+  }
+
+  public function drawScores(X:Int, Y:Int)
+  {
+    var lineAdd = 11;
+    for (i in 0..._numPlayers) {
+      _scoreSprites[i].x = X;
+      _scoreSprites[i].y = Y + (i * lineAdd);
+      _scoreSprites[i].visible = true;
     }
   }
 
