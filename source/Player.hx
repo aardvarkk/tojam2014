@@ -19,7 +19,6 @@ class Player extends FlxExtendedSprite
 	public var ATTACKDELAY:Float = 0.5;
 	public var autoscrollMonkey:Bool = false;
 	public var bubble:Bubble;
-	public var beam:Beam;
 	public var climbing:Bool = false;
 	public var controlSet:Int = 0;
 	public var deathTimer:Float = 0;
@@ -64,7 +63,6 @@ class Player extends FlxExtendedSprite
 		loadGraphic(Reg.MONKEYS[number], true, 16, 16);
 
 		bubble = new Bubble(X, Y);
-		beam = new Beam(X, Y);
 
 		width = 10;
 		height = 13;

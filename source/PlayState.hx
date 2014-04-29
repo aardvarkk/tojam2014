@@ -43,7 +43,6 @@ class PlayState extends FlxState
 	private var _infoText:FlxText;
 	private var _players:FlxTypedGroup<Player> = new FlxTypedGroup<Player>();
 	private var _bubbles:FlxTypedGroup<Bubble>;
-	private var _beams:FlxTypedGroup<Beam>;
 	private var _buildings:RandomBuildings;
 	private var _racer:Racer;
 	private var _camera:FlxCamera;
@@ -123,7 +122,6 @@ class PlayState extends FlxState
 		_boomerangs = new FlxTypedGroup();
 
 		_bubbles = new FlxTypedGroup();
-		_beams = new FlxTypedGroup();
 		_crosshair = new Crosshair();
 		
 		for (a in 0...5)
@@ -157,7 +155,6 @@ class PlayState extends FlxState
 			var player = new Player(150, 100, p, _bombs, _boomerangs, _missiles);
 			_players.add(player);
 			_bubbles.add(player.bubble);
-			_beams.add(player.beam);
 
 			if (p == _round) {
 				player.mount(_racer, _crosshair);
@@ -168,7 +165,6 @@ class PlayState extends FlxState
 		add(_players);
 		
 		add(_bubbles);
-		add(_beams);
 		add(_bombs);
 		add(_boomerangs);
 		add(_missiles);
