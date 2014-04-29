@@ -130,6 +130,30 @@ class Player extends FlxExtendedSprite
 		super.update();
 	}
 
+	override public function reset(X:Float, Y:Float):Void
+	{
+		super.reset(X, Y);
+
+		acceleration.y = gravity;
+		diving = false;
+		drag.x = gravity; // Ground friction
+		health = 1;
+		maxVelocity.x = Reg.RACERSPEED * 2.25;
+		maxVelocity.y = 2 * gravity; 
+		solid = true;
+		_jumped = false;
+		_jumpStrength = 136;
+	}
+
+	override public function kill():Void
+	{
+		super.kill();
+		deathTimer = 1;
+		FlxG.sound.play(_deathStrings[FlxRandom.intRanged(0, _deathStrings.length-1)], 0.25);
+		// FlxG.sound.play("Bananabomb");
+		// beam.reset(x + width/2, y);
+	}
+
 	public function cpuMonkeyAssault():Void
 	{
 		acceleration.x = 0;
@@ -360,21 +384,6 @@ class Player extends FlxExtendedSprite
 		}
 	}
 
-	override public function reset(X:Float, Y:Float):Void
-	{
-		super.reset(X, Y);
-
-		acceleration.y = gravity;
-		diving = false;
-		drag.x = gravity; // Ground friction
-		health = 1;
-		maxVelocity.x = Reg.RACERSPEED * 2.25;
-		maxVelocity.y = 2 * gravity; 
-		solid = true;
-		_jumped = false;
-		_jumpStrength = 136;
-	}
-
 	public function respawn(X:Float, Y:Float):Void
 	{
 		reset(X, Y);
@@ -408,14 +417,4 @@ class Player extends FlxExtendedSprite
 
 		kill();
 	}
-
-	override public function kill():Void
-	{
-		super.kill();
-		deathTimer = 1;
-		FlxG.sound.play(_deathStrings[FlxRandom.intRanged(0, _deathStrings.length-1)], 0.25);
-		// FlxG.sound.play("Bananabomb");
-		// beam.reset(x + width/2, y);
-	}
-
 }
