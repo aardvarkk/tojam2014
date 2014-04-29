@@ -388,14 +388,21 @@ class PlayState extends FlxState
 			{
 				selectNextPlayer();
 			}
-			if (FlxG.keys.justPressed.Q)
+			if (FlxG.keys.justPressed.O)
 			{
 				for (p in _players)
 				{
-					if (p != _players.members[currentlySelectedPlayer])
+					if (p.number != currentlySelectedPlayer)
 					{
 						p.autoscrollMonkey = true;
 					}
+				}
+			}
+			if (FlxG.keys.justPressed.P)
+			{
+				for (p in _players)
+				{
+					p.autoscrollMonkey = false;
 				}
 			}
 		}
