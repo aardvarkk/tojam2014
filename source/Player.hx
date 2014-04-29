@@ -95,10 +95,6 @@ class Player extends FlxExtendedSprite
 		{
 			controlSet = Reg.KeyboardControlSet[number];
 			FlxG.log.add('Player $number using keyboard control set $controlSet');
-
-			// override if Single controller mode
-			if (Reg.SingleControllerMode)
-				controlSet = 0;
 		}
 		else
 		{
@@ -322,9 +318,6 @@ class Player extends FlxExtendedSprite
 		// It's either going to trigger a jump or a dive bomb, depending upon whether or not down key is held
 		if (isJustPressing(Reg.JUMP))
 		{
-			// if not selected in multi mode exit
-			if (Reg.SingleControllerMode == true && selected == false) return;
-
 			// Starting dive bomb
 			// If not already diving and BOTH trying to start a jump and holding down, start the divebomb
 			// Immediately set vertical velocity
@@ -373,9 +366,6 @@ class Player extends FlxExtendedSprite
 
 	private function isPressing(Direction:Int):Bool
 	{
-		if (Reg.SingleControllerMode == true && selected == false)
-			return false;
-
 		if (Direction == FlxObject.UP)
 		{
 			if (Reg.KeyboardControlSet[number] == null)
@@ -460,9 +450,6 @@ class Player extends FlxExtendedSprite
 
 	private function isJustPressing(Direction:Int):Bool
 	{
-		if (Reg.SingleControllerMode == true && selected == false)
-			return false;
-
 		if (Direction == FlxObject.UP)
 		{
 			if (Reg.KeyboardControlSet[number] == null)
