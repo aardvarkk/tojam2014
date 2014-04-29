@@ -245,7 +245,7 @@ class MenuState extends FlxState
 		}
 		else if (isJustPressing(FlxObject.RIGHT) || dpadRightJustPressed) 
 		{
-			_numPlayers = _numPlayers < MAX_PLAYERS ? _numPlayers + 1 : 2;
+			_numPlayers = _numPlayers < Reg.MAX_PLAYERS ? _numPlayers + 1 : 2;
 		}
 
         _twoPlayers.color   = _numPlayers == 2 ? 0xffffffff : 0xff111112;
