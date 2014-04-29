@@ -107,6 +107,10 @@ class Player extends FlxExtendedSprite
 			// For the sufami controllers, ABXY is the same as PS4 placement
 			// but the dpad is AxisX(0) for left (-1) and right (1)
 			// and AxisX(1) for up (-1) and down (1) where 0 is no input
+			// Forgot to commit two things separately so added this so I could make a new commit
+			// Added support for the USB controllers I have
+			// which use AxisX(0) for dpad X
+			// and AxisX(1) for dpad Y
 		}
 
 		bubble = new Bubble(X, Y);
