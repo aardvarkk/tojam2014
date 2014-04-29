@@ -1,9 +1,7 @@
 package;
 
 import flixel.FlxG;
-import flixel.FlxObject;
 import flixel.input.gamepad.FlxGamepad;
-import flixel.input.gamepad.XboxButtonID;
 import flixel.input.gamepad.PS4ButtonID;
 
 class Input
@@ -16,20 +14,20 @@ class Input
 	// which use AxisX(0) for dpad X
 	// and AxisX(1) for dpad Y
 
-	static public inline var UP      :Int = 0;
-	static public inline var DOWN    :Int = 1;
-	static public inline var LEFT    :Int = 2;
-	static public inline var RIGHT   :Int = 3;
-	static public inline var JUMP    :Int = 4;
-	static public inline var ACTION1 :Int = 5;
-	static public inline var ACTION2 :Int = 6;
-	static public inline var ACTION3 :Int = 7;
+	public static inline var UP      = 0;
+	public static inline var DOWN    = 1;
+	public static inline var LEFT    = 2;
+	public static inline var RIGHT   = 3;
+	public static inline var JUMP    = 4;
+	public static inline var ACTION1 = 5;
+	public static inline var ACTION2 = 6;
+	public static inline var ACTION3 = 7;
 
-	static public var gamepads:Array<FlxGamepad> = new Array<FlxGamepad>();
+	public static var gamepads:Array<FlxGamepad> = new Array<FlxGamepad>();
 
-	static public function isPressing(Action:Int, Number:Int):Bool
+	public static function isPressing(Action:Int, Number:Int):Bool
 	{
-		var style = Reg.SinglePlayerMode ? ControlStyle.Keyboard : Reg.ControlStyles[Number];
+		var style = Reg.SINGLE_PLAYER_MODE ? ControlStyle.Keyboard : Reg.ControlStyles[Number];
 		switch (style) {
 			case Keyboard:
 				return FlxG.keys.anyPressed([Reg.KeyboardControls[Number][Action]]);
@@ -49,9 +47,9 @@ class Input
 		return false;
 	}
 
-	static public function isJustPressing(Action:Int, Number:Int):Bool
+	public static function isJustPressing(Action:Int, Number:Int):Bool
 	{
-		var style = Reg.SinglePlayerMode ? ControlStyle.Keyboard : Reg.ControlStyles[Number];
+		var style = Reg.SINGLE_PLAYER_MODE ? ControlStyle.Keyboard : Reg.ControlStyles[Number];
 		switch (style) {
 			case Keyboard:
 				return FlxG.keys.anyJustPressed([Reg.KeyboardControls[Number][Action]]);

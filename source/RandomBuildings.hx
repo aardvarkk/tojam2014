@@ -36,7 +36,7 @@ class RandomBuildings extends FlxGroup
 			SizeY = FlxG.height;
 		}
 
-		var maxH = Math.floor(FlxG.height / Reg.blockSize - 1);
+		var maxH = Math.floor(FlxG.height / Reg.BLOCKSIZE - 1);
 		var curX = 0;
 		var buildingW = 16;
 		var buildingH = 4;
@@ -44,13 +44,13 @@ class RandomBuildings extends FlxGroup
 		while (curX + buildingW < SizeX) {
 
 			var X = curX;
-			var Y = FlxG.height - buildingH * Reg.blockSize;
+			var Y = FlxG.height - buildingH * Reg.BLOCKSIZE;
 			// FlxG.log.add('Add building @ $X, $Y of block size $buildingW x $buildingH');
 
 			add(new Building(X, Y, buildingW, buildingH));
 
 			var shiftX = FlxRandom.intRanged(MinDX, buildingW + MaxDX);
-			curX += shiftX * Reg.blockSize;
+			curX += shiftX * Reg.BLOCKSIZE;
 			// FlxG.log.add('Shifted forward by $shiftX blocks');
 			prvBuildingH = buildingH;
 

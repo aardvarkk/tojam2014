@@ -8,7 +8,7 @@ class Racer extends FlxSprite
 	{
 		super(X, Y);
 
-		loadGraphic(Reg.UFO, true, 48, 32);
+		loadGraphic(Reg.HANDS, true, 48, 32);
 		width = 32;
 		offset.x = 8; 
 

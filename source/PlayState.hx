@@ -15,14 +15,14 @@ import flixel.util.FlxTimer;
  */
 class PlayState extends FlxState
 {
-	private var _bananapops:FlxTypedGroup<Bananapop> = new FlxTypedGroup();
+	private var _bananaBlasts:FlxTypedGroup<BananaBlast> = new FlxTypedGroup();
 	private var _bombs     :FlxTypedGroup<Bomb>      = new FlxTypedGroup();
-	private var _boomerangs:FlxTypedGroup<Boomerang> = new FlxTypedGroup();
+	private var _bananas:FlxTypedGroup<Banana> = new FlxTypedGroup();
 	private var _bubbles   :FlxTypedGroup<Bubble>    = new FlxTypedGroup();
-	private var _explosions:FlxTypedGroup<Explosion> = new FlxTypedGroup();
+	private var _bombBlasts:FlxTypedGroup<BombBlast> = new FlxTypedGroup();
 	private var _missiles  :FlxTypedGroup<Missile>   = new FlxTypedGroup();
 	private var _players   :FlxTypedGroup<Player>    = new FlxTypedGroup();
-	private var _stinkbombs:FlxTypedGroup<Stinkbomb> = new FlxTypedGroup();
+	private var _missileBlasts:FlxTypedGroup<MissileBlast> = new FlxTypedGroup();
 
 	private var _backdropsFar:Backdrops;
 	private var _backdropsMid:Backdrops;
@@ -84,7 +84,7 @@ class PlayState extends FlxState
 		// And mount the player whose turn it is
 		var p = _numPlayers;
 		while (--p >= 0) {
-			var player = new Player(150, 100, p, _bombs, _boomerangs, _missiles);
+			var player = new Player(150, 100, p, _bombs, _bananas, _missiles);
 			_players.add(player);
 			_bubbles.add(player.bubble);
 
@@ -96,13 +96,13 @@ class PlayState extends FlxState
 		selectNextPlayer();
 		add(_players);
 		
-		add(_bananapops);
+		add(_bananaBlasts);
 		add(_bombs);
-		add(_boomerangs);
+		add(_bananas);
 		add(_bubbles);
-		add(_explosions);
+		add(_bombBlasts);
 		add(_missiles);
-		add(_stinkbombs);
+		add(_missileBlasts);
 
 		_backdropsMid = new Backdrops(this, Reg.BACKDROPSMID);
 
@@ -225,7 +225,7 @@ class PlayState extends FlxState
 				if (p != _rider)
 				{
 					FlxG.overlap(p, _bombs, explodeOnPlayer);
-					FlxG.overlap(p, _boomerangs, splatOnPlayer);
+					FlxG.overlap(p, _bananas, splatOnPlayer);
 					FlxG.overlap(p, _missiles, stankOnPlayer);
 				}
 			}
@@ -244,17 +244,17 @@ class PlayState extends FlxState
 			FlxG.switchState(new MenuState());
 		}
 
-		if (Reg.SinglePlayerMode && FlxG.keys.justPressed.SPACE) {
+		if (Reg.SINGLE_PLAYER_MODE && FlxG.keys.justPressed.SPACE) {
 			selectNextPlayer();
 		}
 
-		if (Reg.SinglePlayerMode && FlxG.keys.justPressed.O) {
+		if (Reg.SINGLE_PLAYER_MODE && FlxG.keys.justPressed.O) {
 			for (p in _players) {
 				p.autoscrollMonkey = !p.selected;
 			}
 		}
 
-		if (Reg.SinglePlayerMode && FlxG.keys.justPressed.P) {
+		if (Reg.SINGLE_PLAYER_MODE && FlxG.keys.justPressed.P) {
 			for (p in _players) {
 				p.autoscrollMonkey = false;
 			}
@@ -307,7 +307,7 @@ class PlayState extends FlxState
 	{
 		P.velocity.x += R.velocity.x * 2;
 		P.velocity.y += R.velocity.y * 2;
-		_explosions.recycle(Explosion,[],true,false).boom(R, R.velocity.x/4, R.velocity.y/4);
+		_bombBlasts.recycle(BombBlast,[],true,false).boom(R, R.velocity.x/4, R.velocity.y/4);
 		R.kill();
 		if (FlxRandom.intRanged(0,4) == 0) {
 			FlxG.sound.play("Megascreech1", 0.15);
@@ -318,7 +318,7 @@ class PlayState extends FlxState
 	{
 		P.velocity.x += R.velocity.x * 2;
 		P.velocity.y += R.velocity.y * 2;
-		_bananapops.recycle(Bananapop,[],true,false).boom(R, R.velocity.x/4, R.velocity.y/4);
+		_bananaBlasts.recycle(BananaBlast,[],true,false).boom(R, R.velocity.x/4, R.velocity.y/4);
 		R.kill();
 
 		if (FlxRandom.intRanged(0,4) == 0) {
@@ -330,7 +330,7 @@ class PlayState extends FlxState
 	{
 		P.velocity.x += R.velocity.x * 2;
 		P.velocity.y += R.velocity.y * 2;
-		_stinkbombs.recycle(Stinkbomb,[],true,false).boom(R, R.velocity.x/4, R.velocity.y/4);
+		_missileBlasts.recycle(MissileBlast,[],true,false).boom(R, R.velocity.x/4, R.velocity.y/4);
 		R.kill();
 
 		if (FlxRandom.intRanged(0,4) == 0) {

@@ -1,80 +1,24 @@
 package;
 
-import flixel.util.FlxSave;
-import flixel.group.FlxTypedGroup;
-
-/**
- * Handy, pre-built Registry class that can be used to store 
- * references to objects and other things for quick-access. Feel
- * free to simply ignore it or change it in any way you like.
- */
 class Reg
 {
-	static public inline var MAX_PLAYERS = 4;
+	// Maximum number of players allowed in the game
+	public static inline var MAX_PLAYERS = 4;
 
-	/**
-	 * Generic levels Array that can be used for cross-state stuff.
-	 * Example usage: Storing the levels of a platformer.
-	 */
-	static public var levels:Array<Dynamic> = [];
-	/**
-	 * Generic level variable that can be used for cross-state stuff.
-	 * Example usage: Storing the current level number.
-	 */
-	static public var level:Int = 0;
-	/**
-	 * Size of smallest detail block
-	 */
-	static public var blockSize:Int = 16; 
-	/**
-	 * Generic scores Array that can be used for cross-state stuff.
-	 * Example usage: Storing the scores for level.
-	 */
-	static public var scores:Array<Int> = [];
-		
-	static public function resetScores() 
-	{
-		scores = [];
-	}
+	// How long a game round is (horizontally in pixels)
+	public static inline var LEVELLENGTH = 2048 * 4;
 
-	static public function getScoreString()
-	{
-		var scoreString = "";
-		for (i in 0...scores.length)
-		{
-			var score = Reg.scores[i];
-			scoreString += '    $score\n';
-		}
-		return scoreString;
-	}
-
-	static public function getWinner():Int
-	{
-		var maxScoreIdx = 0;
-		var maxScore = scores[0];
-		for (i in 1...scores.length) 
-		{
-			if (scores[i] > maxScore) {
-				maxScore = scores[i];
-				maxScoreIdx = i;
-			}
-		}
-		return maxScoreIdx;
-	}
-
-	/**
-	 * Generic score variable that can be used for cross-state stuff.
-	 * Example usage: Storing the current score.
-	 */
-	static public var score:Int = 0;
-	/**
-	 * Generic bucket for storing different <code>FlxSaves</code>.
-	 * Especially useful for setting up multiple save slots.
-	 */
-	static public var saves:Array<FlxSave> = [];
+	// General unit size (size of level block features)
+	public static inline var BLOCKSIZE = 16; 
 
 	// Used to control all players with 1 gamepad / key set by switching between them
-	public static var SinglePlayerMode = true; 
+	public static inline var SINGLE_PLAYER_MODE = true; 
+
+	public static inline var RACERWIDTH  = 48;
+	public static inline var RACERHEIGHT = 16;
+	public static inline var RACERSPEED  = 75;
+	
+	public static inline var DEMOSEED    = 635918;
 
 	// Controls used for each player
 	public static var ControlStyles:Array<ControlStyle> =
@@ -113,40 +57,57 @@ class Reg
 		["images/jungleforegroundbot.png", 1.3, 48]
 	];
 
-	 /**
-	 * Game sprites
-	 */
-	 public static var MONKEYS:Array<String> = [
-	 	"images/monkey.png",
+	public static var MONKEYS:Array<String> = [
+		"images/monkey.png",
 		"images/monkey2.png",
 		"images/monkey3.png",
 		"images/monkey4.png"
-	 ];
+	];
 
-	 public static inline var BUBBLE:String = "images/bubble.png";
+	public static inline var BUBBLE = "images/bubble.png";
+	public static inline var HANDS = "images/hand.png";
+	public static inline var CROSSHAIR = "images/crosshair.png";
+	public static inline var LEAVES = "images/leaves02.png";
+	public static inline var BANANA = "images/banana.png";
+	public static inline var BOMB = "images/bomb.png";
+	public static inline var MISSILE = "images/missile.png";
+	public static inline var MISSILE_BLAST = "images/stinkbomb.png";
+	public static inline var BOMB_BLAST = "images/explosion1.png";
+	public static inline var BANANA_BLAST = "images/bananapop.png";
+	public static inline var LEVELTILES = "images/tiles.png";
 
-	 public static inline var UFO:String = "images/hand.png";
+	public static var scores:Array<Int> = [];
 
-	 public static inline var CROSSHAIR:String = "images/crosshair.png";
-	 /**
-	 * Particles
-	 */
-	 public static inline var PARTICLE:String = "images/leaves02.png";
-	 public static inline var BANANA:String = "images/banana.png";
-	 public static inline var BOMB:String = "images/bomb.png";
-	 public static inline var MISSILE:String = "images/missile.png";
-	 public static inline var STINKBOMB:String = "images/stinkbomb.png";
-	 public static inline var EXPLOSION:String = "images/explosion1.png";
-	 public static inline var BANANAPOP:String = "images/bananapop.png";
-	 /*
-	 * Map tiles
-	 */
-	 public static inline var LEVELTILES:String = "images/tiles.png";
+	public static function resetScores() 
+	{
+		scores = [];
+	}
 
-	 public static inline var RACERWIDTH:Int = 48;
-	 public static inline var RACERHEIGHT:Int = 16;
-	 public static inline var RACERSPEED:Int = 75;
+	public static function getScoreString()
+	{
+		// Space out the scores so the monkey sprites can fit in
+		// Hacky, but it works!
+		var scoreString = "";
+		for (i in 0...scores.length)
+		{
+			var score = Reg.scores[i];
+			scoreString += '    $score\n';
+		}
+		return scoreString;
+	}
 
-	 public static inline var LEVELLENGTH:Int = 2048 * 4;
-	 public static inline var DEMOSEED:Int = 635918;
+	public static function getWinner():Int
+	{
+		var maxScoreIdx = 0;
+		var maxScore = scores[0];
+		for (i in 1...scores.length) 
+		{
+			if (scores[i] > maxScore) {
+				maxScore = scores[i];
+				maxScoreIdx = i;
+			}
+		}
+		return maxScoreIdx;
+	}
+
 }

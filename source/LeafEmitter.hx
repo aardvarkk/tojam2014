@@ -13,7 +13,7 @@ class LeafEmitter extends FlxEmitter
 	public function init()
 	{
 		setSize(720, FlxG.height);
-		makeParticles(Reg.PARTICLE, 200, 0, true, 0);
+		makeParticles(Reg.LEAVES, 200, 0, true, 0);
 		setXSpeed(-80, -10); // 10-100 looks good - try it in ruins?
 		setYSpeed(-150, -50);
 		setAlpha(0, 1, 0, 1);

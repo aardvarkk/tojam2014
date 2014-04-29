@@ -18,12 +18,12 @@ class Building extends FlxSprite
 		var tileset = FlxRandom.intRanged(0, 4);
 
 		// FlxG.log.add('Building at $X,$Y,$Width,$Height');
-		var sprite:FlxSprite = new FlxSprite().loadGraphic(Reg.LEVELTILES, true, Reg.blockSize, Reg.blockSize);
+		var sprite:FlxSprite = new FlxSprite().loadGraphic(Reg.LEVELTILES, true, Reg.BLOCKSIZE, Reg.BLOCKSIZE);
 
 		// Choose random full-alpha color (useful for debugging)
 		var color = FlxRandom.int();
 		color = color | 0xff000000;
-		makeGraphic(Width * Reg.blockSize, Height * Reg.blockSize, color);
+		makeGraphic(Width * Reg.BLOCKSIZE, Height * Reg.BLOCKSIZE, color);
 
 		for (r in 0...Height) {
 			for (c in 0...Width) {
@@ -32,7 +32,7 @@ class Building extends FlxSprite
 				sprite.animation.frameIndex = tileset * 16 + FlxRandom.intRanged(0, 15);
 				sprite.drawFrame();
 
-				stamp(sprite, c * Reg.blockSize, r * Reg.blockSize);
+				stamp(sprite, c * Reg.BLOCKSIZE, r * Reg.BLOCKSIZE);
 				// FlxG.log.add("Row " + r + ", Column " + c);
 			}
 		}

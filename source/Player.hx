@@ -34,7 +34,7 @@ class Player extends FlxExtendedSprite
 	private var _jumped = false;
 	private var _landed = false;
 	private var _bombs:FlxTypedGroup<Bomb>;
-	private var _boomerangs:FlxTypedGroup<Boomerang>;
+	private var _bananas:FlxTypedGroup<Banana>;
 	private var _missiles:FlxTypedGroup<Missile>;
 	private var _invTimer = 0.8;
 	private var _invDuration = 0.8;
@@ -51,7 +51,7 @@ class Player extends FlxExtendedSprite
 		Y:Int, 
 		Number:Int, 
 		?Bombs:FlxTypedGroup<Bomb>, 
-		?Boomerangs:FlxTypedGroup<Boomerang>, 
+		?Bananas:FlxTypedGroup<Banana>, 
 		?Missiles:FlxTypedGroup<Missile>
 		)
 	{
@@ -59,7 +59,7 @@ class Player extends FlxExtendedSprite
 
 		number = Number;
 		_bombs = Bombs; // ref to the bomb group
-		_boomerangs = Boomerangs;
+		_bananas = Bananas;
 		_missiles = Missiles;
 
 		loadGraphic(Reg.MONKEYS[number], true, 16, 16);
@@ -179,7 +179,7 @@ class Player extends FlxExtendedSprite
 			if (r == 0) {
 				_bombs.recycle(Bomb,[],true,false).shoot(this, _aim);
 			} else if (r == 1) {
-				_boomerangs.recycle(Boomerang,[],true,false).shoot(this, _aim);
+				_bananas.recycle(Banana,[],true,false).shoot(this, _aim);
 			} else {
 				_missiles.recycle(Missile,[],true,false).shoot(this, _aim);
 			}
@@ -190,8 +190,8 @@ class Player extends FlxExtendedSprite
 
 	public function ridingControls():Void
 	{
-		var controlNumber = (Reg.SinglePlayerMode) ? 0 : number;
-		if (Reg.SinglePlayerMode && !selected) {
+		var controlNumber = (Reg.SINGLE_PLAYER_MODE) ? 0 : number;
+		if (Reg.SINGLE_PLAYER_MODE && !selected) {
 			return;
 		}
 
@@ -226,7 +226,7 @@ class Player extends FlxExtendedSprite
 				attackTimer = ATTACKDELAY;
 			} else if (Input.isPressing(Input.ACTION2, controlNumber)) {
 				FlxG.log.add("Shot a boomerang!");
-				_boomerangs.recycle(Boomerang,[],true,false).shoot(this, _aim);
+				_bananas.recycle(Banana,[],true,false).shoot(this, _aim);
 				attackTimer = ATTACKDELAY;
 			} else if (Input.isPressing(Input.ACTION3, controlNumber)) {
 				FlxG.log.add("Shot a missile!");
@@ -238,8 +238,8 @@ class Player extends FlxExtendedSprite
 
 	public function movingControls():Void
 	{
-		var controlNumber = (Reg.SinglePlayerMode) ? 0 : number;
-		if (Reg.SinglePlayerMode && !selected) {
+		var controlNumber = (Reg.SINGLE_PLAYER_MODE) ? 0 : number;
+		if (Reg.SINGLE_PLAYER_MODE && !selected) {
 			return;
 		}
 
