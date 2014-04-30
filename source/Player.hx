@@ -352,7 +352,7 @@ class Player extends FlxExtendedSprite
 
 			// WALL JUMP KICKBACK
 			if (climbing && !isTouching(FlxObject.FLOOR)) {
-				velocity.x = (facing == FlxObject.LEFT) ? 100 : -100;
+				velocity.x = (facing == FlxObject.LEFT) ? 100 : -100; // Review later. This doesn't work. If you walljump facing left you don't get any x velocity to the right.
 			}
 		}
 		
