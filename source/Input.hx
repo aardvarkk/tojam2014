@@ -38,7 +38,6 @@ class Input
 			case Keyboard:
 				return FlxG.keys.anyPressed([Reg.KeyboardControls[Number][Action]]);
 			case Gamepad:
-				if (gamepads.length <= Number) return false; // redundant line to prevent crashing without disabling gamepad just in case
 				switch (Action) {
 					case UP      : return gamepads[Number].getXAxis(1) == -1 || gamepads[Number].dpadUp;
 					case DOWN    : return gamepads[Number].getXAxis(1) ==  1 || gamepads[Number].dpadDown;
@@ -64,7 +63,6 @@ class Input
 			case Keyboard:
 				return FlxG.keys.anyJustPressed([Reg.KeyboardControls[Number][Action]]);
 			case Gamepad:
-				if (gamepads.length <= Number) return false; // redundant line to prevent crashing without disabling gamepad just in case
 				switch (Action) {
 					case UP      : return gamepads[Number].getXAxis(1) == -1 || gamepads[Number].dpadUp;
 					case DOWN    : return gamepads[Number].getXAxis(1) ==  1 || gamepads[Number].dpadDown;
