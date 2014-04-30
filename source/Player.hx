@@ -336,6 +336,7 @@ class Player extends FlxExtendedSprite
 		_jumpHold = true;
 
 		// Wall kickback
+		// TODO: This doesn't work. If you walljump facing left you don't get any x velocity to the right.
 		velocity.x = (facing == FlxObject.LEFT) ? 100 : -100;
 	}
 

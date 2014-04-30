@@ -16,6 +16,8 @@
 	<!-- <window width="1920" height="1080" fps="60" background="#111112" hardware="true" vsync="true" /> -->
 	<window width="480" height="270" fps="60" background="#111112" hardware="true" vsync="true" />
 	<!-- <window width="720" height="405" fps="60" background="#111112" hardware="true" vsync="true" /> -->
+	<!-- <window width="960" height="540" fps="60" background="#111112" hardware="true" vsync="true" /> -->
+	<!-- <window width="480" height="270" fps="60" background="#111112" hardware="true" vsync="true" /> -->
 	
 	<!--Web-specific-->
 	<window if="web"		orientation="portrait"  />
