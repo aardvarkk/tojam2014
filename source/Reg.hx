@@ -48,7 +48,7 @@ class Reg
 		["images/mountainsFar.png", 0.1, 180],
 		["images/buildingsMid.png", 0.2, 128],
 		["images/buildingsNear.png", 0.4, 80],
-		["images/mist.png", 0.45, 138] // actually 128 though
+		["images/mist.png", 0.45, 138]
 	];
 
 	public static var BACKDROPSMID:Array<Dynamic> = [
