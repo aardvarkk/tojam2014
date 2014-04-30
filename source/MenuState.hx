@@ -24,10 +24,6 @@ class MenuState extends FlxState
 	private var choosePlayers:FlxText;
 	private var names:FlxText;
 
-	private static var recording = false;
-	private static var replaying = false;
-	private static var playbackOnly = true; // this is for when you don't wanna record at all
-
 	private var _numPlayers = 2;
 	private var _twoPlayers:FlxText;
 	private var _threePlayers:FlxText;
@@ -131,18 +127,6 @@ class MenuState extends FlxState
 		FlxG.camera.setBounds(0, 0, Reg.LEVELLENGTH * 2, FlxG.height);
 		FlxG.camera.follow(_players[0], FlxCamera.STYLE_PLATFORMER, new FlxPoint(50, 0), 4);
 
-		if (!playbackOnly)
-		{
-			if (!recording && !replaying)
-			{
-				startRecord();
-			}
-			
-			if (recording) 
-			{
-				choosePlayers.text = "RECORDING";
-			}
-		}
 	}
 
 	/**
@@ -212,37 +196,6 @@ class MenuState extends FlxState
 	private function onResetFaded():Void
 	{
 		FlxG.resetState();
-	}
-
-	private function startRecord():Void 
-	{
-		recording = true;
-		replaying = false;
-
-		/**
-		 *Note FlxG.recordReplay will restart the game or state
-		 *This function will trigger a flag in FlxGame
-		 *and let the internal FlxReplay to record input on every frame
-		 */
-		FlxG.vcr.startRecording(false);
-	}
-
-	private function startPlay():Void 
-	{
-		replaying = true;
-		recording = false;
-
-		/**
-		 * Here we get a string from stopRecoding()
-		 * which records all the input during recording
-		 * Then we load the save
-		 */
-
-		var save:String = FlxG.vcr.stopRecording();
-		/**
-		 * NOTE "ANY" or other key wont work under debug mode!
-		 */
-		FlxG.vcr.loadReplay(save, new MenuState(), ["ANY", "MOUSE"], 0, startRecord);
 	}
 
 	private function isDpadPressed(Action:Int):Bool

@@ -12,7 +12,15 @@ class Reg
 	public static inline var BLOCKSIZE = 16; 
 
 	// Used to control all players with 1 gamepad / key set by switching between them
-	public static inline var SINGLE_PLAYER_MODE = true; 
+	public static inline var SINGLE_PLAYER_MODE = true;
+	/*
+	* Used to override the normal controls when testing with one input
+	* If it's set to gamepad but there is no gamepad,
+	* it will just default back to keyboard
+	* So you pretty much only need to change this if
+	* You have a gamepad plugged in but don't want to use it.
+	*/
+	public static var SINGLE_PLAYER_CONTROLSTYLE = ControlStyle.Gamepad;
 
 	public static inline var RACERWIDTH  = 48;
 	public static inline var RACERHEIGHT = 16;
@@ -24,6 +32,9 @@ class Reg
 	public static inline var DEMOSEED    = 635918;
 
 	// Controls used for each player
+	// Defaults back to keyboard if there is no gamepad
+	// Ideally later it'll give the first available keyset to the first player who needs it
+	// IE giving keyset 0 to player 2 if player 0 and 1 already have gamepads
 	public static var ControlStyles:Array<ControlStyle> =
 	[
 		Gamepad,
@@ -35,10 +46,10 @@ class Reg
 	// null means we'll use a gamepad for this player slot, otherwise we'll use the given keyboard controls
 	public static var KeyboardControls:Array<Dynamic> =
 	[
-		["UP", "DOWN", "LEFT", "RIGHT", "Z", "X", "C", "V"],
-		["NUMPADFIVE","NUMPADTWO","NUMPADONE","NUMPADTHREE","NUMPADSEVEN","NUMPADEIGHT","NUMPADNINE","NUMPADMINUS"],
-		["W", "S", "A", "D", "R", "T", "Y", "U"],
-		["I","K","J","L","O","P","SEMICOLON","QUOTE"]
+		["UP", "DOWN", "LEFT", "RIGHT", "Z", "X", "C", "V", "ENTER"],
+		["NUMPADFIVE","NUMPADTWO","NUMPADONE","NUMPADTHREE","NUMPADSEVEN","NUMPADEIGHT","NUMPADNINE","NUMPADMINUS", "ENTER"],
+		["W", "S", "A", "D", "R", "T", "Y", "U", "ENTER"],
+		["I","K","J","L","O","P","SEMICOLON","QUOTE", "ENTER"]
 	];
 
 	public static var BACKDROPSFAR:Array<Dynamic> = [

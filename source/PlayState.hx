@@ -136,11 +136,18 @@ class PlayState extends FlxState
     _cartScoreTimer = new FlxTimer(1, accumulateCartScore, 0);
     
     FlxG.sound.play("Ambient Jungle", 0.4, true);
+
+    FlxG.watch.add(Input, "gamepads", "Gamepads");
   }
   
   override public function update():Void
   {
     super.update();
+
+	// You have to get the active gamepads constantly.
+	// It doesn't work if you just try to instantiate it
+	// Maybe better to just use FlxG.gamepads.getActiveGamepads in Input instead?
+	Input.getActiveGamepads();
 
     // Update player score strings visually
     _infoText.text = 'Round: ${_round + 1} of ${_numPlayers}\n';
@@ -207,7 +214,7 @@ class PlayState extends FlxState
       FlxG.switchState(new MenuState());
     }
 
-    if (Reg.SINGLE_PLAYER_MODE && FlxG.keys.justPressed.SPACE) {
+    if (Reg.SINGLE_PLAYER_MODE && (FlxG.keys.justPressed.SPACE || Input.isJustPressing(Input.START, 0))) {
       selectNextPlayer();
     }
 
