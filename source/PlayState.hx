@@ -9,6 +9,14 @@ import flixel.group.FlxTypedGroup;
 import flixel.text.FlxText;
 import flixel.util.FlxRandom;
 import flixel.util.FlxTimer;
+import flixel.addons.display.FlxZoomCamera;
+
+enum Stage
+{
+  Countdown;
+  Playing;
+  RoundOver;
+}
 
 class PlayState extends FlxState
 {
@@ -33,12 +41,20 @@ class PlayState extends FlxState
   private var _numPlayers = -1;
   private var _round = -1;
   private var _rider:Player;
-  private var _roundOver = false;
   private var _cartScoreTimer:FlxTimer;
   private var _respawnPlayerTimer:FlxTimer;
   private var _crosshair:Crosshair = new Crosshair();
   private var _scoreSprites:Array<FlxSprite> = new Array();
   private var _selectedPlayer = -1;
+
+  private var _countdownTimer:FlxTimer;
+  private var _countdownText:FlxText;
+  private var _countdownZoomTarget = new FlxObject(FlxG.width/2, FlxG.height/2 - 20);
+
+  private var _stage:Stage;
+
+  private var _baseZoom:Float;
+  private var _zoomCamera = new FlxZoomCamera(0, 0, FlxG.width, FlxG.height);
 
   public function new(NumPlayers:Int = 2, ?Round:Int = 0)
   {
@@ -58,8 +74,10 @@ class PlayState extends FlxState
 
     FlxG.mouse.visible = false;
 
-    FlxG.camera.setBounds(0, 0, Reg.LEVELLENGTH, FlxG.height);
+    _baseZoom = FlxG.camera.zoom;
+    FlxG.cameras.reset(_zoomCamera);
     FlxG.cameras.bgColor = 0xff4a9294;
+    FlxG.camera.setBounds(0, 0, Reg.LEVELLENGTH, FlxG.height);
 
     _backdropsFar = new Backdrops(this, Reg.BACKDROPSFAR);
 
@@ -87,6 +105,7 @@ class PlayState extends FlxState
         _bananas,
         _missiles
       );
+      trace('made player $p at position ${player.x} ${player.y}');
       _players.add(player);
       _bubbles.add(player.bubble);
 
@@ -132,111 +151,156 @@ class PlayState extends FlxState
     FlxG.camera.flash(0xffffffff,0.25);
     FlxG.camera.setBounds(0,0, Reg.LEVELLENGTH, FlxG.height);
 
-    // Keep track of scores for players
-    _cartScoreTimer = new FlxTimer(1, accumulateCartScore, 0);
-    
     FlxG.sound.play("Ambient Jungle", 0.4, true);
+
+    _countdownText = new FlxText(0, 80, FlxG.width);
+    _countdownText.size = 40;
+    _countdownText.color = 0xff111112;
+    _countdownText.alignment = "center";
+    add(_countdownText);
+
+    switchToCountdown();
   }
   
   override public function update():Void
   {
     super.update();
 
-    // Update player score strings visually
-    _infoText.text = 'Round: ${_round + 1} of ${_numPlayers}\n';
-    _infoText.text += 'Remaining: ${Math.max(0, Math.round(Reg.LEVELLENGTH - _racer.x - _racer.width))}m\n';
-    _infoText.text += Reg.getScoreString();
-    drawScores(9, 28);
+    // Execute the following REGARDLESS of stage
+    {
+      // Game controls
+      if (FlxG.keys.justPressed.ESCAPE) {
+        FlxG.switchState(new MenuState());
+      }
 
-    // Game actively playing
-    if (!_roundOver) {
-      // Slide camera to follow racer
-      FlxG.camera.scroll.x += Reg.RACERSPEED * FlxG.elapsed;
+      if (Reg.SINGLE_PLAYER_MODE && (FlxG.keys.justPressed.SPACE || Input.isJustPressing(Input.START, 0))) {
+        selectNextPlayer();
+      }
 
-      // Resize the world - collisions are only detected within the world bounds
-      FlxG.worldBounds.set(FlxG.camera.scroll.x - 20, FlxG.camera.scroll.y - 20, FlxG.width + 20, FlxG.height + 20);
-      
+      if (Reg.SINGLE_PLAYER_MODE && FlxG.keys.justPressed.O) {
+        for (p in _players) {
+          p.autoscrollMonkey = !p.selected;
+        }
+      }
+
+      if (Reg.SINGLE_PLAYER_MODE && FlxG.keys.justPressed.P) {
+        for (p in _players) {
+          p.autoscrollMonkey = false;
+        }
+      }
+
+      // Update player score strings visually
+      _infoText.text = 'Round: ${_round + 1} of ${_numPlayers}\n';
+      _infoText.text += 'Remaining: ${Math.max(0, Math.round(Reg.LEVELLENGTH - _racer.x - _racer.width))}m\n';
+      _infoText.text += Reg.getScoreString();
+      drawScores(9, 28);
+
       // Collisions
-      FlxG.overlap(_players, _racer, swap);
-      FlxG.collide(_players, _players);
-
-      for (b in _bombs) {
-        if (b.velocity.y >= 0) {
-          FlxG.collide(b, _buildings, bombBounce);
-        }
-      }
-
-      // off-screen kill
+      // FlxG.overlap(_players, _racer, swap);
+      // FlxG.collide(_players, _players);
       for (p in _players) {
-        if (p.alive == false)
-        {
-          p.deathTimer -= FlxG.elapsed;
-          if (p.deathTimer < 0)
-            respawnPlayer(p);
-        }
-
-        if (p.alive == true && (p.y > FlxG.height + 20 || p.x + p.width < FlxG.camera.scroll.x - 20))
-        {
-          p.kill();
-          Reg.scores[p.number] -= 100;
-        }
-        if (p.diving == false)
-        {
+        // if (!p.diving) {
           FlxG.collide(p, _buildings);
+        // }
+      }
+    }
+
+    // Each stage has different updates
+    switch (_stage) {
+      case Countdown:
+        _countdownText.text = Std.string(Math.ceil(_countdownTimer.timeLeft));
+        _zoomCamera.targetZoom = _baseZoom + 0.3 * (_countdownTimer.timeLeft % 1);
+      case Playing:
+        // Slide camera to follow racer
+        FlxG.camera.scroll.x += Reg.RACERSPEED * FlxG.elapsed;
+
+        // Resize the world - collisions are only detected within the world bounds
+        FlxG.worldBounds.set(FlxG.camera.scroll.x - 20, FlxG.camera.scroll.y - 20, FlxG.width + 20, FlxG.height + 20);
+        
+        for (b in _bombs) {
+          if (b.velocity.y >= 0) {
+            FlxG.collide(b, _buildings, bombBounce);
+          }
         }
 
-        if (p != _rider)
-        {
-          FlxG.overlap(p, _bombs, bombOnPlayer);
-          FlxG.overlap(p, _bananas, bananaOnPlayer);
-          FlxG.overlap(p, _missiles, missileOnPlayer);
-        }
-      }
+        for (p in _players) {
+          if (p.alive)
+          {
+            // Off-screen kill
+            if (p.x + p.width < FlxG.camera.scroll.x - 20)
+            {
+              p.kill();
+              Reg.scores[p.number] -= 100;
+            }
+          } else {
+            p.deathTimer -= FlxG.elapsed;
+            
+            if (p.deathTimer < 0) {
+              p.respawn(FlxG.camera.scroll.x + 48, 48);
+            }
+          }
 
-      // Check for round over
-      if (_racer.x + _racer.width >= Reg.LEVELLENGTH) {
-        _roundOver = true;
-      }
+          if (p != _rider) {
+            FlxG.overlap(p, _bombs, bombOnPlayer);
+            FlxG.overlap(p, _bananas, bananaOnPlayer);
+            FlxG.overlap(p, _missiles, missileOnPlayer);
+          }
+        }
+
+        // Check for round over
+        if (_racer.x + _racer.width >= Reg.LEVELLENGTH) {
+          switchToRoundOver();
+        }
+      case RoundOver:
+        new FlxTimer(3, endRoundTimer);
+    }
+  }
+
+  private function switchToPlaying(Timer:FlxTimer)
+  {
+    _countdownText.destroy();
+    _zoomCamera.targetZoom = _baseZoom;
+    _zoomCamera.target = null;
+    _cartScoreTimer = new FlxTimer(1, accumulateCartScore, 0);
+    _racer.startRacing();
+
+    for (p in _players) {
+      p.frozen = false;
+    }
+
+    _stage = Stage.Playing;
+  }
+
+  private function endRoundTimer(Timer:FlxTimer)
+  {
+    // Done the game, show which player won!
+    if (_round >= _numPlayers - 1) {
+      FlxG.switchState(new ShowWinnerState());
     } else {
-      // Round is over!
-      new FlxTimer(3, endRoundTimer);
-    }
-
-    // Game controls
-    if (FlxG.keys.justPressed.ESCAPE) {
-      FlxG.switchState(new MenuState());
-    }
-
-    if (Reg.SINGLE_PLAYER_MODE && (FlxG.keys.justPressed.SPACE || Input.isJustPressing(Input.START, 0))) {
-      selectNextPlayer();
-    }
-
-    if (Reg.SINGLE_PLAYER_MODE && FlxG.keys.justPressed.O) {
-      for (p in _players) {
-        p.autoscrollMonkey = !p.selected;
-      }
-    }
-
-    if (Reg.SINGLE_PLAYER_MODE && FlxG.keys.justPressed.P) {
-      for (p in _players) {
-        p.autoscrollMonkey = false;
-      }
+      // More rounds to go!
+      FlxG.switchState(new PlayState(_numPlayers, _round + 1));
     }
   }
 
-  public function accumulateCartScore(Timer:FlxTimer)
+  private function switchToCountdown()
   {
-    if (!_roundOver) {
-      Reg.scores[_rider.number] += 25;
-    }
+    _stage = Stage.Countdown;
+    _countdownTimer = new FlxTimer(3, switchToPlaying);
+    FlxG.camera.target = _countdownZoomTarget;
   }
 
-  public function respawnPlayer(P:Player):Void
+  private function switchToRoundOver()
   {
-    P.respawn(FlxG.camera.scroll.x + 48, 48);
+    _cartScoreTimer.destroy();
+    _stage = Stage.RoundOver;
   }
 
-  public function startRound(Round:Int)
+  private function accumulateCartScore(Timer:FlxTimer)
+  {
+    Reg.scores[_rider.number] += 25;
+  }
+
+  private function startRound(Round:Int)
   {
     _round = Round;
     FlxG.log.add('Starting game round $_round with $_numPlayers players');
@@ -249,7 +313,7 @@ class PlayState extends FlxState
     }
   }
 
-  public function drawScores(X:Int, Y:Int)
+  private function drawScores(X:Int, Y:Int)
   {
     var lineAdd = 11;
     for (i in 0..._numPlayers) {
@@ -259,7 +323,7 @@ class PlayState extends FlxState
     }
   }
 
-  public function selectNextPlayer():Void
+  private function selectNextPlayer():Void
   {
     _selectedPlayer = _selectedPlayer < _numPlayers - 1 ? _selectedPlayer + 1 : 0;
     for (p in _players) {
@@ -269,7 +333,7 @@ class PlayState extends FlxState
     // trace('Player ${_selectedPlayer} is currently selected');
   }
 
-  public function bombBounce(B:Bomb, R:Building):Void
+  private function bombBounce(B:Bomb, R:Building):Void
   {
     if (B.isTouching(FlxObject.FLOOR)) {
       B.velocity.y = -75;
@@ -282,7 +346,7 @@ class PlayState extends FlxState
     FlxG.sound.play("BombBounce", 0.25);
   }
 
-  public function swap(P:Player, R:FlxSprite):Void
+  private function swap(P:Player, R:FlxSprite):Void
   {
     // if the player colliding is the one who's already riding, don't do anything
     if (P == _rider) {
@@ -301,7 +365,7 @@ class PlayState extends FlxState
     Reg.scores[P.number] += 500;
   } 
 
-  public function bombOnPlayer(P:Player, R:FlxSprite):Void
+  private function bombOnPlayer(P:Player, R:FlxSprite):Void
   {
     P.velocity.x += R.velocity.x * 2;
     P.velocity.y += R.velocity.y * 2;
@@ -312,7 +376,7 @@ class PlayState extends FlxState
     }
   }
 
-  public function bananaOnPlayer(P:Player, R:FlxSprite):Void
+  private function bananaOnPlayer(P:Player, R:FlxSprite):Void
   {
     P.velocity.x += R.velocity.x * 2;
     P.velocity.y += R.velocity.y * 2;
@@ -324,7 +388,7 @@ class PlayState extends FlxState
     }
   }
 
-  public function missileOnPlayer(P:Player, R:FlxSprite):Void
+  private function missileOnPlayer(P:Player, R:FlxSprite):Void
   {
     P.velocity.x += R.velocity.x * 2;
     P.velocity.y += R.velocity.y * 2;
@@ -333,17 +397,6 @@ class PlayState extends FlxState
 
     if (FlxRandom.intRanged(0,4) == 0) {
       FlxG.sound.play("Megascreech2", 0.15);
-    }
-  }
-
-  public function endRoundTimer(Timer:FlxTimer)
-  {
-    // Done the game, show which player won!
-    if (_round >= _numPlayers - 1) {
-      FlxG.switchState(new ShowWinnerState());
-    } else {
-      // More rounds to go!
-      FlxG.switchState(new PlayState(_numPlayers, _round + 1));
     }
   }
 }

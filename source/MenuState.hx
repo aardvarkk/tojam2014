@@ -38,9 +38,6 @@ class MenuState extends FlxState
 	private var _timer = 0.0;
 	private var _timeLimit = 90;
 
-	/**
-	 * Function that is called up when to state is created to set it up. 
-	 */
 	override public function create():Void
 	{
 		super.create();
@@ -81,66 +78,62 @@ class MenuState extends FlxState
 		
 		_backdropsNear = new Backdrops(this, Reg.BACKDROPSNEAR);
 
-        var title = new FlxText(0, 80, FlxG.width, "CONCRETE JUNGLE");
-        title.size = 40;
-        title.color = 0xff111112;
-        title.alignment = "center";
-        add(title);
-        title.scrollFactor.x = 0;
+    var title = new FlxText(0, 80, FlxG.width, "CONCRETE JUNGLE");
+    title.size = 40;
+    title.color = 0xff111112;
+    title.alignment = "center";
+    add(title);
+    title.scrollFactor.x = 0;
 
-        choosePlayers = new FlxText(0, FlxG.height/2 + 50, FlxG.width, "Choose Number of Players");
-        choosePlayers.alignment = "center";
-        choosePlayers.color = 0xff111112;
-        add(choosePlayers);
-        choosePlayers.scrollFactor.x = 0;
+    choosePlayers = new FlxText(0, FlxG.height/2 + 50, FlxG.width, "Choose Number of Players");
+    choosePlayers.alignment = "center";
+    choosePlayers.color = 0xff111112;
+    add(choosePlayers);
+    choosePlayers.scrollFactor.x = 0;
 
-        // Three is centered -- other two are spread
-        var textSpread = 40;
+    // Three is centered -- other two are spread
+    var textSpread = 40;
 
-        _threePlayers = new FlxText(0, FlxG.height/2 + 10, FlxG.width, "3");
-        _threePlayers.size = 32;
-        _threePlayers.alignment = "center";
-        _threePlayers.scrollFactor.x = 0;
-        add(_threePlayers);
+    _threePlayers = new FlxText(0, FlxG.height/2 + 10, FlxG.width, "3");
+    _threePlayers.size = 32;
+    _threePlayers.alignment = "center";
+    _threePlayers.scrollFactor.x = 0;
+    add(_threePlayers);
 
-        _twoPlayers = new FlxText(-textSpread, FlxG.height/2 + 10, FlxG.width, "2");
-        _twoPlayers.size = 32;
-        _twoPlayers.scrollFactor.x = 0;
-        _twoPlayers.alignment = "center";
-        add(_twoPlayers);
+    _twoPlayers = new FlxText(-textSpread, FlxG.height/2 + 10, FlxG.width, "2");
+    _twoPlayers.size = 32;
+    _twoPlayers.scrollFactor.x = 0;
+    _twoPlayers.alignment = "center";
+    add(_twoPlayers);
 
-        _fourPlayers = new FlxText(textSpread, FlxG.height/2 + 10, FlxG.width, "4");
-        _fourPlayers.size = 32;
-        _fourPlayers.scrollFactor.x = 0;
-        _fourPlayers.alignment = "center";
-        add(_fourPlayers);
+    _fourPlayers = new FlxText(textSpread, FlxG.height/2 + 10, FlxG.width, "4");
+    _fourPlayers.size = 32;
+    _fourPlayers.scrollFactor.x = 0;
+    _fourPlayers.alignment = "center";
+    add(_fourPlayers);
 
-        names = new FlxText(0, FlxG.height - 16, FlxG.width,"Ian Clarkson   +   Steven Circuiton   +   Colin Marjoram");
-        names.color = 0xffffffff;
-        names.size = 8;
-        names.scrollFactor.x = 0;
-        names.alignment = "center";
-        add(names);
+    names = new FlxText(0, FlxG.height - 16, FlxG.width,"Ian Clarkson   +   Steven Circuiton   +   Colin Marjoram");
+    names.color = 0xffffffff;
+    names.size = 8;
+    names.scrollFactor.x = 0;
+    names.alignment = "center";
+    add(names);
 
-        // Make sure setBounds comes before follow, otherwise follow doesn't work!
-        FlxG.camera.flash(0xff111112, 2.5);
+    // Make sure setBounds comes before follow, otherwise follow doesn't work!
+    FlxG.camera.flash(0xff111112, 2.5);
 		FlxG.camera.setBounds(0, 0, Reg.LEVELLENGTH * 2, FlxG.height);
 		FlxG.camera.follow(_players[0], FlxCamera.STYLE_PLATFORMER, new FlxPoint(50, 0), 4);
 
 	}
 
-	/**
-	 * Function that is called once every frame.
-	 */
 	override public function update():Void
 	{
-		FlxG.worldBounds.set(FlxG.camera.scroll.x - 20, FlxG.camera.scroll.y - 20, FlxG.width + 20, FlxG.height + 20);
-
 		super.update();
 
+		FlxG.worldBounds.set(FlxG.camera.scroll.x - 20, FlxG.camera.scroll.y - 20, FlxG.width + 20, FlxG.height + 20);
+
 		_timer += FlxG.elapsed;
-		if (_timer > _timeLimit)
-		{
+		if (_timer > _timeLimit) {
 			_timer = 0;
 			resetState();
 		}
@@ -148,25 +141,21 @@ class MenuState extends FlxState
 		_curDpadLefts  = isDpadPressed(Input.LEFT);
 		_curDpadRights = isDpadPressed(Input.RIGHT);
 
-		var dpadLeftJustPressed = _curDpadLefts && !_prvDpadLefts;
-		var dpadRightJustPressed = _curDpadRights  && !_prvDpadRights;
+		var dpadLeftJustPressed  = _curDpadLefts  && !_prvDpadLefts;
+		var dpadRightJustPressed = _curDpadRights && !_prvDpadRights;
 
-		if (isJustPressing(Input.LEFT) || dpadLeftJustPressed) 
-		{
+		if (isJustPressing(Input.LEFT) || dpadLeftJustPressed) {
 			_numPlayers = _numPlayers > 2 ? _numPlayers - 1 : Reg.MAX_PLAYERS;
-		}
-		else if (isJustPressing(Input.RIGHT) || dpadRightJustPressed) 
-		{
+		} else if (isJustPressing(Input.RIGHT) || dpadRightJustPressed) {
 			_numPlayers = _numPlayers < Reg.MAX_PLAYERS ? _numPlayers + 1 : 2;
 		}
 
-        _twoPlayers.color   = _numPlayers == 2 ? 0xffffffff : 0xff111112;
-        _threePlayers.color = _numPlayers == 3 ? 0xffffffff : 0xff111112;
-        _fourPlayers.color  = _numPlayers == 4 ? 0xffffffff : 0xff111112;
+    _twoPlayers.color   = _numPlayers == 2 ? 0xffffffff : 0xff111112;
+    _threePlayers.color = _numPlayers == 3 ? 0xffffffff : 0xff111112;
+    _fourPlayers.color  = _numPlayers == 4 ? 0xffffffff : 0xff111112;
 
-        // START THE GAME!
-		if (isJustPressing(Input.JUMP) || isJustPressing(Input.ACTION1) || isJustPressing(Input.ACTION2) || isJustPressing(Input.ACTION3))
-		{
+    // START THE GAME!
+		if (isJustPressing(Input.JUMP) || isJustPressing(Input.ACTION1) || isJustPressing(Input.ACTION2) || isJustPressing(Input.ACTION3)) {
 			onSelectionMade();	
 		}
 
@@ -200,32 +189,18 @@ class MenuState extends FlxState
 
 	private function isDpadPressed(Action:Int):Bool
 	{
-		if (Action == Input.LEFT)
-		{
-			for (gp in FlxG.gamepads.getActiveGamepads())
-			{
-				if (gp.dpadLeft)
-				{
+		if (Action == Input.LEFT) {
+			for (gp in FlxG.gamepads.getActiveGamepads()) {
+				if (gp.dpadLeft) {
 					return true;
 				}
 			}			
-			if (FlxG.keys.anyJustPressed(["LEFT"]))
-			{
-				return true;
-			}
 		}
-		else if (Action == Input.RIGHT)
-		{
-			for (gp in FlxG.gamepads.getActiveGamepads())
-			{
-				if (gp.dpadRight)
-				{
+		else if (Action == Input.RIGHT)	{
+			for (gp in FlxG.gamepads.getActiveGamepads())	{
+				if (gp.dpadRight)	{
 					return true;
 				}
-			}
-			if (FlxG.keys.anyJustPressed(["RIGHT"]))
-			{
-				return true;
 			}
 		}
 		return false;
@@ -233,16 +208,11 @@ class MenuState extends FlxState
 
 	private function isJustPressing(Action:Int):Bool
 	{
-		if (Action == Input.LEFT)
-		{
+		if (Action == Input.LEFT) {
 			return FlxG.keys.anyJustPressed(["LEFT"]);
-		}
-		else if (Action == Input.RIGHT)
-		{
+		}	else if (Action == Input.RIGHT)	{
 			return FlxG.keys.anyJustPressed(["RIGHT"]);
-		}
-		else if (Action == Input.JUMP || Action == Input.ACTION1 || Action == Input.ACTION2 || Action == Input.ACTION3)
-		{
+		}	else if (Action == Input.JUMP || Action == Input.ACTION1 || Action == Input.ACTION2 || Action == Input.ACTION3)	{
 			if (FlxG.gamepads.anyJustPressed(PS4ButtonID.X_BUTTON) 
 				|| FlxG.gamepads.anyJustPressed(PS4ButtonID.SQUARE_BUTTON)
 				|| FlxG.gamepads.anyJustPressed(PS4ButtonID.TRIANGLE_BUTTON)

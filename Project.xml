@@ -15,15 +15,14 @@
 	<!--These window settings apply to all targets-->
 	<!-- <window width="1920" height="1080" fps="60" background="#111112" hardware="true" vsync="true" /> -->
 	<window width="480" height="270" fps="60" background="#111112" hardware="true" vsync="true" />
+	<!-- <window width="720" height="405" fps="60" background="#111112" hardware="true" vsync="true" /> -->
 	
 	<!--Web-specific-->
 	<window if="web"		orientation="portrait"  />
 	
 	<!--Desktop-specific-->
 	<window if="desktop"	orientation="landscape" fullscreen="false" resizable="true" />
-	<!--
-	<window if="desktop"	orientation="landscape" fullscreen="true" resizable="false" />
-	-->
+	<!-- <window if="desktop"	orientation="landscape" fullscreen="true" resizable="false" /> -->
 	
 	<!--Mobile-specific-->
 	<window if="mobile"		orientation="landscape" fullscreen="true" width="0" height="0" />

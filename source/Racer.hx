@@ -11,7 +11,10 @@ class Racer extends FlxSprite
 		loadGraphic(Reg.HANDS, true, 48, 32);
 		width = 32;
 		offset.x = 8; 
-
-		velocity.x = Reg.RACERSPEED;
 	}
+
+  public function startRacing()
+  {
+    velocity.x = Reg.RACERSPEED;
+  }
 }

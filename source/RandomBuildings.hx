@@ -57,8 +57,7 @@ class RandomBuildings extends FlxGroup
 			// Choose building dimensions
 			// Don't allow same height as previous building (looks better)
 			buildingW = FlxRandom.intRanged(MinBuildingX, MaxBuildingX);
-			while (buildingH == prvBuildingH) 
-			{			
+			while (buildingH == prvBuildingH) {			
 				buildingH = FlxRandom.intRanged(1, Std.int(Math.min(prvBuildingH + MaxDY, maxH)));
 			}
 		}
