@@ -10,9 +10,6 @@ import flixel.text.FlxText;
 import flixel.util.FlxRandom;
 import flixel.util.FlxTimer;
 
-/**
- * A FlxState which can be used for the actual gameplay.
- */
 class PlayState extends FlxState
 {
   private var _bananaBlasts :FlxTypedGroup<BananaBlast>  = new FlxTypedGroup();
@@ -59,7 +56,7 @@ class PlayState extends FlxState
     FlxG.game.debugger.stats.visible = true;
     #end
 
-    //FlxG.mouse.visible = false;
+    FlxG.mouse.visible = false;
 
     FlxG.camera.setBounds(0, 0, Reg.LEVELLENGTH, FlxG.height);
     FlxG.cameras.bgColor = 0xff4a9294;
@@ -160,7 +157,6 @@ class PlayState extends FlxState
       FlxG.worldBounds.set(FlxG.camera.scroll.x - 20, FlxG.camera.scroll.y - 20, FlxG.width + 20, FlxG.height + 20);
       
       // Collisions
-      //FlxG.collide(_players, _buildings);
       FlxG.overlap(_players, _racer, swap);
       FlxG.collide(_players, _players);
 
