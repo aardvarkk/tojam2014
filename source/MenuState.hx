@@ -128,8 +128,6 @@ class MenuState extends FlxState
 
 	override public function update():Void
 	{
-		super.update();
-
 		FlxG.worldBounds.set(FlxG.camera.scroll.x - 20, FlxG.camera.scroll.y - 20, FlxG.width + 20, FlxG.height + 20);
 
 		_timer += FlxG.elapsed;
@@ -165,6 +163,8 @@ class MenuState extends FlxState
 
 		_prvDpadLefts  = _curDpadLefts;
 		_prvDpadRights = _curDpadRights;
+
+    super.update();
 	}	
 
 	private function onSelectionMade():Void

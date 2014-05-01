@@ -23,9 +23,9 @@ class LeafEmitter extends FlxEmitter
 
 	override public function update()
 	{
-		super.update();
-
 		// Keep on screen
 		x = FlxG.camera.scroll.x;
+
+		super.update();
 	}
 }

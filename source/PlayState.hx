@@ -105,7 +105,6 @@ class PlayState extends FlxState
         _bananas,
         _missiles
       );
-      trace('made player $p at position ${player.x} ${player.y}');
       _players.add(player);
       _bubbles.add(player.bubble);
 
@@ -164,8 +163,6 @@ class PlayState extends FlxState
   
   override public function update():Void
   {
-    super.update();
-
     // Execute the following REGARDLESS of stage
     {
       // Game controls
@@ -196,12 +193,20 @@ class PlayState extends FlxState
       drawScores(9, 28);
 
       // Collisions
-      // FlxG.overlap(_players, _racer, swap);
-      // FlxG.collide(_players, _players);
+      FlxG.collide(_players, _players);
       for (p in _players) {
-        // if (!p.diving) {
+
+        if (!p.diving) {
           FlxG.collide(p, _buildings);
-        // }
+        }
+
+        // Projectile hits
+        if (p != _rider) {
+          FlxG.overlap(p, _racer, swap);
+          FlxG.overlap(p, _bombs, bombOnPlayer);
+          FlxG.overlap(p, _bananas, bananaOnPlayer);
+          FlxG.overlap(p, _missiles, missileOnPlayer);
+        }
       }
     }
 
@@ -227,8 +232,7 @@ class PlayState extends FlxState
           if (p.alive)
           {
             // Off-screen kill
-            if (p.x + p.width < FlxG.camera.scroll.x - 20)
-            {
+            if (p.x + p.width < FlxG.camera.scroll.x - 20 || p.y > FlxG.height) {
               p.kill();
               Reg.scores[p.number] -= 100;
             }
@@ -239,12 +243,6 @@ class PlayState extends FlxState
               p.respawn(FlxG.camera.scroll.x + 48, 48);
             }
           }
-
-          if (p != _rider) {
-            FlxG.overlap(p, _bombs, bombOnPlayer);
-            FlxG.overlap(p, _bananas, bananaOnPlayer);
-            FlxG.overlap(p, _missiles, missileOnPlayer);
-          }
         }
 
         // Check for round over
@@ -254,6 +252,8 @@ class PlayState extends FlxState
       case RoundOver:
         new FlxTimer(3, endRoundTimer);
     }
+
+    super.update();
   }
 
   private function switchToPlaying(Timer:FlxTimer)
@@ -348,11 +348,6 @@ class PlayState extends FlxState
 
   private function swap(P:Player, R:FlxSprite):Void
   {
-    // if the player colliding is the one who's already riding, don't do anything
-    if (P == _rider) {
-      return;
-    }
-
     // kick out old rider if there is one
     if (_rider != null) {
       Reg.scores[_rider.number] -= 200;

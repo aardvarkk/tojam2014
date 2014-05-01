@@ -18,7 +18,6 @@ class MissileBlast extends FlxSprite
 
 	override public function update():Void
 	{
-
 		if (!isOnScreen())
 			kill();
 

@@ -22,10 +22,10 @@ class Missile extends FlxSprite
 
 	override public function update():Void
 	{
-		super.update();
-
 		if (!isOnScreen())
 			kill();
+
+		super.update();
 	}
 
 	public function shoot(P:FlxSprite, Angle:Float):Void

@@ -21,8 +21,6 @@ class Bubble extends FlxSprite
 
 	override public function update():Void
 	{
-		super.update();
-
 		if (timer > 0)
 		{
 			timer -= FlxG.elapsed;
@@ -31,6 +29,8 @@ class Bubble extends FlxSprite
 				kill();
 			}
 		}
+
+		super.update();
 	}
 
 	override public function reset(X:Float, Y:Float):Void

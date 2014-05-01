@@ -60,24 +60,22 @@ class ShowWinnerState extends FlxState
 
 	override public function update()
 	{
-		super.update();
-
-        _winnerGraphic.animation.play("idle");
+    _winnerGraphic.animation.play("idle");
 
 		new FlxTimer(2, waitOver);
 
-		if (_waitOver) 
-		{
+		if (_waitOver) {
 	        var startAgain = new FlxText(0, FlxG.height/2 + 90, FlxG.width, "Press Any Button...");
 	        startAgain.alignment = "center";
 	        startAgain.color = 0xff111112;
 	        add(startAgain);
 
-			if (FlxG.keys.justPressed.ANY || FlxG.gamepads.anyButton()) 
-			{
+			if (FlxG.keys.justPressed.ANY || FlxG.gamepads.anyButton()) {
 				FlxG.switchState(new MenuState());
 			}
 		}
+
+    super.update();
 	}
 
 	public function waitOver(Timer:FlxTimer)

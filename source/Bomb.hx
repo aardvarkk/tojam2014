@@ -22,12 +22,12 @@ class Bomb extends FlxSprite
 
 	override public function update():Void
 	{
-		super.update();
-
 		angularVelocity = Math.abs(velocity.x) * 3;
 
 		if (!isOnScreen())
 			kill();
+
+		super.update();
 	}
 
 	public function shoot(P:FlxSprite, Angle:Float):Void

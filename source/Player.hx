@@ -88,59 +88,51 @@ class Player extends FlxExtendedSprite
 
 	override public function update():Void
 	{
+		animate();
 
-		trace('Player $number');
-		trace('pos $x $y');
-		trace('world bounds ${FlxG.worldBounds}');
-		trace('velocity $velocity');
-		trace('solid $solid');
-		trace('touching $touching');
-
-		// animate();
-
-		// if (ridingVehicle) {
-		// 	x = _vehicle.x + 12; // +20 good for 48x16
-		// 	y = _vehicle.y; // and -16
-		// 	_crosshair.angle = _aim;
-		// 	_crosshair.x = x + width / 2;
-		// 	_crosshair.y = y + height / 2;
+		if (ridingVehicle) {
+			x = _vehicle.x + 12; // +20 good for 48x16
+			y = _vehicle.y; // and -16
+			_crosshair.angle = _aim;
+			_crosshair.x = x + width / 2;
+			_crosshair.y = y + height / 2;
 			
-		// 	if (attackTimer > 0) {
-		// 		attackTimer -= FlxG.elapsed;
-		// 	}
+			if (attackTimer > 0) {
+				attackTimer -= FlxG.elapsed;
+			}
 
-		// 	if (!frozen) {
-		// 		if (selected) {
-		// 			ridingControls();
-		// 		} else if (autoscrollMonkey) {
-		// 			cpuMonkeyDefend();
-		// 		}
-		// 	}
-		// } else {
-		// 	if (!frozen) {
-		// 		if (selected) {
-		// 			movingControls();
-		// 		} else if (autoscrollMonkey) {
-		// 			cpuMonkeyAssault();
-		// 		}
-		// 	}
-		// }
+			if (!frozen) {
+				if (selected) {
+					ridingControls();
+				} else if (autoscrollMonkey) {
+					cpuMonkeyDefend();
+				}
+			}
+		} else {
+			if (!frozen) {
+				if (selected) {
+					movingControls();
+				} else if (autoscrollMonkey) {
+					cpuMonkeyAssault();
+				}
+			}
+		}
 
-		// // Respawn stuff
-		// // When it was >= 0 there were bugs
-		// if (_respawnTimer > 0) {
-		// 	_respawnTimer -= FlxG.elapsed;
-		// 	velocity.y = 0;
-		// 	bubble.x = x - 10;
-		// 	bubble.y = y - 12;
+		// Respawn stuff
+		// When it was >= 0 there were bugs
+		if (_respawnTimer > 0) {
+			_respawnTimer -= FlxG.elapsed;
+			velocity.y = 0;
+			bubble.x = x - 10;
+			bubble.y = y - 12;
 
-		// 	if (Input.isPressing(Input.JUMP, number) || x > FlxG.camera.scroll.x + 100 || _respawnTimer <= 0) {
-		// 		_respawnTimer = -1;
-		// 		bubble.die();
-		// 	}
-		// }
-		super.update();
-		
+			if (Input.isPressing(Input.JUMP, number) || x > FlxG.camera.scroll.x + 100 || _respawnTimer <= 0) {
+				_respawnTimer = -1;
+				bubble.die();
+			}
+		}
+
+		super.update();		
 	}
 
 	override public function reset(X:Float, Y:Float):Void
@@ -274,20 +266,19 @@ class Player extends FlxExtendedSprite
 		// Move Left
 		if (Input.isPressing(Input.LEFT, controlNumber)) {
 			flipX = true;
-			facing = Input.LEFT;
+			facing = FlxObject.LEFT;
 			acceleration.x -= _runAccel;
 		}
 		
 		// Move Right
 		if (Input.isPressing(Input.RIGHT, controlNumber)) {
 			flipX = false;
-			facing = Input.RIGHT;
+			facing = FlxObject.RIGHT;
 			acceleration.x += _runAccel;
 		}
 		
-		// Divebomb, jumping, and wall jumping
+		// Divebomb, jumping
 		if (Input.isJustPressing(Input.JUMP, controlNumber)) {
-
 			// Dive bomb
 			if (!diving && Input.isPressing(Input.DOWN, controlNumber)) {
 				FlxG.sound.play("Divebomb", 0.25);
@@ -299,10 +290,13 @@ class Player extends FlxExtendedSprite
 			} else if (isTouching(FlxObject.FLOOR)) {
 				// Normal jump
 				jump();
-			} else if (isTouching(FlxObject.WALL)) {
-				// Wall jump
-				wallJump();
 			}
+		}
+
+		// Walljumping possible even if you're already holding down jump
+		if (Input.isPressing(Input.JUMP, controlNumber) && isTouching(FlxObject.WALL)) {
+			// Wall jump
+			wallJump();
 		}
 
 		// If user is still holding the jump, do variable jump control
@@ -314,8 +308,8 @@ class Player extends FlxExtendedSprite
 				velocity.y = -_jumpStrength * 1;
 			} else if (_jumpTimer < 0.24) {
 				velocity.y = -_jumpStrength * 1.1;
-			} else {
-				velocity.y = -_jumpStrength * 1;
+			} else if (_jumpTimer >= 0.26 ) {
+				_jumpHold = false;
 			}
 		}
 
@@ -356,8 +350,7 @@ class Player extends FlxExtendedSprite
 		animation.play("idle");
 
 		if (!ridingVehicle)	{
-			// Can't set threshold to 0, because the object has non-zero velocity after colliding with floor
-			if (velocity.y > 10)	{
+			if (velocity.y > 0)	{
 				animation.play("fall");
 			}
 			else if (velocity.y < 0) {
@@ -378,8 +371,6 @@ class Player extends FlxExtendedSprite
 
 	public function mount(Vehicle:FlxSprite, Aimer:Crosshair):Void
 	{
-		trace('mount player $number');
-
 		ridingVehicle = true;
 		acceleration.y = 0;
 		velocity.x = 0;

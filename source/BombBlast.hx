@@ -18,10 +18,10 @@ class BombBlast extends FlxSprite
 
 	override public function update():Void
 	{
-		super.update();
-
 		if (!isOnScreen())
 			kill();
+
+		super.update();
 	}
 
 	public function boom(P:FlxSprite, ?Vx:Float = 0, ?Vy:Float = 0):Void
