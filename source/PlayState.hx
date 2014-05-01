@@ -92,9 +92,6 @@ class PlayState extends FlxState
     _crosshair.init();
     add(_crosshair);
 
-    // Have to turn up world divisions so the player collision doesn't fuck with their start positions
-    FlxG.worldDivisions = 7;
-
     // Add players in reverse order so 0th shows on top
     // And mount the player whose turn it is
     var p = _numPlayers;
@@ -116,7 +113,7 @@ class PlayState extends FlxState
         _rider = player;
       } else {
         // Stagger players horizontally so they can see themselves
-        player.x += shifted++ * 2 * Reg.BLOCKSIZE;
+        player.x += shifted++ * 3 * Reg.BLOCKSIZE;
       }
     }
 
@@ -199,10 +196,23 @@ class PlayState extends FlxState
       _infoText.text += Reg.getScoreString();
       drawScores(9, 28);
 
+      // Resize the world - collisions are only detected within the world bounds
+      FlxG.worldBounds.set(
+        FlxG.camera.scroll.x - 20, 
+        FlxG.camera.scroll.y - 20, 
+        FlxG.width + 20, 
+        FlxG.height + 20
+        );
+        
+      // TODO: Why doesn't precollision line up with post collision?!
+      
+      // for (p in _players) {
+      //   trace('Precollision ${p.x} ${p.y}');
+      // }
+
       // Collisions
       FlxG.collide(_players, _players);
       for (p in _players) {
-
         if (!p.diving) {
           FlxG.collide(p, _buildings);
         }
@@ -215,6 +225,10 @@ class PlayState extends FlxState
           FlxG.overlap(p, _missiles, missileOnPlayer);
         }
       }
+
+      // for (p in _players) {
+      //   trace('Postcollision ${p.x} ${p.y}');
+      // }
     }
 
     // Each stage has different updates
@@ -226,9 +240,6 @@ class PlayState extends FlxState
         // Slide camera to follow racer
         FlxG.camera.scroll.x += Reg.RACERSPEED * FlxG.elapsed;
 
-        // Resize the world - collisions are only detected within the world bounds
-        FlxG.worldBounds.set(FlxG.camera.scroll.x - 20, FlxG.camera.scroll.y - 20, FlxG.width + 20, FlxG.height + 20);
-        
         for (b in _bombs) {
           if (b.velocity.y >= 0) {
             FlxG.collide(b, _buildings, bombBounce);
@@ -300,6 +311,7 @@ class PlayState extends FlxState
     for (p in _players) {
       p.frozen = true;
     }
+
     _stage = Stage.Countdown;
     _countdownTimer = new FlxTimer(3, switchToPlaying);
     FlxG.camera.target = _countdownZoomTarget;
@@ -319,7 +331,7 @@ class PlayState extends FlxState
   private function startRound(Round:Int)
   {
     _round = Round;
-    FlxG.log.add('Starting game round $_round with $_numPlayers players');
+    trace('Starting game round $_round with $_numPlayers players');
 
     if (_round == 0) {
       Reg.resetScores();

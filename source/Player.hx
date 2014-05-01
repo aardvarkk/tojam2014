@@ -91,8 +91,8 @@ class Player extends FlxExtendedSprite
 		animate();
 
 		if (ridingVehicle) {
-			x = _vehicle.x + 12; // +20 good for 48x16
-			y = _vehicle.y; // and -16
+			x = _vehicle.x + 12;
+			y = _vehicle.y;
 			_crosshair.angle = _aim;
 			_crosshair.x = x + width / 2;
 			_crosshair.y = y + height / 2;
