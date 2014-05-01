@@ -118,6 +118,28 @@ class Player extends FlxExtendedSprite
 			}
 		}
 
+		// If user is still holding the jump (or it's a bot), do variable jump control
+		_jumpHold = _jumpHold && (autoscrollMonkey || Input.isPressing(Input.JUMP, (Reg.SINGLE_PLAYER_MODE) ? 0 : number));
+		if (_jumpHold) {
+			_jumpTimer += FlxG.elapsed;
+
+			if (_jumpTimer < 0.075) {
+				velocity.y = -_jumpStrength * 0.7;
+			} else if (_jumpTimer < 0.15) {
+				velocity.y = -_jumpStrength * 1;
+			} else if (_jumpTimer < 0.24) {
+				velocity.y = -_jumpStrength * 1.1;
+			} else if (_jumpTimer >= 0.26 ) {
+				_jumpHold = false;
+				_jumpTimer = 0;
+			}
+		}
+
+		// Landing
+		if (justTouched(FlxObject.FLOOR)) {
+			FlxG.sound.play("Landing", 0);			
+		}
+
 		// Respawn stuff
 		// When it was >= 0 there were bugs
 		if (_respawnTimer > 0) {
@@ -157,13 +179,12 @@ class Player extends FlxExtendedSprite
 
 	public function cpuMonkeyAssault():Void
 	{
-		acceleration.x = 0;
-		acceleration.x += (_runAccel * 0.75);
+		acceleration.x = _runAccel * 0.75;
 		facing = FlxObject.RIGHT;
-		flipX = false;
+		flipX  = false;
 
-		// Constantly climb walls
-		if (isTouching(FlxObject.WALL)) {
+		// Constantly climb right walls
+		if (isTouching(FlxObject.RIGHT)) {
 			wallJump();
 		}
 
@@ -256,10 +277,11 @@ class Player extends FlxExtendedSprite
 
 	public function movingControls():Void
 	{
-		var controlNumber = (Reg.SINGLE_PLAYER_MODE) ? 0 : number;
 		if (Reg.SINGLE_PLAYER_MODE && !selected) {
 			return;
 		}
+
+		var controlNumber = (Reg.SINGLE_PLAYER_MODE) ? 0 : number;
 
 		acceleration.x = 0;
 
@@ -298,48 +320,21 @@ class Player extends FlxExtendedSprite
 			// Wall jump
 			wallJump();
 		}
-
-		// If user is still holding the jump, do variable jump control
-		_jumpHold = Input.isPressing(Input.JUMP, controlNumber);
-		if (_jumpHold) {
-			if (_jumpTimer < 0.075) {
-				velocity.y = -_jumpStrength * 0.7;
-			} else if (_jumpTimer < 0.15) {
-				velocity.y = -_jumpStrength * 1;
-			} else if (_jumpTimer < 0.24) {
-				velocity.y = -_jumpStrength * 1.1;
-			} else if (_jumpTimer >= 0.26 ) {
-				_jumpHold = false;
-			}
-		}
-
-		// Always keep timer moving...
-		_jumpTimer += FlxG.elapsed;
-
-		// Landing
-		if (justTouched(FlxObject.FLOOR)) {
-			FlxG.sound.play("Landing", 0);			
-		}
 	}
 
 	public function wallJump()
 	{
-		trace('wallJump');
-
 		_jumpTimer = 0;
-		_jumpHold = true;
+		_jumpHold  = true;
 
 		// Wall kickback
-		// TODO: This doesn't work. If you walljump facing left you don't get any x velocity to the right.
 		velocity.x = (facing == FlxObject.LEFT) ? 100 : -100;
 	}
 
 	public function jump()
 	{
-		trace('jump');
-
 		_jumpTimer = 0;
-		_jumpHold = true;
+		_jumpHold  = true;
 
 		// Jump sound
 		FlxG.sound.play(_jumpStrings[FlxRandom.intRanged(0, _jumpStrings.length-1)]);
