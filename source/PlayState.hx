@@ -99,7 +99,7 @@ class PlayState extends FlxState
     while (--p >= 0) {
       var player = new Player(
         Reg.START_X, 
-        Reg.START_Y, 
+        Reg.START_Y - p * Reg.BLOCKSIZE * 6,  // Staggering their Y solves the staggered X not working and looks nicer than dropping all 3 at once
         p, 
         _bombs, 
         _bananas,
