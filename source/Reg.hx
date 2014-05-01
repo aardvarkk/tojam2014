@@ -26,9 +26,9 @@ class Reg
 	public static inline var RACERHEIGHT = 16;
 	public static inline var RACERSPEED  = 75;
 
-	public static inline var START_X     = 128;
+	public static inline var START_X     = 64;
 	public static inline var START_Y     = 128;
-	
+
 	public static inline var DEMOSEED    = 635918;
 
 	// Controls used for each player

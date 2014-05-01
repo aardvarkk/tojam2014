@@ -18,6 +18,7 @@ class Player extends FlxExtendedSprite
 	public var climbing = false;
 	public var controlSet = 0;
 	public var deathTimer = 0.0;
+	public var respawnTimer = 0.0;
 	public var diving = false;
 	public var gravity = 450.0;
 	public var invulnerable = false;
@@ -27,7 +28,7 @@ class Player extends FlxExtendedSprite
 
 	// Don't allow input while frozen
 	// Useful for countdown so nobody moves
-	public var frozen = true;
+	public var frozen = false;
 
 	private var _vehicle:FlxSprite;
 	private var _jumpTimer = 0.0;
@@ -41,7 +42,6 @@ class Player extends FlxExtendedSprite
 	private var _missiles:FlxTypedGroup<Missile>;
 	private var _invTimer = 0.8;
 	private var _invDuration = 0.8;
-	private var _respawnTimer = 0.0;
 	private var _aim = 180.0;
 	private var _crosshair:Crosshair;
 	private var _jumpStrings = ["LightOoh", "TinyOoh1", "TinyOoh2", "TinyOoh3", "TinyOoh4", "TinyOoh5", "TinyOoh6", "TinyOoh7", "TinyOoh8", "TinyOoh9"];
@@ -142,14 +142,15 @@ class Player extends FlxExtendedSprite
 
 		// Respawn stuff
 		// When it was >= 0 there were bugs
-		if (_respawnTimer > 0) {
-			_respawnTimer -= FlxG.elapsed;
+		if (respawnTimer > 0) {
+			respawnTimer -= FlxG.elapsed;
 			velocity.y = 0;
 			bubble.x = x - 10;
 			bubble.y = y - 12;
 
-			if (Input.isPressing(Input.JUMP, number) || x > FlxG.camera.scroll.x + 100 || _respawnTimer <= 0) {
-				_respawnTimer = -1;
+			// Kill bubble
+			if (Input.isPressing(Input.JUMP, number) || x > FlxG.camera.scroll.x + 100 || respawnTimer <= 0) {
+				respawnTimer = -1;
 				bubble.die();
 			}
 		}
@@ -361,7 +362,7 @@ class Player extends FlxExtendedSprite
 		reset(X, Y);
 
 		bubble.reset(x - 10, y - 12);
-		_respawnTimer = 2;
+		respawnTimer = 2;
 	}
 
 	public function mount(Vehicle:FlxSprite, Aimer:Crosshair):Void

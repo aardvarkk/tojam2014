@@ -92,13 +92,16 @@ class PlayState extends FlxState
     _crosshair.init();
     add(_crosshair);
 
+    // Have to turn up world divisions so the player collision doesn't fuck with their start positions
+    FlxG.worldDivisions = 7;
+
     // Add players in reverse order so 0th shows on top
     // And mount the player whose turn it is
     var p = _numPlayers;
+    var shifted = 0;
     while (--p >= 0) {
-      // Stagger players horizontally so they can see themselves
       var player = new Player(
-        Reg.START_X - p * 2 * Reg.BLOCKSIZE, 
+        Reg.START_X, 
         Reg.START_Y, 
         p, 
         _bombs, 
@@ -111,8 +114,12 @@ class PlayState extends FlxState
       if (p == _round) {
         player.mount(_racer, _crosshair);
         _rider = player;
+      } else {
+        // Stagger players horizontally so they can see themselves
+        player.x += shifted++ * 2 * Reg.BLOCKSIZE;
       }
     }
+
     selectNextPlayer();
     add(_players);
     
@@ -132,7 +139,7 @@ class PlayState extends FlxState
     _backdropsNear = new Backdrops(this, Reg.BACKDROPSNEAR);
 
     // Info text and score sprites
-    _infoText = new FlxText(10,10, FlxG.width - 20, null);
+    _infoText = new FlxText(10, 10, FlxG.width - 20, null);
     _infoText.size = 8;
     _infoText.scrollFactor.x = 0;
     _infoText.scrollFactor.y = 0;
@@ -229,14 +236,20 @@ class PlayState extends FlxState
         }
 
         for (p in _players) {
-          if (p.alive)
-          {
+          if (p.alive) {
             // Off-screen kill
             if (p.x + p.width < FlxG.camera.scroll.x - 20 || p.y > FlxG.height) {
               p.kill();
               Reg.scores[p.number] -= 100;
             }
+
+            // Don't let player + bubble go left of its start position while waiting for bubble death
+            if (p.respawnTimer > 0) {
+              p.x = Math.max(p.x, FlxG.camera.scroll.x + 48);
+              p.bubble.x = Math.min(p.x, FlxG.camera.scroll.x + 48);
+            }
           } else {
+            // Respawn after a while
             p.deathTimer -= FlxG.elapsed;
             
             if (p.deathTimer < 0) {
@@ -284,6 +297,9 @@ class PlayState extends FlxState
 
   private function switchToCountdown()
   {
+    for (p in _players) {
+      p.frozen = true;
+    }
     _stage = Stage.Countdown;
     _countdownTimer = new FlxTimer(3, switchToPlaying);
     FlxG.camera.target = _countdownZoomTarget;
@@ -358,6 +374,9 @@ class PlayState extends FlxState
     _rider = P;
     P.mount(R, _crosshair);
     Reg.scores[P.number] += 500;
+
+    // show the swap happened
+    FlxG.camera.flash(0xffffffff, 0.1);
   } 
 
   private function bombOnPlayer(P:Player, R:FlxSprite):Void
