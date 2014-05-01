@@ -329,7 +329,7 @@ class Player extends FlxExtendedSprite
 		_jumpHold  = true;
 
 		// Wall kickback
-		velocity.x = (facing == FlxObject.LEFT) ? 100 : -100;
+		velocity.x = (isTouching(FlxObject.LEFT)) ? 100 : -100;
 	}
 
 	public function jump()
