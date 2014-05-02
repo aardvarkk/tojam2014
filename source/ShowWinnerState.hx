@@ -16,6 +16,7 @@ class ShowWinnerState extends FlxState
 	private var _leafEmitter:LeafEmitter = new LeafEmitter();
 	private var _waitOver:Bool = false;
 	private var _winnerGraphic:FlxSprite;
+  private var _startAgainText:FlxText;
 
 	override public function create()
 	{
@@ -47,19 +48,22 @@ class ShowWinnerState extends FlxState
     _winnerGraphic.animation.add("idle", [0, 1, 2, 3], 6, true);
     _winnerGraphic.scale.set(3, 3);
     add(_winnerGraphic);
+
+    _startAgainText = new FlxText(0, FlxG.height/2 + 90, FlxG.width, "Press Any Button...");
+    _startAgainText.alignment = "center";
+    _startAgainText.color = 0xff111112;
+    _startAgainText.visible = false;
+    add(_startAgainText);
+
+    new FlxTimer(2, waitOver);
 	}
 
 	override public function update()
 	{
     _winnerGraphic.animation.play("idle");
 
-		new FlxTimer(2, waitOver);
-
 		if (_waitOver) {
-	        var startAgain = new FlxText(0, FlxG.height/2 + 90, FlxG.width, "Press Any Button...");
-	        startAgain.alignment = "center";
-	        startAgain.color = 0xff111112;
-	        add(startAgain);
+      _startAgainText.visible = true;
 
 			if (FlxG.keys.justPressed.ANY || FlxG.gamepads.anyButton()) {
 				FlxG.switchState(new MenuState());
@@ -71,6 +75,7 @@ class ShowWinnerState extends FlxState
 
 	public function waitOver(Timer:FlxTimer)
 	{
+    Timer.destroy();
 		_waitOver = true;
 	}
 }
