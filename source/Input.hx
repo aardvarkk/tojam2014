@@ -23,11 +23,23 @@ class Input
 
 	public static function isPressing(Action:Int, Number:Int):Bool
 	{
-		// getByID always returns a gamepad
-		// If nothing is plugged in, the gamepad that's returned just has nothing pressed
-		var gamepad = FlxG.gamepads.getByID(Number);
+		var gamepad = null;
 		var style = Reg.SINGLE_PLAYER_MODE ? Reg.SINGLE_PLAYER_CONTROLSTYLE : Reg.ControlStyles[Number];
-
+		
+		// If the settings are set to gamepad but there is no gamepad, fall back to keyboard.
+		// If you don't do this, someone who has no gamepad to plug in can't even change the settings.
+		if (FlxG.gamepads.numActiveGamepads < Number + 1)
+		{
+			style = ControlStyle.Keyboard;
+		}
+		else
+		{
+			// getByID always returns a gamepad
+			// If nothing is plugged in, the gamepad that's returned just has nothing pressed
+			// But returning a gamepad value when there is no gamepad doesn't seem to be a wise practice, since it blinds the game as to what's actually plugged in
+			gamepad = FlxG.gamepads.getByID(Number);
+		}
+		
 		switch (style) {
 			case Keyboard:
 				return FlxG.keys.anyPressed([Reg.KeyboardControls[Number][Action]]);
@@ -49,10 +61,22 @@ class Input
 
 	public static function isJustPressing(Action:Int, Number:Int):Bool
 	{
-		// getByID always returns a gamepad
-		// If nothing is plugged in, the gamepad that's returned just has nothing pressed
-		var gamepad = FlxG.gamepads.getByID(Number);
+		var gamepad = null;
 		var style = Reg.SINGLE_PLAYER_MODE ? Reg.SINGLE_PLAYER_CONTROLSTYLE : Reg.ControlStyles[Number];
+		
+		// If the settings are set to gamepad but there is no gamepad, fall back to keyboard.
+		// If you don't do this, someone who has no gamepad to plug in can't even change the settings.
+		if (FlxG.gamepads.numActiveGamepads < Number + 1)
+		{
+			style = ControlStyle.Keyboard;
+		}
+		else
+		{
+			// getByID always returns a gamepad
+			// If nothing is plugged in, the gamepad that's returned just has nothing pressed
+			// But returning a gamepad value when there is no gamepad doesn't seem to be a wise practice, since it blinds the game as to what's actually plugged in
+			gamepad = FlxG.gamepads.getByID(Number);
+		}
 
 		switch (style) {
 			case Keyboard:

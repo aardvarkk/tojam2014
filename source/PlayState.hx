@@ -72,6 +72,7 @@ class PlayState extends FlxState
     FlxG.game.debugger.stats.visible = true;
     #end
 
+    FlxG.watch.add(FlxG.gamepads, "numActiveGamepads", "Active Gamepads");
 
     _baseZoom = FlxG.camera.zoom;
     FlxG.cameras.reset(_zoomCamera);
