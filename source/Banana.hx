@@ -33,10 +33,10 @@ class Banana extends FlxSprite
 	public function shoot(P:FlxSprite, Angle:Float):Void
 	{
 		reset(P.x, P.y + P.height / 2);
-		acceleration.x = 180;
-		angularVelocity = -200;
-		velocity.x = Math.cos(Angle * Math.PI/180) * speed * 1.5;
-		velocity.y = Math.sin(Angle * Math.PI/180) * speed * 1.5;
+		velocity.x = Math.cos(Angle * Math.PI/180) * speed * 2;
+		velocity.y = Math.sin(Angle * Math.PI/180) * speed * 2;
+		acceleration.x = Math.cos(Angle * Math.PI/180) * speed * -1.5;
+		acceleration.y = Math.sin(Angle * Math.PI/180) * speed * -1.5;
 	}
 
 	override public function reset(X:Float, Y:Float):Void

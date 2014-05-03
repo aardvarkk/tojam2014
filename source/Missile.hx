@@ -34,8 +34,8 @@ class Missile extends FlxSprite
 		angle = Angle;
 		velocity.x = Math.cos(Angle * Math.PI/180) * -speed;
 		velocity.y = Math.sin(Angle * Math.PI/180) * -speed;
-		acceleration.x = Math.cos(Angle * Math.PI/180) * speed * 1.8;
-		acceleration.y = Math.sin(Angle * Math.PI/180) * speed * 1.8;
+		acceleration.x = Math.cos(Angle * Math.PI/180) * speed * 10;
+		acceleration.y = Math.sin(Angle * Math.PI/180) * speed * 10;
 	}
 
 	override public function reset(X:Float, Y:Float):Void
