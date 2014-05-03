@@ -138,15 +138,15 @@ class MenuState extends FlxState
 			resetState();
 		}
 
-		_curDpadLefts  = isDpadPressed(Input.LEFT);
-		_curDpadRights = isDpadPressed(Input.RIGHT);
+		_curDpadLefts  = Input.isJustPressing(Input.LEFT,0);
+		_curDpadRights = Input.isJustPressing(Input.RIGHT,0);
 
 		var dpadLeftJustPressed  = _curDpadLefts  && !_prvDpadLefts;
 		var dpadRightJustPressed = _curDpadRights && !_prvDpadRights;
 
-		if (isJustPressing(Input.LEFT) || dpadLeftJustPressed) {
+		if (dpadLeftJustPressed) {
 			_numPlayers = _numPlayers > 2 ? _numPlayers - 1 : Reg.MAX_PLAYERS;
-		} else if (isJustPressing(Input.RIGHT) || dpadRightJustPressed) {
+		} else if (dpadRightJustPressed) {
 			_numPlayers = _numPlayers < Reg.MAX_PLAYERS ? _numPlayers + 1 : 2;
 		}
 
@@ -155,7 +155,7 @@ class MenuState extends FlxState
     _fourPlayers.color  = _numPlayers == 4 ? 0xffffffff : 0xff111112;
 
     // START THE GAME!
-		if (isJustPressing(Input.JUMP) || isJustPressing(Input.ACTION1) || isJustPressing(Input.ACTION2) || isJustPressing(Input.ACTION3)) {
+		if (Input.isJustPressing(Input.JUMP,0) || Input.isJustPressing(Input.ACTION1,0) || Input.isJustPressing(Input.ACTION2,0) || Input.isJustPressing(Input.ACTION3,0)) {
 			onSelectionMade();	
 		}
 
@@ -189,43 +189,4 @@ class MenuState extends FlxState
 		FlxG.resetState();
 	}
 
-	private function isDpadPressed(Action:Int):Bool
-	{
-		if (Action == Input.LEFT) {
-			for (gp in FlxG.gamepads.getActiveGamepads()) {
-				if (gp.dpadLeft) {
-					return true;
-				}
-			}			
-		}
-		else if (Action == Input.RIGHT)	{
-			for (gp in FlxG.gamepads.getActiveGamepads())	{
-				if (gp.dpadRight)	{
-					return true;
-				}
-			}
-		}
-		return false;
-	}
-
-	private function isJustPressing(Action:Int):Bool
-	{
-		if (Action == Input.LEFT) {
-			return FlxG.keys.anyJustPressed(["LEFT"]);
-		}	else if (Action == Input.RIGHT)	{
-			return FlxG.keys.anyJustPressed(["RIGHT"]);
-		}	else if (Action == Input.JUMP || Action == Input.ACTION1 || Action == Input.ACTION2 || Action == Input.ACTION3)	{
-			if (FlxG.gamepads.anyJustPressed(PS4ButtonID.X_BUTTON) 
-				|| FlxG.gamepads.anyJustPressed(PS4ButtonID.SQUARE_BUTTON)
-				|| FlxG.gamepads.anyJustPressed(PS4ButtonID.TRIANGLE_BUTTON)
-				|| FlxG.gamepads.anyJustPressed(PS4ButtonID.CIRCLE_BUTTON))
-			{
-				return true;
-			}
-
-			return FlxG.keys.anyJustPressed(["SPACE", "ENTER"]);	
-		}
-
-		return false;
-	}
 }
