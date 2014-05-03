@@ -13,14 +13,8 @@ class Reg
 
 	// Used to control all players with 1 gamepad / key set by switching between them
 	public static inline var SINGLE_PLAYER_MODE = true;
-	/*
-	* Used to override the normal controls when testing with one input
-	* If it's set to gamepad but there is no gamepad,
-	* it will just default back to keyboard
-	* So you pretty much only need to change this if
-	* You have a gamepad plugged in but don't want to use it.
-	*/
-	public static var SINGLE_PLAYER_CONTROLSTYLE = ControlStyle.Keyboard;
+	// Used to override the normal controls when testing with one input
+	public static var SINGLE_PLAYER_CONTROLSTYLE = ControlStyle.Gamepad;
 
 	public static inline var RACERWIDTH  = 48;
 	public static inline var RACERHEIGHT = 16;

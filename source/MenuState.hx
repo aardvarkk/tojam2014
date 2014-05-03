@@ -42,6 +42,8 @@ class MenuState extends FlxState
 	{
 		super.create();
 
+		FlxG.mouse.visible = false;
+
 		FlxG.sound.playMusic("music", 0.35, true);
 
 		// Set a background color

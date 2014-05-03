@@ -72,7 +72,6 @@ class PlayState extends FlxState
     FlxG.game.debugger.stats.visible = true;
     #end
 
-    FlxG.mouse.visible = false;
 
     _baseZoom = FlxG.camera.zoom;
     FlxG.cameras.reset(_zoomCamera);
