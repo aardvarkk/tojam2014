@@ -12,7 +12,7 @@ class Reg
 	public static inline var BLOCKSIZE = 16; 
 
 	// Used to control all players with 1 gamepad / key set by switching between them
-	public static inline var SINGLE_PLAYER_MODE = true;
+	public static inline var SINGLE_PLAYER_MODE = false;
 	// Used to override the normal controls when testing with one input
 	public static var SINGLE_PLAYER_CONTROLSTYLE = ControlStyle.Gamepad;
 
@@ -41,7 +41,8 @@ class Reg
 	public static var KeyboardControls:Array<Dynamic> =
 	[
 		["UP", "DOWN", "LEFT", "RIGHT", "Z", "X", "C", "V", "ENTER"],
-		["NUMPADFIVE","NUMPADTWO","NUMPADONE","NUMPADTHREE","NUMPADSEVEN","NUMPADEIGHT","NUMPADNINE","NUMPADMINUS", "ENTER"],
+		//["NUMPADFIVE","NUMPADTWO","NUMPADONE","NUMPADTHREE","NUMPADSEVEN","NUMPADEIGHT","NUMPADNINE","NUMPADMINUS", "ENTER"],
+		["UP", "DOWN", "LEFT", "RIGHT", "Z", "X", "C", "V", "ENTER"],
 		["W", "S", "A", "D", "R", "T", "Y", "U", "ENTER"],
 		["I","K","J","L","O","P","SEMICOLON","QUOTE", "ENTER"]
 	];
